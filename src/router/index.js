@@ -1,122 +1,138 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 // Marketing Views
-import HomeView from '../views/marketing/HomeView.vue'
-import PricingView from '../views/marketing/PricingView.vue'
-import ContactView from '../views/marketing/ContactView.vue'
+import HomeView from "../views/marketing/HomeView.vue";
+import PricingView from "../views/marketing/PricingView.vue";
+import ContactView from "../views/marketing/ContactView.vue";
 
 // Auth Views
-import LoginView from '../views/auth/LoginView.vue'
-import SignUpView from '../views/auth/SignUpView.vue'
+import LoginView from "../views/auth/LoginView.vue";
+import SignUpView from "../views/auth/SignUpView.vue";
+import PasswordResetView from "../views/auth/PasswordResetView.vue";
 
 // Dashboard Views
-import DashboardView from '../views/dashboard/DashboardView.vue'
-import UserProfileView from '../views/dashboard/UserProfileView.vue'
+import DashboardView from "../views/dashboard/DashboardView.vue";
+import UserProfileView from "../views/dashboard/UserProfileView.vue";
 
 // Jewelry Views
-import JewelryUploadView from '../views/jewelry/JewelryUploadView.vue'
-import JewelryPlacementView from '../views/jewelry/JewelryPlacementView.vue'
-import ImageRefinementView from '../views/jewelry/ImageRefinementView.vue'
-import ModelSelectionView from '../views/jewelry/ModelSelectionView.vue'
+import JewelryUploadView from "../views/jewelry/JewelryUploadView.vue";
+import JewelryPlacementView from "../views/jewelry/JewelryPlacementView.vue";
+import ImageRefinementView from "../views/jewelry/ImageRefinementView.vue";
+import ModelSelectionView from "../views/jewelry/ModelSelectionView.vue";
 
 // Legal Views
-import TermsOfServiceView from '../views/legal/TermsOfServiceView.vue'
-import PrivacyPolicyView from '../views/legal/PrivacyPolicyView.vue'
+import TermsOfServiceView from "../views/legal/TermsOfServiceView.vue";
+import PrivacyPolicyView from "../views/legal/PrivacyPolicyView.vue";
+
+// Marketplace Views
+import MainMarketView from "../views/marketplace/MainMarketView.vue";
 
 // Help & Error Views
-import FAQView from '../views/help/FAQView.vue'
-import Error404View from '../views/errors/Error404View.vue'
+import FAQView from "../views/help/FAQView.vue";
+import Error404View from "../views/errors/Error404View.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     // Marketing Routes
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: HomeView,
     },
     {
-      path: '/pricing',
-      name: 'pricing',
+      path: "/pricing",
+      name: "pricing",
       component: PricingView,
     },
     {
-      path: '/contact',
-      name: 'contact',
+      path: "/contact",
+      name: "contact",
       component: ContactView,
     },
 
     // Auth Routes
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: LoginView,
     },
     {
-      path: '/signup',
-      name: 'signup',
+      path: "/signup",
+      name: "signup",
       component: SignUpView,
+    },
+    {
+      path: "/password-reset",
+      name: "password-reset",
+      component: PasswordResetView,
     },
 
     // Dashboard Routes
     {
-      path: '/dashboard',
-      name: 'dashboard',
+      path: "/dashboard",
+      name: "dashboard",
       component: DashboardView,
     },
     {
-      path: '/profile',
-      name: 'profile',
+      path: "/profile",
+      name: "profile",
       component: UserProfileView,
     },
 
     // Jewelry Routes
     {
-      path: '/upload',
-      name: 'jewelry-upload',
+      path: "/upload",
+      name: "jewelry-upload",
       component: JewelryUploadView,
     },
     {
-      path: '/placement',
-      name: 'jewelry-placement',
+      path: "/placement",
+      name: "jewelry-placement",
       component: JewelryPlacementView,
     },
     {
-      path: '/refinement',
-      name: 'image-refinement',
+      path: "/refinement",
+      name: "image-refinement",
       component: ImageRefinementView,
     },
     {
-      path: '/models',
-      name: 'model-selection',
+      path: "/models",
+      name: "model-selection",
       component: ModelSelectionView,
     },
 
     // Legal Routes
     {
-      path: '/terms',
-      name: 'terms-of-service',
+      path: "/terms",
+      name: "terms-of-service",
       component: TermsOfServiceView,
     },
     {
-      path: '/privacy',
-      name: 'privacy-policy',
+      path: "/privacy",
+      name: "privacy-policy",
       component: PrivacyPolicyView,
+    },
+
+    // Marketplace Routes
+    {
+      path: "/marketplace",
+      name: "marketplace",
+      component: MainMarketView,
     },
 
     // Help and Error Routes
     {
-      path: '/faq',
-      name: 'faq',
+      path: "/faq",
+      name: "faq",
       component: FAQView,
     },
     {
-      path: '/:pathMatch(.*)*',
-      name: '404',
+      path: "/:pathMatch(.*)*",
+      name: "404",
       component: Error404View,
     },
   ],
-})
+});
 
-export default router
+export default router;

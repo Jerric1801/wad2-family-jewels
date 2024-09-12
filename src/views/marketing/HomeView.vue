@@ -5,7 +5,8 @@
         <h2
           class="text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
         >
-          Your Jewelry, <br/> Perfectly Displayed Every Time
+          Your Jewelry, <br />
+          Perfectly Displayed Every Time
         </h2>
       </div>
     </div>
