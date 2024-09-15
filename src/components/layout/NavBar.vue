@@ -5,7 +5,7 @@
   >
     <div class="container mx-auto flex justify-between items-center">
       <img
-        src="@/assets/images/logo/primary.svg"
+        src="@/assets/images/logo/logo.png"
         alt="Family Jewels Logo"
         class="h-12 w-auto mr-4"
       />

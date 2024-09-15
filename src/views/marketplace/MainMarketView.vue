@@ -2,9 +2,7 @@
   <DefaultLayout>
     <div class="container mx-auto px-4 pt-[100px]">
       <h1 class="text-3xl font-bold mb-8">Marketplace</h1>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <!-- Placeholder for marketplace items -->
         <div
           v-for="item in marketplaceItems"
