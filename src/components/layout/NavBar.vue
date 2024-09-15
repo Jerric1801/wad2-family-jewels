@@ -4,11 +4,14 @@
     class="fixed top-0 left-0 w-full p-4 bg-transparent transition-opacity duration-500 ease-in-out z-50"
   >
     <div class="container mx-auto flex justify-between items-center">
-      <img
-        src="@/assets/images/logo/logo.png"
-        alt="Family Jewels Logo"
-        class="h-12 w-auto mr-4"
-      />
+      <div class="flex items-center">
+        <img
+          src="@/assets/images/logo/logo.png"
+          alt="Family Jewels Logo"
+          class="h-20 w-auto mr-2"
+        />
+        <span class="text-xl font-bold">Family Jewels</span>
+      </div>
       <ul class="flex space-x-6 text-black">
         <li>
           <router-link to="/" class="text-lg font-medium">Home</router-link>

@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="container mx-auto px-4 pt-[100px]">
+    <div class="container mx-auto px-4 pt-[150px]">
       <h1 class="text-3xl font-bold mb-8">Marketplace</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <!-- Placeholder for marketplace items -->
@@ -47,8 +47,6 @@ export default {
   },
   methods: {
     getImageUrl(imageName) {
-      // Resolve the image path dynamically using import.meta.url
-      console.log("Image Name:", imageName);
       try {
         return new URL(
           `/src/assets/images/marketplace_images/${imageName}`,
@@ -61,20 +59,7 @@ export default {
     },
   },
   async created() {
-    const firebaseConfig = {
-      apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-      authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-      storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-      appId: import.meta.env.VITE_FIREBASE_APP_ID,
-    };
-
-    console.log("Firebase API Key:", firebaseConfig.apiKey); // Check the API key
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+    const { db } = await import("@/config/firebase");
     try {
       const { getDocs, collection } = await import("firebase/firestore");
       const querySnapshot = await getDocs(collection(db, "marketplace"));

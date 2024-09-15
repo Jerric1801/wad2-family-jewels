@@ -6,8 +6,8 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <img
-            class="mx-auto h-16 w-auto"
-            src="@/assets/images/logo/primary.svg"
+            class="mx-auto h-40 w-auto"
+            src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
@@ -30,6 +30,7 @@
               <label for="full-name" class="sr-only">Full name</label>
               <input
                 id="full-name"
+                v-model="name"
                 name="name"
                 type="text"
                 required
@@ -41,6 +42,7 @@
               <label for="email-address" class="sr-only">Email address</label>
               <input
                 id="email-address"
+                v-model="email"
                 name="email"
                 type="email"
                 autocomplete="email"
@@ -53,6 +55,7 @@
               <label for="password" class="sr-only">Password</label>
               <input
                 id="password"
+                v-model="password"
                 name="password"
                 type="password"
                 autocomplete="new-password"
@@ -68,6 +71,7 @@
               <input
                 id="confirm-password"
                 name="confirm-password"
+                v-model="confirmPassword"
                 type="password"
                 autocomplete="new-password"
                 required
@@ -133,21 +137,74 @@
         </form>
       </div>
     </div>
+
+    <!-- Success Popup -->
+    <div
+      v-if="showSuccessPopup"
+      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    >
+      <div class="bg-white p-12 rounded-lg shadow-lg max-w-md w-full">
+        <h3 class="text-2xl font-bold mb-6">Account Created Successfully!</h3>
+        <p class="text-lg mb-8">
+          Your account has been created. You can now log in.
+        </p>
+        <button
+          @click="closeSuccessPopup"
+          class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-indigo-700 transition-colors duration-300"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   </DefaultLayout>
 </template>
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import { collection, addDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { hashPassword } from "@/utils/authUtils";
 
 export default {
   name: "SignUpView",
   components: {
     DefaultLayout,
   },
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      showSuccessPopup: false,
+    };
+  },
   methods: {
-    handleSignUp() {
-      // Implement sign up logic here
+    async handleSignUp() {
+      if (this.password !== this.confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+      try {
+        const db = getFirestore();
+        const hashedPassword = await hashPassword(this.password);
+        await addDoc(collection(db, "accounts"), {
+          name: this.name,
+          email: this.email,
+          password: hashedPassword,
+        });
+        this.showSuccessPopup = true;
+      } catch (error) {
+        console.error("Error adding document: ", error);
+      }
     },
+    closeSuccessPopup() {
+      this.showSuccessPopup = false;
+      this.$router.push("/login");
+    },
+  },
+  async created() {
+    const { db } = await import("@/config/firebase");
   },
 };
 </script>

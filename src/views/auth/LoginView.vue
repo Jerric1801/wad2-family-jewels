@@ -6,8 +6,8 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <img
-            class="mx-auto h-16 w-auto"
-            src="@/assets/images/logo/primary.svg"
+            class="mx-auto h-40 w-auto"
+            src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
