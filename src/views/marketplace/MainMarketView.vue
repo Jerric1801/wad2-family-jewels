@@ -34,6 +34,8 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 export default {
   name: "MainMarket",
