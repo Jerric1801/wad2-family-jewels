@@ -32,6 +32,7 @@
                 id="email-address"
                 name="email"
                 type="email"
+                v-model="email"
                 autocomplete="email"
                 required
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
@@ -44,6 +45,7 @@
                 id="password"
                 name="password"
                 type="password"
+                v-model="password"
                 autocomplete="current-password"
                 required
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
@@ -77,6 +79,9 @@
               </a>
             </div>
           </div>
+          <div v-if="errorMessage" class="text-red-500 text-center">
+            {{ errorMessage }}
+          </div>
 
           <div>
             <button
@@ -104,11 +109,42 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import { comparePassword } from "@/utils/authUtils";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/config/firebase";
 
 export default {
   name: "LoginView",
   components: {
     DefaultLayout,
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+      errorMessage: "",
+    };
+  },
+  methods: {
+    async handleLogin() {
+      const usersCollection = collection(db, "accounts");
+      const q = query(usersCollection, where("email", "==", this.email));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        this.errorMessage = "No user with that email found";
+      } else {
+        const user = querySnapshot.docs[0].data();
+        const passwordMatch = await comparePassword(
+          this.password,
+          user.password
+        );
+        if (passwordMatch) {
+          this.$router.push("/profile");
+        } else {
+          this.errorMessage = "Invalid email or password";
+        }
+      }
+    },
   },
 };
 </script>
