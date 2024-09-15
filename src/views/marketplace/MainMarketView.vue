@@ -10,16 +10,14 @@
           class="bg-white rounded-lg shadow-md overflow-hidden"
         >
           <img
-            :src="item.image"
-            :alt="item.name"
+            :src="getImageUrl(item.image)"
+            :alt="item.title"
             class="w-full h-48 object-cover"
           />
           <div class="p-4">
-            <h2 class="text-xl font-semibold mb-2">{{ item.name }}</h2>
+            <h2 class="text-xl font-semibold mb-2">{{ item.title }}</h2>
             <p class="text-gray-600 mb-2">{{ item.description }}</p>
-            <p class="text-lg font-bold text-blue-600">
-              ${{ item.price.toFixed(2) }}
-            </p>
+            <p class="text-lg font-bold text-blue-600">${{ item.price }}</p>
             <button
               class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
             >
@@ -44,39 +42,48 @@ export default {
   },
   data() {
     return {
-      marketplaceItems: [
-        // Placeholder data, replace with actual data from your backend
-        {
-          id: 1,
-          name: "Diamond Ring",
-          description: "Beautiful diamond ring",
-          price: 999.99,
-          image: "https://placeholder.com/300x200",
-        },
-        {
-          id: 2,
-          name: "Gold Necklace",
-          description: "Elegant gold necklace",
-          price: 599.99,
-          image: "https://placeholder.com/300x200",
-        },
-        {
-          id: 3,
-          name: "Silver Bracelet",
-          description: "Stylish silver bracelet",
-          price: 299.99,
-          image: "https://placeholder.com/300x200",
-        },
-        {
-          id: 4,
-          name: "Pearl Earrings",
-          description: "Classic pearl earrings",
-          price: 199.99,
-          image: "https://placeholder.com/300x200",
-        },
-        // Add more items as needed
-      ],
+      marketplaceItems: [],
     };
+  },
+  methods: {
+    getImageUrl(imageName) {
+      // Resolve the image path dynamically using import.meta.url
+      console.log("Image Name:", imageName);
+      try {
+        return new URL(
+          `/src/assets/images/marketplace_images/${imageName}`,
+          import.meta.url
+        ).href;
+      } catch (error) {
+        console.error("Error loading image:", error);
+        return ""; // Return an empty string or a placeholder image URL
+      }
+    },
+  },
+  async created() {
+    const firebaseConfig = {
+      apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+      authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+      projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+      storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+      appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    };
+
+    console.log("Firebase API Key:", firebaseConfig.apiKey); // Check the API key
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    try {
+      const { getDocs, collection } = await import("firebase/firestore");
+      const querySnapshot = await getDocs(collection(db, "marketplace"));
+      querySnapshot.forEach((doc) => {
+        this.marketplaceItems.push({ id: doc.id, ...doc.data() });
+      });
+    } catch (error) {
+      console.error("Error accessing Firestore:", error);
+    }
   },
 };
 </script>
