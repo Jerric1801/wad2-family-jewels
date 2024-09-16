@@ -109,9 +109,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { comparePassword } from "@/utils/authUtils";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/config/firebase";
+import { handleLogin } from "@/services/firebase/auth";
 
 export default {
   name: "LoginView",
@@ -127,21 +125,17 @@ export default {
   },
   methods: {
     async handleLogin() {
-      const usersCollection = collection(db, "accounts");
-      const q = query(usersCollection, where("email", "==", this.email));
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) {
-        this.errorMessage = "No user with that email found";
-      } else {
-        const user = querySnapshot.docs[0].data();
-        const passwordMatch = await comparePassword(
-          this.password,
-          user.password
-        );
-        if (passwordMatch) {
-          this.$router.push("/profile");
+      this.errorMessage = ""; 
+      try {
+        await handleLogin(this.email, this.password);
+        this.$router.push("/profile"); 
+      } catch (error) {
+        if (error.code === "auth/wrong-password") {
+          this.errorMessage = "Invalid password";
+        } else if (error.code === "auth/user-not-found") {
+          this.errorMessage = "No user with that email found";
         } else {
-          this.errorMessage = "Invalid email or password";
+          this.errorMessage = "An error occurred during login. Please try again.";
         }
       }
     },

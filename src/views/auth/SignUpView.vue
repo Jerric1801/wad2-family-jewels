@@ -65,9 +65,7 @@
               />
             </div>
             <div>
-              <label for="confirm-password" class="sr-only"
-                >Confirm Password</label
-              >
+              <label for="confirm-password" class="sr-only">Confirm Password</label>
               <input
                 id="confirm-password"
                 name="confirm-password"
@@ -90,10 +88,7 @@
                 required
                 class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
-              <label
-                for="terms-and-privacy"
-                class="ml-2 block text-sm text-gray-900"
-              >
+              <label for="terms-and-privacy" class="ml-2 block text-sm text-gray-900">
                 I agree to the
                 <router-link
                   to="/terms"
@@ -145,9 +140,7 @@
     >
       <div class="bg-white p-12 rounded-lg shadow-lg max-w-md w-full">
         <h3 class="text-2xl font-bold mb-6">Account Created Successfully!</h3>
-        <p class="text-lg mb-8">
-          Your account has been created. You can now log in.
-        </p>
+        <p class="text-lg mb-8">Your account has been created. You can now log in.</p>
         <button
           @click="closeSuccessPopup"
           class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-indigo-700 transition-colors duration-300"
@@ -161,9 +154,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { collection, addDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-import { hashPassword } from "@/utils/authUtils";
+import { handleSignUp } from "@/services/firebase/auth";
 
 export default {
   name: "SignUpView",
@@ -185,26 +176,19 @@ export default {
         alert("Passwords do not match");
         return;
       }
+
       try {
-        const db = getFirestore();
-        const hashedPassword = await hashPassword(this.password);
-        await addDoc(collection(db, "accounts"), {
-          name: this.name,
-          email: this.email,
-          password: hashedPassword,
-        });
+        await handleSignUp(this.name, this.email, this.password);
         this.showSuccessPopup = true;
       } catch (error) {
-        console.error("Error adding document: ", error);
+        console.error("Error during signup:", error);
       }
     },
+
     closeSuccessPopup() {
       this.showSuccessPopup = false;
       this.$router.push("/login");
     },
-  },
-  async created() {
-    const { db } = await import("@/config/firebase");
   },
 };
 </script>

@@ -32,8 +32,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getMarketplaceItems } from "@/services/firebase/marketplace";
 
 export default {
   name: "MainMarket",
@@ -59,15 +58,10 @@ export default {
     },
   },
   async created() {
-    const { db } = await import("@/config/firebase");
     try {
-      const { getDocs, collection } = await import("firebase/firestore");
-      const querySnapshot = await getDocs(collection(db, "marketplace"));
-      querySnapshot.forEach((doc) => {
-        this.marketplaceItems.push({ id: doc.id, ...doc.data() });
-      });
+      this.marketplaceItems = await getMarketplaceItems();
     } catch (error) {
-      console.error("Error accessing Firestore:", error);
+      console.error("Error fetching marketplace items:", error);
     }
   },
 };
