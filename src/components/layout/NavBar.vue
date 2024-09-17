@@ -1,40 +1,29 @@
 <template>
   <nav
-    :class="['navbar', isVisible ? 'opacity-100' : 'opacity-0']"
-    class="fixed top-0 left-0 w-full p-4 bg-transparent transition-opacity duration-500 ease-in-out z-50"
+    :class="[
+      'navbar',
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full',
+    ]"
+    class="fixed top-0 left-0 w-full p-4 bg-transparent transition-all duration-1000 ease-in-out z-50 shadow-md"
   >
     <div class="container mx-auto flex justify-between items-center">
-      <div class="flex items-center">
+      <div class="flex items-center logo-container">
         <img
           src="@/assets/images/logo/logo.png"
           alt="Family Jewels Logo"
-          class="h-20 w-auto mr-2"
+          class="h-20 w-auto mr-2 animate-logo"
         />
-        <span class="text-xl font-bold">Family Jewels</span>
+        <span class="text-xl font-bold animate-text">Family Jewels</span>
       </div>
       <ul class="flex space-x-6 text-black">
-        <li>
-          <router-link to="/" class="text-lg font-medium">Home</router-link>
-        </li>
-        <li>
-          <router-link to="/marketplace" class="text-lg font-medium"
-            >Marketplace</router-link
+        <li v-for="(item, index) in navItems" :key="item.to" class="nav-item">
+          <router-link
+            :to="item.to"
+            class="text-lg font-medium"
+            :style="{ animationDelay: `${index * 0.2}s` }"
           >
-        </li>
-        <li>
-          <router-link to="/login" class="text-lg font-medium"
-            >Login</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/upload" class="text-lg font-medium"
-            >Upload Jewelry</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/profile" class="text-lg font-medium"
-            >Profile</router-link
-          >
+            {{ item.text }}
+          </router-link>
         </li>
       </ul>
     </div>
@@ -48,6 +37,13 @@ export default {
     return {
       isVisible: true,
       lastScrollY: 0,
+      navItems: [
+        { to: "/", text: "Home" },
+        { to: "/marketplace", text: "Marketplace" },
+        { to: "/login", text: "Login" },
+        { to: "/upload", text: "Upload Jewelry" },
+        { to: "/profile", text: "Profile" },
+      ],
     };
   },
   mounted() {
@@ -69,5 +65,60 @@ export default {
 <style scoped>
 .router-link-active {
   font-weight: bold;
+}
+
+.nav-item {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInDown 0.5s ease forwards;
+}
+
+@keyframes fadeInDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-container {
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-logo {
+  animation: rotateIn 1s ease-out forwards;
+}
+
+.animate-text {
+  opacity: 0;
+  animation: slideIn 1s ease-out forwards 0.5s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    transform: rotate(-360deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style>

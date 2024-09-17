@@ -53,7 +53,7 @@ export default {
         ).href;
       } catch (error) {
         console.error("Error loading image:", error);
-        return ""; // Return an empty string or a placeholder image URL
+        return "";
       }
     },
   },

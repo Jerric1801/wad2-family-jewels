@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/motion": "^2.2.5",
     "bcryptjs": "^2.4.3",
     "firebase": "^10.13.1",
     "pinia": "^2.2.2",
