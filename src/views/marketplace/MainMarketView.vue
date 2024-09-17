@@ -1,13 +1,14 @@
 <template>
   <DefaultLayout>
     <div class="container mx-auto px-4 pt-[150px]">
-      <h1 class="text-3xl font-bold mb-8">Marketplace</h1>
+      <h1 class="text-3xl font-bold mb-8 animate-fade-in">Marketplace</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Placeholder for marketplace items -->
+        <!-- Marketplace items with animation -->
         <div
-          v-for="item in marketplaceItems"
+          v-for="(item, index) in marketplaceItems"
           :key="item.id"
-          class="bg-white rounded-lg shadow-md overflow-hidden"
+          class="bg-white rounded-lg shadow-md overflow-hidden animate-fade-in-up"
+          :style="{ animationDelay: `${index * 0.1}s` }"
         >
           <img
             :src="getImageUrl(item.image)"
@@ -66,3 +67,34 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+</style>
