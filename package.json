@@ -12,6 +12,8 @@
     "bcryptjs": "^2.4.3",
     "firebase": "^10.13.1",
     "pinia": "^2.2.2",
+    "three": "^0.168.0",
+    "three-gltf-loader": "^1.111.0",
     "vue": "^3.4.37",
     "vue-router": "^4.4.3"
   },
