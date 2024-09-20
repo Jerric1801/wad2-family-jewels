@@ -16,14 +16,28 @@
         <span class="text-xl font-bold animate-text">Family Jewels</span>
       </div>
       <ul class="flex space-x-6 text-black">
-        <li v-for="(item, index) in navItems" :key="item.to" class="nav-item">
+        <li
+          v-for="(item, index) in currentNavItems"
+          :key="item.to"
+          class="nav-item"
+        >
           <router-link
+            v-if="item.text !== 'Logout'"
             :to="item.to"
             class="text-lg font-medium"
             :style="{ animationDelay: `${index * 0.2}s` }"
           >
             {{ item.text }}
           </router-link>
+          <a
+            v-else
+            href="#"
+            @click.prevent="logout"
+            class="text-lg font-medium"
+            :style="{ animationDelay: `${index * 0.2}s` }"
+          >
+            {{ item.text }}
+          </a>
         </li>
       </ul>
     </div>
@@ -31,33 +45,68 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/store/auth";
+import { storeToRefs } from "pinia";
+import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { handleLogout } from "@/services/firebase/auth";
+import { useRouter } from "vue-router";
+
 export default {
   name: "NavBar",
-  data() {
-    return {
-      isVisible: true,
-      lastScrollY: 0,
-      navItems: [
-        { to: "/", text: "Home" },
-        { to: "/marketplace", text: "Marketplace" },
-        { to: "/login", text: "Login" },
-        { to: "/upload", text: "Upload Jewelry" },
-        { to: "/profile", text: "Profile" },
-      ],
-    };
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
-  methods: {
-    handleScroll() {
+  setup() {
+    const authStore = useAuthStore();
+    const { isAuthenticated } = storeToRefs(authStore);
+    const router = useRouter();
+
+    const isVisible = ref(true);
+    const lastScrollY = ref(0);
+    const guestNavItems = [
+      { to: "/", text: "Home" },
+      { to: "/marketplace", text: "Marketplace" },
+      { to: "/login", text: "Login" },
+    ];
+    const loggedInNavItems = [
+      { to: "/", text: "Home" },
+      { to: "/marketplace", text: "Marketplace" },
+      { to: "/upload", text: "Upload Jewelry" },
+      { to: "/profile", text: "Profile" },
+      { to: "/logout", text: "Logout" },
+    ];
+
+    const currentNavItems = computed(() => {
+      return isAuthenticated.value ? loggedInNavItems : guestNavItems;
+    });
+
+    const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      this.isVisible = this.lastScrollY > currentScrollY || currentScrollY < 10;
-      this.lastScrollY = currentScrollY;
-    },
+      isVisible.value =
+        lastScrollY.value > currentScrollY || currentScrollY < 10;
+      lastScrollY.value = currentScrollY;
+    };
+
+    onMounted(() => {
+      window.addEventListener("scroll", handleScroll);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
+
+    const logout = async () => {
+      try {
+        await handleLogout();
+        router.push("/login");
+      } catch (error) {
+        console.error("Error during logout:", error);
+      }
+    };
+
+    return {
+      isAuthenticated,
+      isVisible,
+      currentNavItems,
+      logout,
+    };
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <DefaultLayout>
     <div class="container mx-auto px-4 py-8 pt-[150px]">
       <h1 class="text-3xl font-bold mb-6">User Profile</h1>
-      <div class="bg-white shadow-md rounded-lg p-6">
+      <div v-if="isAuthenticated" class="bg-white shadow-md rounded-lg p-6">
         <div class="flex items-center mb-6">
           <!-- <img :src="" alt="Profile Photo" class="w-24 h-24 rounded-full mr-6" /> -->
           <div>
@@ -21,19 +21,49 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/store/auth";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import { computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
     DefaultLayout,
   },
+  setup() {
+    const authStore = useAuthStore();
+    const router = useRouter();
+    const isAuthenticated = computed(() => authStore.isAuthenticated);
+    const userRetrieved = computed(() => authStore.user);
+
+    console.log("FF", JSON.stringify(userRetrieved.value, null, 2));
+
+    onMounted(() => {
+      if (!isAuthenticated.value) {
+        router.push("/login");
+      }
+    });
+
+    return { isAuthenticated, userRetrieved };
+  },
   data() {
     return {
       user: {
-        name: "John Doe",
-        email: "john@doe.com",
+        id: "",
+        name: "",
+        email: "",
       },
     };
+  },
+  async created() {
+    if (this.isAuthenticated) {
+      try {
+        const { id, name, email } = this.userRetrieved;
+        this.user = { id, name, email };
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    }
   },
 };
 </script>

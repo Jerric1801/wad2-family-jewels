@@ -125,17 +125,18 @@ export default {
   },
   methods: {
     async handleLogin() {
-      this.errorMessage = ""; 
+      this.errorMessage = "";
       try {
         await handleLogin(this.email, this.password);
-        this.$router.push("/profile"); 
+        this.$router.push("/profile");
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           this.errorMessage = "Invalid password";
         } else if (error.code === "auth/user-not-found") {
           this.errorMessage = "No user with that email found";
         } else {
-          this.errorMessage = "An error occurred during login. Please try again.";
+          this.errorMessage =
+            "An error occurred during login. Please try again.";
         }
       }
     },
