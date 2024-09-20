@@ -15,8 +15,7 @@ app.use(router);
 
 const authStore = useAuthStore(pinia);
 
-let appMounted = false;
-
+// Wait for the initial auth state to be determined before mounting the app
 onAuthStateChanged(auth, (user) => {
   if (user) {
     authStore.setUser({
@@ -28,8 +27,6 @@ onAuthStateChanged(auth, (user) => {
     authStore.clearUser();
   }
 
-  if (!appMounted) {
-    app.mount("#app");
-    appMounted = true;
-  }
+  // Mount the app after the auth state has been determined
+  app.mount("#app");
 });

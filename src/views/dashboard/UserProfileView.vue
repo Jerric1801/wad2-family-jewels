@@ -23,7 +23,8 @@
 <script>
 import { useAuthStore } from "@/store/auth";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -33,37 +34,18 @@ export default {
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
-    const isAuthenticated = computed(() => authStore.isAuthenticated);
-    const userRetrieved = computed(() => authStore.user);
+    const { isAuthenticated, user } = storeToRefs(authStore);
 
-    console.log("FF", JSON.stringify(userRetrieved.value, null, 2));
-
-    onMounted(() => {
+    const checkAuthentication = () => {
       if (!isAuthenticated.value) {
         router.push("/login");
       }
-    });
-
-    return { isAuthenticated, userRetrieved };
-  },
-  data() {
-    return {
-      user: {
-        id: "",
-        name: "",
-        email: "",
-      },
     };
-  },
-  async created() {
-    if (this.isAuthenticated) {
-      try {
-        const { id, name, email } = this.userRetrieved;
-        this.user = { id, name, email };
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    }
+
+    onMounted(checkAuthentication);
+    watch(isAuthenticated, checkAuthentication);
+
+    return { isAuthenticated, user };
   },
 };
 </script>

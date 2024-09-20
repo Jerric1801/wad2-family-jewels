@@ -12,8 +12,13 @@
           src="@/assets/images/logo/logo.png"
           alt="Family Jewels Logo"
           class="h-20 w-auto mr-2 animate-logo"
+          onclick="window.location.href = '/'"
         />
-        <span class="text-xl font-bold animate-text">Family Jewels</span>
+        <span
+          class="text-xl font-bold animate-text"
+          onclick="window.location.href = '/'"
+          >Family Jewels</span
+        >
       </div>
       <ul class="flex space-x-6 text-black">
         <li

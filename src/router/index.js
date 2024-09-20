@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { auth } from "@/config/firebase";
+import { useAuthStore } from "@/store/auth";
 
 // Marketing Views
 import HomeView from "../views/marketing/HomeView.vue";
@@ -78,6 +80,7 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: UserProfileView,
+      meta: { requiresAuth: true },
     },
 
     // Jewelry Routes
@@ -133,6 +136,17 @@ const router = createRouter({
       component: Error404View,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && !authStore.isAuthenticated) {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;
