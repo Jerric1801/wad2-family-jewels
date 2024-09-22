@@ -1,8 +1,9 @@
 <template>
   <DefaultLayout>
-    <div ref="homeContainer" class="bg-white h-[100vh] w-[100vw] flex justify-center relative overflow-scroll">
+    <div ref="homeContainer" class="bg-white h-[380vh] w-[100vw] flex flex-col justify-center relative">
       <!-- Intro -->
-      <div class="relative text-center z-10 mt-[40vh] flex justify-center align-center w-full h-[100vh] bg-transparent ">
+      <div
+        class="relative text-center z-10 mt-[40vh] flex justify-center align-center w-full h-[100vh] bg-transparent ">
         <h2 class="text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
           style="z-index: 5;">
           Your Jewelry, <br />
@@ -10,18 +11,31 @@
         </h2>
       </div>
       <!-- Ring -->
-      <div ref="sceneContainer" class="absolute overflow-hidden" style="z-index: 2;"> </div>
-      <!-- Backgrounds -->
-      <div class="relative h-[200vh]">
-        <div v-for="(image, index) in backgroundImages" :key="index"
-          class="absolute bottom-0 left-0 w-full bg-cover bg-center transition-opacity duration-1000" :style="{
-            backgroundImage: `url(${image})`,
-            opacity: index === currentImageIndex ? 1 : 0
-          }"></div>
+      <div class="w-full h-full absolute bg-transparent">
+        <div ref="sceneContainer" class="overflow-hidden h-[85vh]" :style="{
+          zIndex: 2,
+          top: 0,
+          position: 'sticky'
+        }"> </div>
       </div>
-
+      <!-- Backgrounds -->
+      <div ref="backgroundsContainer" class="stack" :style="{
+        height: '300vh',  // Set height to 50% of homeContainer
+      }">
+        <div v-for="(image, index) in backgroundImages" :key="index" class="
+            flex 
+            justify-center 
+            items-center 
+            h-[95vh] 
+            sticky 
+            top-0 
+            shadow-[0_-1px_3px_rgba(0,0,0,0.1),_0_-1px_2px_rgba(0,0,0,0.25)] 
+            text-[10rem] 
+            bg-cover 
+            bg-center" :style="{ backgroundImage: `url(${image})` }"></div>
+      </div>
     </div>
-
+    <div class="bg-pink h-[100vh]"></div>
   </DefaultLayout>
 </template>
 
@@ -29,8 +43,6 @@
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import background1 from '@/assets/images/home/backgrounds/background_1.jpg';
 import background2 from '@/assets/images/home/backgrounds/background_2.jpg';
 
@@ -41,6 +53,7 @@ export default {
   },
   data() {
     return {
+      backgroundParallax: 0,
       previousScrollTop: 0,
       targetRotation: 0,
       ring: null,
@@ -48,12 +61,13 @@ export default {
       backgroundImages: [
         background1,
         background2,
+        background1,
       ],
       currentImageIndex: 0,
     };
   },
   mounted() {
-    this.$refs.homeContainer.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 800);
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -67,23 +81,19 @@ export default {
     this.scene.add(directionalLight);
 
     const loader = new FBXLoader();
-    loader.load('/assets/models/Ring.fbx', (object) => { 
+    loader.load('/assets/models/Ring.fbx', (object) => {
       this.ring = object;
-
       this.scene.add(object);
-
       object.rotation.y = Math.PI / 2;
       object.rotation.z = 0;
       object.rotation.x = 0.55;
       object.position.z = -2;
       object.position.set(0, 0, 0);
-      object.scale.set(0.001, 0.001, 0.001);   
-
+      object.scale.set(0.001, 0.001, 0.001);
       object.traverse((child) => {
         if (child.isMesh) {
           const color1 = '#FFB8DA'
           const color2 = '#8063BC'
-
           const material = new THREE.ShaderMaterial({
             uniforms: {
               color1: { type: "c", value: new THREE.Color(color1) },
@@ -110,13 +120,9 @@ export default {
                     gl_FragColor = vec4(color, 1.0);
                 }
               `
-
-
           });
-
           material.metalness = 0.9;
           material.roughness = 0.1;
-
           child.material = material;
         }
       });
@@ -141,9 +147,8 @@ export default {
     window.addEventListener('resize', this.onWindowResize, false);
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
     window.removeEventListener('resize', this.onWindowResize);
-    this.$refs.homeContainer.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     animate() {
@@ -151,14 +156,7 @@ export default {
       this.renderer.render(this.scene, this.camera);
     },
     handleScroll() {
-      const scrollTop = this.$refs.homeContainer.scrollTop;
-
-      // Change background image on scroll thresholds
-      const imageChangeThreshold = window.innerHeight / 2;
-      const newImageIndex = Math.floor(scrollTop / imageChangeThreshold) % this.backgroundImages.length;
-      if (newImageIndex !== this.currentImageIndex) { // Only update if the index has changed
-        this.currentImageIndex = newImageIndex;
-      }
+      const scrollTop = window.scrollY;
       // Scroll direction detection
       const currentScrollTop = scrollTop;
       const scrollDirection = currentScrollTop > this.previousScrollTop ? 'down' : 'up';
