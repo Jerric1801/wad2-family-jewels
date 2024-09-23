@@ -3,7 +3,7 @@
     <div ref="homeContainer" class="bg-white h-[400vh] w-[100vw] flex flex-col justify-center relative">
       <!-- Intro -->
       <div class="relative text-center z-10 mt-[40vh] flex justify-center w-full h-[100vh] bg-transparent ">
-        <h2 class="text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        <h2 class="text-5xl font-bold"
           style="z-index: 5;">
           <span class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
             v-for="(line, index) in headlineLines" :key="index" :style="{ animationDelay: `${index * 1}s` }">
