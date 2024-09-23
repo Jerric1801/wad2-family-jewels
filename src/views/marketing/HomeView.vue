@@ -5,8 +5,10 @@
       <div class="relative text-center z-10 mt-[40vh] flex justify-center w-full h-[100vh] bg-transparent ">
         <h2 class="text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
           style="z-index: 5;">
-          Your Jewelry, <br />
-          Perfectly Displayed Every Time
+          <span class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+            v-for="(line, index) in headlineLines" :key="index" :style="{ animationDelay: `${index * 1}s` }">
+            {{ line }}<br v-if="index === 0" />
+          </span>
         </h2>
       </div>
       <!-- Ring -->
@@ -35,28 +37,31 @@
       </div>
     </div>
     <!-- Section 1: Image Gen -->
-    <div class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"> 
+    <div
+      class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4">
       <div class="h-[40%] w-[80%] md:w-[45%]">
-        <h2 class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+        <h2
+          class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
           Effortless Product Image Generation</h2>
         <p class="mt-4">Upload your jewelry photos, and our AI will seamlessly place them on lifelike models, creating
           captivating images in seconds. No more expensive photoshoots or complex editing!</p>
       </div>
       <div class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative">
-        <img class="w-full max-w-[85%] absolute bg-cover rounded-md" src="../../assets/images/home/product_1.jpg"> 
+        <img class="w-full max-w-[85%] absolute bg-cover rounded-md" src="../../assets/images/home/product_1.jpg">
       </div>
     </div>
     <!-- Section 2: Perfect the look -->
     <div class="h-[85vh] w-[100vw] flex flex-col justify-center items-center gap-10 bg-white md:h-[110vh]">
       <div class="w-[80vw] text-center md:w-[50vw]">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+        <h2
+          class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
           Perfect the Look</h2>
         <p class="mt-3">Fine-tune images with easy-to-use editing tools. Adjust lighting, remove backgrounds, and even
           select the
           perfect model skin tone to match your brand's style.</p>
       </div>
-      <div class="h-[45vh] w-[80vw] md:h-[60vh] md:w-[60vw] relative overflow-hidden rounded-md" @mousemove="handleMouseMove"
-        @touchmove="handleTouchMove">
+      <div class="h-[45vh] w-[80vw] md:h-[60vh] md:w-[60vw] relative overflow-hidden rounded-md"
+        @mousemove="handleMouseMove" @touchmove="handleTouchMove">
         <div class="absolute top-0 left-0 w-full h-full"
           :style="{ 'background-image': `url(${productImages[1]})`, 'background-size': 'cover', 'background-position': 'center 10%' }">
         </div>
@@ -69,11 +74,13 @@
       </div>
     </div>
     <!-- Section 3: Call-To-Action -->
-    <div class="h-[65vh] md:h-[80vh] w-[100vw] bg-gradient-to-r from-pink via-purple to-blue flex justify-center items-center">
+    <div
+      class="h-[65vh] md:h-[80vh] w-[100vw] bg-gradient-to-r from-pink via-purple to-blue flex justify-center items-center">
       <div class="w-[80vw] md:h-[80vh] md:w-[60%] flex flex-col justify-center items-center gap-10 text-center">
-      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Start Creating Stunning Jewelry Images Today!</h2>
-      <button class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white">Start Here!</button>
-    </div>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Start Creating Stunning Jewelry Images Today!
+        </h2>
+        <button class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white">Start Here!</button>
+      </div>
     </div>
   </DefaultLayout>
 </template>
@@ -96,6 +103,7 @@ export default {
   },
   data() {
     return {
+      headlineLines: ["Your Jewelry,", "Perfectly Displayed Every Time"],
       sliderPosition: 275,
       isDragging: false,
       backgroundParallax: 0,
@@ -266,11 +274,6 @@ export default {
       this.sliderPosition = newPosition;
     }
   }
-  data() {
-    return {
-      headlineLines: ["Your Jewelry,", "Perfectly Displayed Every Time"],
-    };
-  },
 };
 </script>
 
@@ -280,6 +283,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
