@@ -1,9 +1,8 @@
 <template>
   <DefaultLayout>
-    <div ref="homeContainer" class="bg-white h-[380vh] w-[100vw] flex flex-col justify-center relative">
+    <div ref="homeContainer" class="bg-white h-[400vh] w-[100vw] flex flex-col justify-center relative">
       <!-- Intro -->
-      <div
-        class="relative text-center z-10 mt-[40vh] flex justify-center align-center w-full h-[100vh] bg-transparent ">
+      <div class="relative text-center z-10 mt-[40vh] flex justify-center w-full h-[100vh] bg-transparent ">
         <h2 class="text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
           style="z-index: 5;">
           Your Jewelry, <br />
@@ -35,8 +34,46 @@
             bg-center" :style="{ backgroundImage: `url(${image})` }"></div>
       </div>
     </div>
-    <div class="bg-white h-[100vh]">
-      <h1></h1>
+    <!-- Section 1: Image Gen -->
+    <div class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"> 
+      <div class="h-[40%] w-[80%] md:w-[45%]">
+        <h2 class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+          Effortless Product Image Generation</h2>
+        <p class="mt-4">Upload your jewelry photos, and our AI will seamlessly place them on lifelike models, creating
+          captivating images in seconds. No more expensive photoshoots or complex editing!</p>
+      </div>
+      <div class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative">
+        <img class="w-full max-w-[85%] absolute bg-cover rounded-md" src="../../assets/images/home/product_1.jpg"> 
+      </div>
+    </div>
+    <!-- Section 2: Perfect the look -->
+    <div class="h-[85vh] w-[100vw] flex flex-col justify-center items-center gap-10 bg-white md:h-[110vh]">
+      <div class="w-[80vw] text-center md:w-[50vw]">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+          Perfect the Look</h2>
+        <p class="mt-3">Fine-tune images with easy-to-use editing tools. Adjust lighting, remove backgrounds, and even
+          select the
+          perfect model skin tone to match your brand's style.</p>
+      </div>
+      <div class="h-[45vh] w-[80vw] md:h-[60vh] md:w-[60vw] relative overflow-hidden rounded-md" @mousemove="handleMouseMove"
+        @touchmove="handleTouchMove">
+        <div class="absolute top-0 left-0 w-full h-full"
+          :style="{ 'background-image': `url(${productImages[1]})`, 'background-size': 'cover', 'background-position': 'center 10%' }">
+        </div>
+        <div class="absolute top-0 left-0 h-full"
+          :style="{ width: sliderPosition + 'px', 'background-image': `url(${productImages[0]})`, 'background-size': 'cover' }">
+        </div>
+        <div class="absolute top-0 h-full w-2 bg-gray-300 cursor-ew-resize" :style="{ left: sliderPosition + 'px' }"
+          @mousedown="startDragging" @touchstart="startDragging" ref="sliderHandle">
+        </div>
+      </div>
+    </div>
+    <!-- Section 3: Call-To-Action -->
+    <div class="h-[65vh] md:h-[80vh] w-[100vw] bg-gradient-to-r from-pink via-purple to-blue flex justify-center items-center">
+      <div class="w-[80vw] md:h-[80vh] md:w-[60%] flex flex-col justify-center items-center gap-10 text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Start Creating Stunning Jewelry Images Today!</h2>
+      <button class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white">Start Here!</button>
+    </div>
     </div>
   </DefaultLayout>
 </template>
@@ -48,6 +85,8 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import background1 from '@/assets/images/home/backgrounds/background_1.jpg';
 import background2 from '@/assets/images/home/backgrounds/background_2.jpg';
 import background3 from '@/assets/images/home/backgrounds/background_3.jpg';
+import product1 from '@/assets/images/home/product_2.jpg';
+import product2 from '@/assets/images/home/product_3.png';
 
 export default {
   name: "HomeView",
@@ -56,11 +95,17 @@ export default {
   },
   data() {
     return {
+      sliderPosition: 275,
+      isDragging: false,
       backgroundParallax: 0,
       previousScrollTop: 0,
       targetRotation: 0,
       ring: null,
       rotation: 0,
+      productImages: [
+        product1,
+        product2
+      ],
       backgroundImages: [
         background3,
         background2,
@@ -182,7 +227,43 @@ export default {
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth,
         window.innerHeight);
+    },
+    handleMouseMove(event) {
+      if (this.isDragging) {
+        this.updateSliderPosition(event.clientX);
+      }
+    },
+    handleTouchMove(event) {
+      if (this.isDragging) {
+        this.updateSliderPosition(event.touches[0].clientX);
+      }
+    },
+    startDragging() {
+      this.isDragging = true;
+      document.addEventListener('mousemove', this.handleMouseMove);
+      document.addEventListener('mouseup', this.stopDragging);
+      document.addEventListener('touchmove', this.handleTouchMove);
+      document.addEventListener('touchend', this.stopDragging);
+    },
+    stopDragging() {
+      this.isDragging = false;
+      document.removeEventListener('mousemove', this.handleMouseMove);
+      document.removeEventListener('mouseup', this.stopDragging);
+
+      document.removeEventListener('touchmove', this.handleTouchMove);
+      document.removeEventListener('touchend', this.stopDragging);
+    },
+    updateSliderPosition(clientX) {
+      const container = this.$el;
+      const containerRect = container.getBoundingClientRect();
+      let newPosition = clientX - containerRect.left;
+
+      // Constrain the slider position within the container's width
+      const maxWidth = containerRect.width - this.$refs.sliderHandle.offsetWidth; // Adjust for handle width
+      newPosition = Math.max(50, Math.min(maxWidth - 450, newPosition));
+
+      this.sliderPosition = newPosition;
     }
-  },
+  }
 };
 </script>
