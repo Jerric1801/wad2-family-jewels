@@ -35,7 +35,9 @@
             bg-center" :style="{ backgroundImage: `url(${image})` }"></div>
       </div>
     </div>
-    <div class="bg-pink h-[100vh]"></div>
+    <div class="bg-white h-[100vh]">
+      <h1></h1>
+    </div>
   </DefaultLayout>
 </template>
 
@@ -45,6 +47,7 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import background1 from '@/assets/images/home/backgrounds/background_1.jpg';
 import background2 from '@/assets/images/home/backgrounds/background_2.jpg';
+import background3 from '@/assets/images/home/backgrounds/background_3.jpg';
 
 export default {
   name: "HomeView",
@@ -59,7 +62,7 @@ export default {
       ring: null,
       rotation: 0,
       backgroundImages: [
-        background1,
+        background3,
         background2,
         background1,
       ],
@@ -114,8 +117,10 @@ export default {
                 uniform vec3 color1;
                 uniform vec3 color2;
                 varying vec3 vPosition;
+                varying vec3 vViewDirection;
+                
                 void main() {
-                    float t = 0.25 * (vPosition.y + 1.0); // Interpolate based on Y-position
+                    float t = 0.25 * (vPosition.y + 0.8); 
                     vec3 color = mix(color1, color2, t);
                     gl_FragColor = vec4(color, 1.0);
                 }
