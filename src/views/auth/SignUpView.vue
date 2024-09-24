@@ -60,12 +60,15 @@
                 type="password"
                 autocomplete="new-password"
                 required
+                minlength="6"
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
-                placeholder="Password"
+                placeholder="Password (minimum 6 characters)"
               />
             </div>
             <div>
-              <label for="confirm-password" class="sr-only">Confirm Password</label>
+              <label for="confirm-password" class="sr-only"
+                >Confirm Password</label
+              >
               <input
                 id="confirm-password"
                 name="confirm-password"
@@ -73,6 +76,7 @@
                 type="password"
                 autocomplete="new-password"
                 required
+                minlength="6"
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
                 placeholder="Confirm Password"
               />
@@ -88,7 +92,10 @@
                 required
                 class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
-              <label for="terms-and-privacy" class="ml-2 block text-sm text-gray-900">
+              <label
+                for="terms-and-privacy"
+                class="ml-2 block text-sm text-gray-900"
+              >
                 I agree to the
                 <router-link
                   to="/terms"
@@ -140,7 +147,9 @@
     >
       <div class="bg-white p-12 rounded-lg shadow-lg max-w-md w-full">
         <h3 class="text-2xl font-bold mb-6">Account Created Successfully!</h3>
-        <p class="text-lg mb-8">Your account has been created. You can now log in.</p>
+        <p class="text-lg mb-8">
+          Your account has been created. You can now log in.
+        </p>
         <button
           @click="closeSuccessPopup"
           class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-indigo-700 transition-colors duration-300"
@@ -154,7 +163,8 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { handleSignUp } from "@/services/firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 export default {
   name: "SignUpView",
@@ -172,17 +182,46 @@ export default {
   },
   methods: {
     async handleSignUp() {
-      if (this.password !== this.confirmPassword) {
-        alert("Passwords do not match");
+      if (this.password.length < 6) {
+        console.error("Password must be at least 6 characters long");
+        // Display an error message to the user
         return;
       }
 
+      if (this.password !== this.confirmPassword) {
+        console.error("Passwords do not match");
+        // Display an error message to the user
+        return;
+      }
+
+      const auth = getAuth();
+      const db = getFirestore();
+
       try {
-        await handleSignUp(this.name, this.email, this.password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          this.email,
+          this.password
+        );
+        const user = userCredential.user;
+        await this.createUserProfile(user.uid, db);
+
+        console.log("Signed up as:", user.uid);
         this.showSuccessPopup = true;
       } catch (error) {
-        console.error("Error during signup:", error);
+        console.error("Error signing up:", error);
+        // Display an error message to the user
+        // You might want to add error handling logic here
       }
+    },
+
+    async createUserProfile(userId, db) {
+      await setDoc(doc(db, "user-profile", userId), {
+        bio: "",
+        fullName: this.name,
+        photoURL: "",
+        email: this.email,
+      });
     },
 
     closeSuccessPopup() {
