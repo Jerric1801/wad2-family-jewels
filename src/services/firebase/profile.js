@@ -1,6 +1,6 @@
 import { db } from "@/config/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const retrieveUserProfile = async (userId) => {
   const docRef = doc(db, "user-profile", userId);
@@ -15,35 +15,29 @@ export const retrieveUserProfile = async (userId) => {
 
 export const uploadPhoto = async (userId, photo) => {
   const storage = getStorage();
-  const storageRef = ref(storage, `user-profile-photos/${userId}`);
+  const storageRef = ref(
+    storage,
+    `${import.meta.env.VITE_FIREBASE_STORAGE_BUCKET}/${userId}`
+  );
 
-  return new Promise((resolve, reject) => {
-    const uploadTask = uploadBytesResumable(storageRef, photo);
+  try {
+    // Upload the file
+    const snapshot = await uploadBytes(storageRef, photo);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-        console.error("Error uploading photo:", error);
-        reject(error);
-      },
-      () => {
-        // Handle successful uploads on complete
-        console.log("Photo uploaded successfully");
-        resolve(uploadTask.snapshot);
-      }
-    );
-  });
+    // Get the download URL
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    // Update the user profile with the new photo URL
+    updateProfilePhotoUrl(userId, downloadURL);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
 };
 
-// export const updateUserProfile = async (userId, updatedData) => {
-//   const docRef = doc(db, "user-profile", userId);
-//   await setDoc(docRef, updatedData);
-// };
+export const updateProfilePhotoUrl = async (userId, photoUrl) => {
+  const docRef = doc(db, "user-profile", userId);
+
+  // Update only the imageUrl field, merging it with the existing data
+  await setDoc(docRef, { imageUrl: photoUrl }, { merge: true });
+};
