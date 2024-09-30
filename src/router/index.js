@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { auth } from "@/config/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAuthStore } from "@/store/auth";
 
 // Marketing Views
@@ -139,14 +139,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-
-  if (requiresAuth && !authStore.isAuthenticated) {
-    next("/login");
-  } else {
-    next();
-  }
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    if (requiresAuth && !user) {
+      next("/login");
+    } else {
+      next();
+    }
+  });
 });
 
 export default router;
