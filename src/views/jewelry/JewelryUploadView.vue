@@ -12,25 +12,29 @@
 
                 </div>
                 <div class="container col-span-2" id="uploadDiv">
-                    <div class="rounded shadow-lg bg-gray-200 lg:h-96 lg:w-3/4 mx-auto content-center" >
+                    <div class="rounded shadow-lg bg-gray-200 lg:h-96 lg:w-3/4 h-96 mx-auto content-center" >
                         <img class = "lg:w-full lg:h-full" id="mainImg" :src="mainImg" v-if="mainImg != ''">
                         <div v-else class="bg-grey-200">
                             <p class="text-center border-2 p-8">No Image Selected</p>
                         </div>
+                    </div>  
+                    <div>
+                        <input @change="chooseImg()" type="file" id="chooseImg" name="chooseImg" class="focus mx-auto pt-5 pb-2" style="display: block;width: 110px;"/>
+
                     </div>
+                   
 
-
-                    <div class="m-10">
+                    <div>
                         <button type="submit" id="uploadImg"
                             class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            @click="uploadImage()">
+                            @click="uploadImages()">
                             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                 <!-- Heroicon name: solid/lock-closed -->
                                 <svg class="h-6 w-6 text-indigo-500 group-hover:text-indigo-400"
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                     aria-hidden="true"></svg>
                             </span>
-                            Upload Image
+                            Upload Images
                         </button>
                         <div v-if="error" style="text-align: center;" >
                             <p style="color:red" >{{ errorMsg }}</p>
@@ -64,27 +68,38 @@ export default {
         };
     },
     methods: {
-        uploadImage() {
+        uploadImages() {
             if(this.images.length == 2){
                 this.error = true;
                 this.errorMsg = 'You can only upload 6 images';
             }else{
-                const input = document.createElement('input');
-            input.type = 'file';
-            input.onchange = e => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = readerEvent => {
-                    const content = readerEvent.target.result;
-                    this.images.push(content);
-                    this.mainImg = content;
-                }
-            }
-            input.click();
+            
             }
             
-        }
+        },
+        chooseImg() {
+            const file = document.getElementById('chooseImg').files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result
+                this.mainImg = content;
+                this.images.push(content);
+            }.bind(this);
+            reader.readAsDataURL(file);
+            // const input = document.createElement('input');
+            // input.type = 'file';
+            // input.onchange = e => {
+            //     const file = e.target.files[0];
+            //     const reader = new FileReader();
+            //     reader.readAsDataURL(file);
+            //     reader.onload = readerEvent => {
+            //         const content = readerEvent.target.result;
+            //         
+            //         this.mainImg = content;
+            //     }
+            // }
+            // input.click();
+        },
     }
 }
 </script>
