@@ -11,11 +11,13 @@
   "dependencies": {
     "@vueuse/motion": "^2.2.5",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.4",
     "firebase": "^10.13.1",
     "pinia": "^2.2.2",
     "three": "^0.168.0",
     "three-gltf-loader": "^1.111.0",
     "vue": "^3.4.37",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.4.3"
   },
   "devDependencies": {
