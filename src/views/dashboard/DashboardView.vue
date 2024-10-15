@@ -58,6 +58,18 @@ export default {
         },
         options: {
           responsive: true,
+          plugins: {
+            legend: {
+              display: true,  // Ensure the legend is displayed
+              position: 'bottom',
+              labels: {
+                color: 'black'  // Ensures legend text is visible
+              }
+            },
+            tooltip: {
+              enabled: true // Enable tooltips
+            }
+          },
           scales: {
             y: {
               beginAtZero: true
