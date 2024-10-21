@@ -9,14 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@imgly/background-removal": "^1.5.5",
     "@vueuse/motion": "^2.2.5",
     "bcryptjs": "^2.4.3",
-    "family-jewels": "file:",
+    "chart.js": "^4.4.4",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "firebase": "^10.13.1",
     "pinia": "^2.2.2",
     "three": "^0.168.0",
     "three-gltf-loader": "^1.111.0",
     "vue": "^3.4.37",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.4.3"
   },
   "devDependencies": {

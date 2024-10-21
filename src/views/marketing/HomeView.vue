@@ -79,7 +79,9 @@
       <div class="w-[80vw] md:h-[80vh] md:w-[60%] flex flex-col justify-center items-center gap-10 text-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Start Creating Stunning Jewelry Images Today!
         </h2>
-        <button class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white">Start Here!</button>
+        <a href="/login" class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white"> 
+        <button class="w-[100%] h-[100%]">Start Here!</button>
+        </a>
       </div>
     </div>
   </DefaultLayout>

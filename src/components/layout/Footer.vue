@@ -8,11 +8,11 @@
       </div>
 
       <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4">
-        <a href="#" class="text-gray-600 hover:text-gray-800">Home</a>
-        <a href="#" class="text-gray-600 hover:text-gray-800">About Us</a>
-        <a href="#" class="text-gray-600 hover:text-gray-800">Features</a>
-        <a href="#" class="text-gray-600 hover:text-gray-800">Pricing</a>
-        <a href="#" class="text-gray-600 hover:text-gray-800">Contact</a>
+        <a href="/" class="text-gray-600 hover:text-gray-800">Home</a>
+        <a href="/marketplace" class="text-gray-600 hover:text-gray-800">Marketplace</a>
+        <a href="/pricing" class="text-gray-600 hover:text-gray-800">Pricing</a>
+        <a href="/terms" class="text-gray-600 hover:text-gray-800">Terms</a>
+        <a href="/privacy" class="text-gray-600 hover:text-gray-800">Privacy</a>
       </div>
     </div>
 
