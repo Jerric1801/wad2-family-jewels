@@ -1,19 +1,27 @@
 <template>
   <DefaultLayout>
-    <div class="container mx-auto px-4 py-8 pt-[150px] h-screen">
+    <div
+      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center"
+    >
+      <!-- Title -->
       <h1
         class="text-4xl font-bold mb-8 text-center text-indigo-700 animate-fade-in"
       >
         User Profile
       </h1>
+
+      <!-- Loading Spinner -->
       <div v-if="isLoading" class="text-center text-indigo-600">Loading...</div>
+
+      <!-- User Profile Details -->
       <div
         v-else-if="isAuthenticated && userData"
-        class="bg-white shadow-lg rounded-lg p-8 h-full animate-fade-in-up"
+        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl animate-fade-in-up"
       >
+        <!-- Profile Image -->
         <div class="flex flex-col items-center mb-8 relative">
           <div
-            class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer relative group"
+            class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer relative group overflow-hidden"
             @click="triggerFileInput"
           >
             <img
@@ -52,6 +60,7 @@
             class="hidden"
             @change="handleUploadPhoto"
           />
+          <!-- Edit Bio Button -->
           <div
             class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer"
             @click="editBio"
@@ -67,11 +76,13 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M15.232 5.232l3.536 3.536M9 11l6-6 3.536 3.536-6 6H9v-3.536zM19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7z"
+                d="M15.232 5.232l3.536 3.536M9 11l6-6 3.536 3.536-6 6H9v-3.536zM19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 2 0 002 2h14a2 2 2 0 002-2v-7h-2v7z"
               ></path>
             </svg>
           </div>
         </div>
+
+        <!-- Profile Information -->
         <div class="border-t border-gray-200 pt-6">
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
             Profile Information
@@ -79,19 +90,17 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-gray-100 p-4 rounded-lg">
               <p class="text-gray-600 mb-1">Name</p>
-              <p class="text-xl font-medium">
-                {{ userData && userData.fullName }}
-              </p>
+              <p class="text-xl font-medium">{{ userData.fullName }}</p>
             </div>
             <div class="bg-gray-100 p-4 rounded-lg">
               <p class="text-gray-600 mb-1">Email</p>
-              <p class="text-xl font-medium">
-                {{ userData && userData.email }}
-              </p>
+              <p class="text-xl font-medium">{{ userData.email }}</p>
             </div>
           </div>
         </div>
-        <div class="border-t border-gray-200 pt-6 mt-6 relative">
+
+        <!-- User Bio -->
+        <div class="border-t border-gray-200 pt-6 mt-6">
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">User Bio</h3>
           <div class="bg-gray-100 p-4 rounded-lg">
             <p class="text-gray-600 mb-1">About Me</p>
@@ -132,19 +141,7 @@ export default {
       } else {
         userid.value = user.value.uid;
         userData.value = await retrieveUserProfile(userid.value);
-        if (userData.value && userData.value.imageUrl) {
-          const img = new Image();
-          img.src = userData.value.imageUrl;
-          img.onload = () => {
-            isLoading.value = false;
-          };
-          img.onerror = () => {
-            console.error("Error loading image");
-            isLoading.value = false;
-          };
-        } else {
-          isLoading.value = false;
-        }
+        isLoading.value = false;
       }
     };
 
@@ -170,7 +167,6 @@ export default {
     };
 
     const editBio = () => {
-      // Logic to edit bio
       console.log("Edit bio clicked");
     };
 
