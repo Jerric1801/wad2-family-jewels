@@ -1,20 +1,16 @@
 <template>
   <DefaultLayout>
     <div class="container mx-auto px-4 py-8 pt-[150px]">
-      <h1
-        class="text-4xl font-bold mb-8 text-center text-indigo-700 animate-fade-in"
-      >
-        User Profile
+      <h1 class="text-4xl font-bold mb-8 text-center animate-fade-in">
+        <span class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
+          User Profile
+        </span>
       </h1>
-      <div
-        v-if="isAuthenticated && userData"
-        class="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto animate-fade-in-up"
-      >
+      <div v-if="isAuthenticated && userData"
+        class="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto animate-fade-in-up">
         <div class="flex flex-col items-center mb-8">
-          <div
-            class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer"
-            @click="handleUploadPhoto"
-          >
+          <div class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer"
+            @click="handleUploadPhoto">
             <span class="text-4xl text-indigo-600">
               {{ userData.name ? userData.name[0].toUpperCase() : "" }}
             </span>
@@ -22,7 +18,10 @@
         </div>
         <div class="border-t border-gray-200 pt-6">
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            Profile Information
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
+              Profile Information
+            </span>
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-gray-100 p-4 rounded-lg">
@@ -36,7 +35,11 @@
           </div>
         </div>
         <div class="border-t border-gray-200 pt-6 mt-6">
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">User Bio</h3>
+          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">User
+              Bio</span>
+          </h3>
           <div class="bg-gray-100 p-4 rounded-lg">
             <p class="text-gray-600 mb-1">About Me</p>
             <p class="text-xl font-medium">
@@ -100,6 +103,7 @@ export default {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -110,6 +114,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

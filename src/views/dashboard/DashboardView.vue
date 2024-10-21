@@ -1,8 +1,16 @@
 <template>
   <DefaultLayout>
     <div class="container mx-auto px-4 pt-[150px]">
-      <h1 class="text-3xl font-bold mb-8 animate-fade-in">Dashboard</h1>
-
+      <div class="w-full">
+        <button
+          class="mb-4 bg-gradient-to-r from-purple to-blue font-bold py-2 px-4 rounded-md hover:opacity-75 text-white"
+          @click="$router.push('/marketplace')">
+          Back to Shop
+        </button>
+      </div>
+      <h2 class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+        Dashboard
+      </h2>
       <!-- Sales KPI Section -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Sales Trends Chart -->

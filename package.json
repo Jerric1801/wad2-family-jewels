@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@imgly/background-removal": "^1.5.5",
     "@vueuse/motion": "^2.2.5",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.4",

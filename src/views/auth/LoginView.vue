@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh]"
     >
       <div class="max-w-md w-full space-y-8">
         <div>
@@ -11,13 +11,15 @@
             alt="Family Jewels Logo"
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+            <span class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
             Sign in to your account
+            </span>
           </h2>
           <p class="mt-2 text-center text-base text-gray-600">
             Or
             <router-link
               to="/signup"
-              class="font-medium text-indigo-600 hover:text-indigo-500"
+              class="font-medium text-blue hover:text-indigo-500"
             >
               create a new account
             </router-link>
@@ -57,7 +59,7 @@
             <div class="text-base">
               <a
                 href="/password-reset"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
+                class="font-medium text-blue hover:text-indigo-500"
               >
                 Forgot your password?
               </a>
@@ -70,7 +72,7 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Sign in
             </button>

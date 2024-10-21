@@ -15,6 +15,8 @@ import PasswordResetView from "../views/auth/PasswordResetView.vue";
 // Dashboard Views
 import DashboardView from "../views/dashboard/DashboardView.vue";
 import UserProfileView from "../views/dashboard/UserProfileView.vue";
+import UserLibraryView from "../views/dashboard/UserLibraryView.vue";
+
 
 // Jewelry Views
 import JewelryUploadView from "../views/jewelry/JewelryUploadView.vue";
@@ -82,27 +84,37 @@ const router = createRouter({
       component: UserProfileView,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/library",
+      name: "library",
+      component: UserLibraryView,
+      meta: { requiresAuth: true },
+    },
 
     // Jewelry Routes
     {
       path: "/upload",
       name: "jewelry-upload",
       component: JewelryUploadView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/placement",
       name: "jewelry-placement",
       component: JewelryPlacementView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/refinement",
       name: "image-refinement",
       component: ImageRefinementView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/models",
       name: "model-selection",
       component: ModelSelectionView,
+      meta: { requiresAuth: true },
     },
 
     // Legal Routes
