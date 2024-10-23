@@ -2,9 +2,11 @@
     <DefaultLayout>
         <div class="container mx-auto px-4 pt-[100px] md:pt-[150px] flex flex-col justify-center items-center">
             <div class="w-full">
-                <button class="mb-4 bg-gradient-to-r from-purple to-blue font-bold py-2 px-4 rounded-md hover:opacity-75 text-white" @click="$router.push('/marketplace')">
+                <button
+                    class="mb-4 bg-gradient-to-r from-purple to-blue font-bold py-2 px-4 rounded-md hover:opacity-75 text-white"
+                    @click="$router.push('/marketplace')">
                     Back to Shop
-                  </button>
+                </button>
             </div>
             <h2
                 class="text-3xl font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
@@ -20,7 +22,7 @@
                             class="w-full h-64 object-cover rounded shadow-md mb-4" />
                         <span
                             class="absolute top-2 right-2 bg-purple text-white px-2 py-1 rounded-md text-sm">Listed</span>
-                            <button @click="openListModal(index, true)" 
+                        <button @click="openListModal(index, true)"
                             class="bg-blue text-white font-medium py-2 px-4 rounded-md w-full">
                             View Details
                         </button>
@@ -48,7 +50,8 @@
 
             <div v-if="showListModal" class="modal fixed inset-0 flex items-center justify-center z-50">
                 <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-96">
-                    <h3 class="text-xl font-semibold mb-4">{{ modalMode === 'list' ? 'List Jewelry' : 'Listing Details' }}</h3>
+                    <h3 class="text-xl font-semibold mb-4">{{ modalMode === 'list' ? 'List Jewelry' : 'Listing Details'
+                        }}</h3>
                     <form @submit.prevent="listImage">
                         <div class="mb-4">
                             <label for="price" class="block text-gray-700 font-medium mb-2">Price:</label>
@@ -58,7 +61,8 @@
                         <div class="mb-4">
                             <label for="description" class="block text-gray-700 font-medium mb-2">Description:</label>
                             <textarea id="description" v-model="listDescription"
-                                class="border border-gray-400 p-2 rounded w-full" :disabled="modalMode === 'view'"></textarea>
+                                class="border border-gray-400 p-2 rounded w-full"
+                                :disabled="modalMode === 'view'"></textarea>
                         </div>
                         <div class="flex justify-end">
                             <button type="button" @click="closeListModal"
@@ -78,7 +82,11 @@
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import tempImg from '@/assets/images/home/product_2.jpg'; // Make sure this path is correct
-import { ref, computed } from 'vue';
+import { useAuthStore } from "@/store/auth";
+import { retrieveUserProfile, uploadPhoto } from "@/services/firebase/profile";
+import { storeToRefs } from "pinia";
+import { onMounted, watch, ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
     name: "UserLibraryView",
@@ -90,7 +98,20 @@ export default {
         const listPrice = ref(0);
         const listDescription = ref('');
         const imageToListItemIndex = ref(null);
+        const authStore = useAuthStore();
+        const router = useRouter();
+        const { isAuthenticated, user } = storeToRefs(authStore);
+        let userid = ref("");
+        let userData = ref(null);
+        const checkAuthentication = async () => {
+            if (!isAuthenticated.value) {
+                router.push("/login");
+            } else {
+                userid.value = user.value.uid;
+                userData.value = await retrieveUserProfile(userid.value);
 
+            }
+        };
         const combinedImages = ref([
             { url: tempImg, listed: false },
             { url: tempImg, listed: true },
