@@ -73,7 +73,8 @@
 import product1 from '@/assets/images/home/product_2.jpg';
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { useAuthStore } from "@/store/auth";
-import { retrieveUserProfile, uploadPhoto } from "@/services/firebase/uploadJewel";
+import { uploadPhoto } from "@/services/firebase/uploadJewel";
+import { retrieveUserProfile } from "@/services/firebase/profile";
 import { storeToRefs } from "pinia";
 import { onMounted, watch, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
@@ -104,11 +105,12 @@ export default {
         };
         const goToLibraryPage = async () => {
             //TODO add to store and library (push to cloud?)
-           
+            let imageFile = await dataURLtoFile(selectedImage.value, imageName.value);
+            console.log(imageFile);
             if (imageName.value != "") {
                 try {
                     isLoading.value = true;
-                    await uploadPhoto(userid.value, selectedImage, imageName.value);
+                    await uploadPhoto(userid.value, imageFile, imageName.value);
                     userData.value = await retrieveUserProfile(userid.value);
                     router.push('/library')
                     console.log("Photo uploaded successfully");
@@ -120,6 +122,15 @@ export default {
                 errorMessage.value = "Please enter a name for the product";
             }
         };
+        const dataURLtoFile = (dataurl, filename) => {
+            return fetch(dataurl)
+                .then(async response => {
+                    const contentType = response.headers.get('content-type');
+                    const blob = await response.blob();
+                    const file = new File([blob], filename, { type: contentType });
+                    return file;
+                });
+        }
         onMounted(checkAuthentication);
         watch(isAuthenticated, checkAuthentication);
         return {

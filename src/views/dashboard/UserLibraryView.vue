@@ -83,7 +83,9 @@
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import tempImg from '@/assets/images/home/product_2.jpg'; // Make sure this path is correct
 import { useAuthStore } from "@/store/auth";
-import { retrieveUserProfile, uploadPhoto } from "@/services/firebase/profile";
+import { retrieveUserProfile } from "@/services/firebase/profile";
+import { retrieveImagesFromDatabase } from "@/services/firebase/uploadJewel";
+
 import { storeToRefs } from "pinia";
 import { onMounted, watch, ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -103,24 +105,35 @@ export default {
         const { isAuthenticated, user } = storeToRefs(authStore);
         let userid = ref("");
         let userData = ref(null);
+        let isLoading = ref(false);
+        let imageData = ref(null);
+        let imageName = ref(null);
+        const combinedImages = ref([
+            // { url: tempImg, listed: false },
+            // { url: tempImg, listed: true },
+            // { url: tempImg, listed: false },
+            // { url: tempImg, listed: false },
+            // { url: tempImg, listed: true },
+            // { url: tempImg, listed: false },
+        ]);
         const checkAuthentication = async () => {
             if (!isAuthenticated.value) {
                 router.push("/login");
             } else {
                 userid.value = user.value.uid;
                 userData.value = await retrieveUserProfile(userid.value);
-
             }
         };
-        const combinedImages = ref([
-            { url: tempImg, listed: false },
-            { url: tempImg, listed: true },
-            { url: tempImg, listed: false },
-            { url: tempImg, listed: false },
-            { url: tempImg, listed: true },
-            { url: tempImg, listed: false },
-        ]);
-
+        const retrieveImages = async () => {
+            imageData.value = await retrieveImagesFromDatabase(userid.value);
+            if (imageData.value) {
+                let imageObject = Object.entries(imageData.value.imageURL);
+                for (const [imageName, value] of imageObject) {
+                    combinedImages.value.push({ url: value.url, listed: value.listed });
+                }
+                console.log('Combined images:', combinedImages.value);
+            }
+        };
         const modalMode = ref('list'); // Can be 'list' or 'view'
 
         const openListModal = (index, isView = false) => {
@@ -166,7 +179,10 @@ export default {
         const unlistedImages = computed(() => {
             return combinedImages.value.filter(image => !image.listed);
         });
-
+        onMounted(() => {
+            checkAuthentication();
+            retrieveImages();
+        });
         return {
             showListModal,
             listPrice,
@@ -177,7 +193,8 @@ export default {
             listedImages,
             unlistedImages,
             combinedImages,
-            modalMode
+            modalMode,
+
         };
     },
 };

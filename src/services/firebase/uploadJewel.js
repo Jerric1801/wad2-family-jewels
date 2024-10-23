@@ -2,22 +2,13 @@ import { db } from "@/config/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-export const retrieveUserProfile = async (userId) => {
-  const docRef = doc(db, "user-profile", userId);
-  const docSnap = await getDoc(docRef);
 
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    return null;
-  }
-};
 
 export const uploadPhoto = async (userId, photo,imageName) => {
   const storage = getStorage();
   const storageRef = ref(
     storage,
-    `${import.meta.env.VITE_FIREBASE_STORAGE_BUCKET}/${userId}`
+    `${userId}/${imageName}`
   );
 
   try {
@@ -38,9 +29,26 @@ export const uploadPhoto = async (userId, photo,imageName) => {
   }
 };
 
-export const updatePhotoUrl = async (userId, photoUrl,imageName) => {
+export const updatePhotoUrl = async (userId, imageURL,imageName) => {
   const docRef = doc(db, "user-jewelery", userId);
 
   // Update only the imageUrl field, merging it with the existing data
-  await setDoc(docRef, { [imageName]: photoUrl }, { merge: true });
+  let image = {[imageName]:{url:imageURL,listed:false}};
+  await setDoc(docRef, { imageURL: image }, { merge: true });
+};
+
+export const retrieveImagesFromDatabase = async (userId) => {
+  const docRef = doc(db, `user-jewelery/${userId}`);
+  try {
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error retrieving document:", error);
+    throw error;
+  }
 };
