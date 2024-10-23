@@ -29,6 +29,16 @@
                     <input type="range" id="saturation" v-model="saturation" min="0.5" max="2" step="0.01"
                         class="w-full">
                 </div>
+                <div>
+                    <label for="image-name" class="sr-only">Product Name</label>
+                    <input id="image-name" name="image-name" type="text" v-model="imageName" autocomplete="image-name"
+                        required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 mt-6 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                        placeholder="Product Name" />
+                    <div v-if='errorMessage != ""' >
+                        <p class="text-red-500 text-xs italic">{{ errorMessage }}</p>
+                    </div>
+                </div>
                 <button @click="goToLibraryPage"
                     class="group relative w-[250px] flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-5">
                     Save Photo to Library
@@ -61,6 +71,8 @@ export default {
         let userData = ref(null);
         let isLoading = ref(true);
         let selectedImage = ref(product1);
+        let imageName = ref("");
+        let errorMessage = ref("");
         const checkAuthentication = async () => {
             if (!isAuthenticated.value) {
                 router.push("/login");
@@ -71,19 +83,19 @@ export default {
             }
         };
         const goToLibraryPage = async () => {
-            //     //TODO add to store and library (push to cloud?)
-            
-            
-            if (selectedImage) {
+            //TODO add to store and library (push to cloud?)
+            if (imageName.value != "") {
                 try {
-                    await uploadPhoto(userid.value, selectedImage,"product1");
+                    await uploadPhoto(userid.value, selectedImage, imageName.value);
                     userData.value = await retrieveUserProfile(userid.value);
                     router.push('/library')
                     console.log("Photo uploaded successfully");
-                    
+
                 } catch (error) {
                     console.error("Error uploading photo:", error);
                 }
+            } else {
+                errorMessage.value = "Please enter a name for the product";
             }
         };
         onMounted(checkAuthentication);
@@ -94,6 +106,8 @@ export default {
             isLoading,
             selectedImage,
             goToLibraryPage,
+            imageName,
+            errorMessage,
 
         };
     },
