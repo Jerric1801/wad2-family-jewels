@@ -1,188 +1,145 @@
 <template>
     <DefaultLayout>
-        <div class="container mx-auto px-4 pt-[150px]">
-
-            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-                <div>
-                    <div
-                        class="h-3/4 col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1  grid grid-cols-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 overflow-y-auto">
-                        <div class="w-42  rounded " v-for="image in images">
-                            <img class="w-full h-40" :src="image" alt="">
+        <div class="container mx-auto px-4 pt-[150px] flex flex-col lg:flex-row">
+            <div class="lg:w-1/2 lg:pr-10 mb-6 lg:mb-0">
+                <h2
+                    class="text-xxxl font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent">
+                    Upload Your Jewelry Image</h2>
+                <p class="text-gray-600">
+                    To get started, please upload a high-quality image of your jewelry.
+                    Our advanced background removal tool will automatically remove the background
+                    so you can showcase your piece beautifully.
+                </p>
+            </div>
+            <div class="lg:w-1/2" :class="{ 'ml-auto': imageSelected }">
+                <div v-if="!imageSelected" class="upload-container">
+                    <div class="rounded shadow-lg bg-gray-200 lg:h-64 lg:w-64 mx-auto flex items-center justify-center">
+                        <div class="bg-gray-200 p-8">
+                            <p class="text-center">No Image Selected</p>
                         </div>
                     </div>
 
-                </div>
-                <div class="container col-span-2" id="uploadDiv">
-                    <div class="rounded shadow-lg bg-gray-200 lg:h-96 lg:w-3/4 h-96 mx-auto content-center">
-                        <img class="lg:w-full lg:h-full" id="mainImg" :src="mainImg" v-if="mainImg != ''">
-                        <div v-else class="bg-grey-200">
-                            <p class="text-center border-2 p-8">No Image Selected</p>
-                        </div>
-                    </div>
-                    <div>
-                        <input @change="chooseImg" type="file" id="chooseImg" name="chooseImg"
-                            class="focus mx-auto pt-5 pb-2" style="display: block;width: 110px;" />
-
-                    </div>
-
-
-                    <div>
-                        <button type="submit" id="uploadImg"
-                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            @click="handleUploadPhoto">
-                            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                                <!-- Heroicon name: solid/lock-closed -->
-                                <svg class="h-6 w-6 text-indigo-500 group-hover:text-indigo-400"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    aria-hidden="true"></svg>
-                            </span>
-                            Upload Images
+                    <div class="m-10">
+                        <button @click="uploadImage()"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-purple hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Upload Image
                         </button>
-                        <div v-if="error" style="text-align: center;">
-                            <p style="color:red">{{ errorMsg }}</p>
-                        </div>
+                    </div>
+                </div>
 
+                <div v-else class="processing-container">
+                    <div
+                        class="rounded shadow-lg bg-gray-200 lg:h-64 lg:w-64 mx-auto flex items-center justify-center overflow-hidden relative">
+                        <img v-if="!removingBackground" :src="mainImg" alt="Uploaded Image"
+                            class="w-full h-full object-cover">
+                        <div v-if="removingBackground" class="absolute inset-0 flex items-center justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-purple" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="m-10">
+                        <button v-if="!imageConfirmed && !removingBackground" @click="confirmImage()"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            Remove Background
+                        </button>
+                        <button @click="reselectImage()" :disabled="removingBackground"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-purple hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mt-2">
+                            Reselect Image
+                        </button>
+                    </div>
+
+                    <div class="m-10" v-if="imageConfirmed">
+                        <button @click="goToModelsPage"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Continue to Models
+                    </button>
                     </div>
                 </div>
             </div>
-
         </div>
     </DefaultLayout>
 </template>
-<style></style>
+
 <script>
-import { useAuthStore } from "@/store/auth";
-import { retrieveUserProfile, uploadPhoto } from "@/services/firebase/uploadJewel";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { storeToRefs } from "pinia";
-import { onMounted, watch, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { removeBackground } from '@imgly/background-removal';
+import { useImageStore } from '@/store/imageStore'; 
+
 export default {
     name: "JewelryUpload",
     components: {
         DefaultLayout,
-    }, setup() {
-        const authStore = useAuthStore();
-        const router = useRouter();
-        const { isAuthenticated, user } = storeToRefs(authStore);
-        let userid = ref("");
-        let userData = ref(null);
-        let isLoading = ref(true);
-        const fileInput = ref(null);
-        let images = reactive([]);
-        let mainImg = ref('');
-        const checkAuthentication = async () => {
-            if (!isAuthenticated.value) {
-                router.push("/login");
-            } else {
-                userid.value = user.value.uid;
-                userData.value = await retrieveUserProfile(userid.value);
-                // if (userData.value && userData.value.imageUrl) {
-                //     const img = new Image();
-                //     img.src = userData.value.imageUrl;
-                //     img.onload = () => {
-                //         isLoading.value = false;
-                //     };
-                //     img.onerror = () => {
-                //         console.error("Error loading image");
-                //         isLoading.value = false;
-                //     };
-                // } else {
-                //     isLoading.value = false;
-                // }
-            }
-        };
-
-        const handleUploadPhoto = async (event) => {
-            
-            if (images) {
-                try {
-                    await uploadPhoto(userid.value, images);
-                    userData.value = await retrieveUserProfile(userid.value);
-                    console.log("Photo uploaded successfully");
-                } catch (error) {
-                    console.error("Error uploading photo:", error);
-                }
-            }
-        };
-        const chooseImg = () => {
-            const file = document.getElementById('chooseImg').files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const content = e.target.result
-                
-                mainImg.value = content;
-                images.push(content);
-            }.bind(this);
-            reader.readAsDataURL(file);
-        };
-        const triggerFileInput = () => {
-            fileInput.value.click();
-        };
-
-        const handleImageError = () => {
-            console.error("Error loading image");
-        };
-
-
-
-        onMounted(checkAuthentication);
-        watch(isAuthenticated, checkAuthentication);
+    },
+    data() {
         return {
-            isAuthenticated,
-            userData,
-            isLoading,
-            handleUploadPhoto,
-            triggerFileInput,
-            images,
-            mainImg,
-            chooseImg,
-            handleImageError,
-
+            images: [],
+            mainImg: "",
+            imageSelected: false,
+            imageConfirmed: false,
+            removingBackground: false,
         };
     },
-    // data() {
-    //     return {
-    //         images: images,
-    //         mainImg: '',
-    //         error: false,
-    //         errorMsg: '',
-
-    //     };
-    // },
-    // methods: {
-    //     uploadImages() {
-    //         if (this.images.length == 2) {
-    //             this.error = true;
-    //             this.errorMsg = 'You can only upload 6 images';
-    //         } else {
-
-    //         }
-
-    //     },
-    //     chooseImg() {
-    //         const file = document.getElementById('chooseImg').files[0];
-    //         const reader = new FileReader();
-    //         reader.onload = function (e) {
-    //             const content = e.target.result
-    //             this.mainImg = content;
-    //             this.images.push(content);
-    //         }.bind(this);
-    //         reader.readAsDataURL(file);
-    //         // const input = document.createElement('input');
-    //         // input.type = 'file';
-    //         // input.onchange = e => {
-    //         //     const file = e.target.files[0];
-    //         //     const reader = new FileReader();
-    //         //     reader.readAsDataURL(file);
-    //         //     reader.onload = readerEvent => {
-    //         //         const content = readerEvent.target.result;
-    //         //         
-    //         //         this.mainImg = content;
-    //         //     }
-    //         // }
-    //         // input.click();
-    //     },
-    // }
-}
+    methods: {
+        uploadImage() {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (readerEvent) => {
+                    const content = readerEvent.target.result;
+                    this.images = [content];
+                    this.mainImg = content;
+                    this.imageSelected = true;
+                    this.imageConfirmed = false; // Reset imageConfirmed when a new image is selected
+                };
+            };
+            input.click();
+        },
+        reselectImage() {
+            this.uploadImage();
+            this.imageConfirmed = false; // Reset imageConfirmed when reselecting
+        },
+        async confirmImage() {
+            this.removingBackground = true; // Show loader
+            try {
+                const file = this.dataURLtoFile(this.mainImg, "image.png");
+                const result = await removeBackground(file);
+                this.mainImg = URL.createObjectURL(result);
+                this.imageConfirmed = true;
+            } catch (error) {
+                console.error("Error removing background:", error);
+            } finally {
+                this.removingBackground = false; // Hide loader
+            }
+        },
+        dataURLtoFile(dataurl, filename) {
+            let arr = dataurl.split(","),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        },
+        goToModelsPage() {
+            const imageStore = useImageStore();
+            imageStore.setImage(this.mainImg);
+            this.$router.push({
+                name: 'model-selection',
+            });
+        },
+    }
+};
 </script>

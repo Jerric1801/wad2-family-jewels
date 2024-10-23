@@ -1,26 +1,41 @@
 <template>
   <DefaultLayout>
-    <div class="container mx-auto px-4 pt-[150px]">
-      <h1 class="text-3xl font-bold mb-8">Marketplace</h1>
+    <div class="container mx-auto px-4 pt-[100px] md:pt-[150px] pb-[20vh]">
+      <div v-if="userLoggedIn">
+        <h1
+          class="font-bold text-xxxl text-center w-auto mb-8">
+          <span
+          class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
+          My Shop</span></h1>
+        <div class="user-dashboard-section bg-gray-100 rounded-lg shadow-md p-6 mb-8">
+          <h2 class="text-xl font-semibold mb-4">Welcome, {{ user.email.split('@')[0] }}!</h2>
+          <div class="flex gap-4">
+            <router-link to="/dashboard" class="bg-purple text-white font-medium py-2 px-4 rounded-lg">
+              Go to Dashboard
+            </router-link>
+            <router-link to="/library" class="bg-blue text-white font-medium py-2 px-4 rounded-lg">
+              My Library
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <h1
+        class="font-bold text-xxxl mb-8 text-center w-auto">
+        <span
+          class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
+          Marketplace</span>
+        </h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Placeholder for marketplace items -->
-        <div
-          v-for="item in marketplaceItems"
-          :key="item.id"
-          class="bg-white rounded-lg shadow-md overflow-hidden"
-        >
-          <img
-            :src="getImageUrl(item.image)"
-            :alt="item.title"
-            class="w-full h-48 object-cover"
-          />
+        <div v-for="(item, index) in marketplaceItems" :key="item.id"
+          class="bg-white rounded-lg shadow-md overflow-hidden animate-fade-in-up"
+          :style="{ animationDelay: `${index * 0.1}s` }">
+          <img :src="getImageUrl(item.image)" :alt="item.title" class="w-full h-48 object-cover" />
           <div class="p-4">
             <h2 class="text-xl font-semibold mb-2">{{ item.title }}</h2>
             <p class="text-gray-600 mb-2">{{ item.description }}</p>
             <p class="text-lg font-bold text-blue-600">${{ item.price }}</p>
-            <button
-              class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-            >
+            <button class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue transition-colors">
               View Details
             </button>
           </div>
@@ -33,15 +48,18 @@
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { getMarketplaceItems } from "@/services/firebase/marketplace";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default {
-  name: "MainMarket",
+  name: "MainMarketView",
   components: {
     DefaultLayout,
   },
   data() {
     return {
       marketplaceItems: [],
+      userLoggedIn: false,
+      user: null,
     };
   },
   methods: {
@@ -53,16 +71,61 @@ export default {
         ).href;
       } catch (error) {
         console.error("Error loading image:", error);
-        return ""; // Return an empty string or a placeholder image URL
+        return "";
       }
     },
   },
-  async created() {
+  async created() { // Removed the duplicate created() hook
     try {
       this.marketplaceItems = await getMarketplaceItems();
+
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log(user)
+          this.userLoggedIn = true;
+          this.user = user;
+        } else {
+          this.userLoggedIn = false;
+          this.user = null;
+        }
+      });
     } catch (error) {
       console.error("Error fetching marketplace items:", error);
     }
   },
 };
 </script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+</style>

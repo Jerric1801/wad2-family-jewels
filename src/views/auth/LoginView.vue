@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh]"
     >
       <div class="max-w-md w-full space-y-8">
         <div>
@@ -11,20 +11,21 @@
             alt="Family Jewels Logo"
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+            <span class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
             Sign in to your account
+            </span>
           </h2>
           <p class="mt-2 text-center text-base text-gray-600">
             Or
             <router-link
               to="/signup"
-              class="font-medium text-indigo-600 hover:text-indigo-500"
+              class="font-medium text-blue hover:text-indigo-500"
             >
               create a new account
             </router-link>
           </p>
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
-          <input type="hidden" name="remember" value="true" />
           <div class="rounded-md shadow-sm -space-y-px">
             <div>
               <label for="email-address" class="sr-only">Email address</label>
@@ -55,25 +56,10 @@
           </div>
 
           <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label
-                for="remember-me"
-                class="ml-2 block text-base text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-
             <div class="text-base">
               <a
                 href="/password-reset"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
+                class="font-medium text-blue hover:text-indigo-500"
               >
                 Forgot your password?
               </a>
@@ -86,18 +72,8 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                <!-- Heroicon name: solid/lock-closed -->
-                <svg
-                  class="h-6 w-6 text-indigo-500 group-hover:text-indigo-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                ></svg>
-              </span>
               Sign in
             </button>
           </div>
@@ -109,36 +85,45 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { handleLogin } from "@/services/firebase/auth";
+import { signIn } from "@/services/firebase/auth";
+import { ref, nextTick } from "vue";
+import { useRouter } from "vue-router";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default {
   name: "LoginView",
   components: {
     DefaultLayout,
   },
-  data() {
-    return {
-      email: "",
-      password: "",
-      errorMessage: "",
-    };
-  },
-  methods: {
-    async handleLogin() {
-      this.errorMessage = ""; 
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const errorMessage = ref("");
+    const router = useRouter();
+
+    const handleLogin = async () => {
+      errorMessage.value = "";
       try {
-        await handleLogin(this.email, this.password);
-        this.$router.push("/profile"); 
+        await signIn(email.value, password.value);
+
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            await nextTick(); // Ensures the DOM is updated after login
+            window.location.assign("/profile");
+          }
+        });
       } catch (error) {
-        if (error.code === "auth/wrong-password") {
-          this.errorMessage = "Invalid password";
-        } else if (error.code === "auth/user-not-found") {
-          this.errorMessage = "No user with that email found";
-        } else {
-          this.errorMessage = "An error occurred during login. Please try again.";
-        }
+        errorMessage.value = "Invalid credentials. Please try again.";
       }
-    },
+    };
+
+    return {
+      email,
+      password,
+      errorMessage,
+      handleLogin,
+    };
   },
 };
 </script>

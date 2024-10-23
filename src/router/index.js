@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useAuthStore } from "@/store/auth";
 
 // Marketing Views
 import HomeView from "../views/marketing/HomeView.vue";
@@ -13,6 +15,8 @@ import PasswordResetView from "../views/auth/PasswordResetView.vue";
 // Dashboard Views
 import DashboardView from "../views/dashboard/DashboardView.vue";
 import UserProfileView from "../views/dashboard/UserProfileView.vue";
+import UserLibraryView from "../views/dashboard/UserLibraryView.vue";
+
 
 // Jewelry Views
 import JewelryUploadView from "../views/jewelry/JewelryUploadView.vue";
@@ -78,6 +82,13 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: UserProfileView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/library",
+      name: "library",
+      component: UserLibraryView,
+      meta: { requiresAuth: true },
     },
 
     // Jewelry Routes
@@ -85,21 +96,25 @@ const router = createRouter({
       path: "/upload",
       name: "jewelry-upload",
       component: JewelryUploadView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/placement",
       name: "jewelry-placement",
       component: JewelryPlacementView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/refinement",
       name: "image-refinement",
       component: ImageRefinementView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/models",
       name: "model-selection",
       component: ModelSelectionView,
+      meta: { requiresAuth: true },
     },
 
     // Legal Routes
@@ -133,6 +148,18 @@ const router = createRouter({
       component: Error404View,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    if (requiresAuth && !user) {
+      next("/login");
+    } else {
+      next();
+    }
+  });
 });
 
 export default router;
