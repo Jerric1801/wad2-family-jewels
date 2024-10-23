@@ -67,9 +67,9 @@
                         <div class="flex justify-end">
                             <button type="button" @click="closeListModal"
                                 class="mr-2 px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancel</button>
-                            <button v-if="modalMode === 'list'" type="submit"
-                                class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white">List Item</button>
-                            <button v-if="modalMode === 'view'" type="button" @click="delistItem"
+                            <button v-if="modalMode === 'list'" type="button" @click="listImage"
+                                class="px-4 py-2 rounded bg-blue hover:bg-purple text-white">List Item</button>
+                            <button v-if="modalMode === 'delist'" type="button" @click="delistItem"
                                 class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white">Delist Item</button>
                         </div>
                     </form>
@@ -84,10 +84,10 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import tempImg from '@/assets/images/home/product_2.jpg'; // Make sure this path is correct
 import { useAuthStore } from "@/store/auth";
 import { retrieveUserProfile } from "@/services/firebase/profile";
-import { retrieveImagesFromDatabase } from "@/services/firebase/uploadJewel";
+import { retrieveImagesFromDatabase,listItem } from "@/services/firebase/uploadJewel";
 
 import { storeToRefs } from "pinia";
-import { onMounted, watch, ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -105,9 +105,7 @@ export default {
         const { isAuthenticated, user } = storeToRefs(authStore);
         let userid = ref("");
         let userData = ref(null);
-        let isLoading = ref(false);
         let imageData = ref(null);
-        let imageName = ref(null);
         const combinedImages = ref([
             // { url: tempImg, listed: false },
             // { url: tempImg, listed: true },
@@ -129,7 +127,7 @@ export default {
             if (imageData.value) {
                 let imageObject = Object.entries(imageData.value.imageURL);
                 for (const [imageName, value] of imageObject) {
-                    combinedImages.value.push({ url: value.url, listed: value.listed });
+                    combinedImages.value.push({ name:imageName,url: value.url, listed: value.listed });
                 }
                 console.log('Combined images:', combinedImages.value);
             }
@@ -139,12 +137,12 @@ export default {
         const openListModal = (index, isView = false) => {
             showListModal.value = true;
             imageToListItemIndex.value = index;
-
-            if (isView) {
-                modalMode.value = 'view';
+            console.log('Image to list:', combinedImages.value[index].listed);
+            if (combinedImages.value[index].listed) {
+                modalMode.value = 'delist';
                 const imageData = combinedImages.value[index];
-                listPrice.value = imageData.price; // Assuming your image data has a price property
-                listDescription.value = imageData.description; // Assuming your image data has a description property
+                listPrice.value = imageData.price || 0; // Assuming your image data has a price property
+                listDescription.value = imageData.description || ''; // Assuming your image data has a description property
             } else {
                 modalMode.value = 'list';
                 listPrice.value = 0;
@@ -152,8 +150,10 @@ export default {
             }
         };
 
-        const delistItem = () => {
+        const delistItem = async () => {
             combinedImages.value[imageToListItemIndex.value].listed = false;
+            await listItem(userid.value, combinedImages.value[imageToListItemIndex.value].name,false);
+            
             closeListModal();
         };
 
@@ -164,11 +164,12 @@ export default {
             listDescription.value = '';
         };
 
-        const listImage = () => {
+        const listImage = async () => {
             console.log('Listing image with price:', listPrice.value, 'and description:', listDescription.value);
 
             // Update the listed status directly in the combinedImages array
             combinedImages.value[imageToListItemIndex.value].listed = true;
+            await listItem(userid.value, combinedImages.value[imageToListItemIndex.value].name,true);
             closeListModal();
         };
 
@@ -194,6 +195,7 @@ export default {
             unlistedImages,
             combinedImages,
             modalMode,
+            delistItem,
 
         };
     },
