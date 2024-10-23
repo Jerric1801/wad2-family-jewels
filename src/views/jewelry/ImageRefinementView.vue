@@ -42,11 +42,60 @@
 <script>
 import product1 from '@/assets/images/home/product_2.jpg';
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-
+import { useAuthStore } from "@/store/auth";
+import { retrieveUserProfile, uploadPhoto } from "@/services/firebase/uploadJewel";
+import { storeToRefs } from "pinia";
+import { onMounted, watch, ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { select } from 'three/webgpu';
 export default {
     name: "ImageRefinementView",
     components: {
         DefaultLayout,
+    },
+    setup() {
+        const authStore = useAuthStore();
+        const router = useRouter();
+        const { isAuthenticated, user } = storeToRefs(authStore);
+        let userid = ref("");
+        let userData = ref(null);
+        let isLoading = ref(true);
+        let selectedImage = ref(product1);
+        const checkAuthentication = async () => {
+            if (!isAuthenticated.value) {
+                router.push("/login");
+            } else {
+                userid.value = user.value.uid;
+                userData.value = await retrieveUserProfile(userid.value);
+
+            }
+        };
+        const goToLibraryPage = async () => {
+            //     //TODO add to store and library (push to cloud?)
+            
+            
+            if (selectedImage) {
+                try {
+                    await uploadPhoto(userid.value, selectedImage,"product1");
+                    userData.value = await retrieveUserProfile(userid.value);
+                    router.push('/library')
+                    console.log("Photo uploaded successfully");
+                    
+                } catch (error) {
+                    console.error("Error uploading photo:", error);
+                }
+            }
+        };
+        onMounted(checkAuthentication);
+        watch(isAuthenticated, checkAuthentication);
+        return {
+            isAuthenticated,
+            userData,
+            isLoading,
+            selectedImage,
+            goToLibraryPage,
+
+        };
     },
     data() {
         return {
@@ -68,7 +117,7 @@ export default {
                 { color: '#8d5524' },
                 { color: '#4b2e1f' },
             ],
-            selectedImage: product1,
+            // selectedImage: product1,
         };
     },
     computed: {
@@ -82,10 +131,10 @@ export default {
         selectTone(tone) {
             this.selectedTone = tone.color;
         },
-        goToLibraryPage() {
-            //TODO add to store and library (push to cloud?)
-            this.$router.push('/library')
-        }
+        // goToLibraryPage() {
+        //     //TODO add to store and library (push to cloud?)
+        //     this.$router.push('/library')
+        // }
     }
 };
 </script>

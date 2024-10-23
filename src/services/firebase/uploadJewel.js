@@ -13,7 +13,7 @@ export const retrieveUserProfile = async (userId) => {
   }
 };
 
-export const uploadPhoto = async (userId, photo) => {
+export const uploadPhoto = async (userId, photo,imageName) => {
   const storage = getStorage();
   const storageRef = ref(
     storage,
@@ -22,27 +22,25 @@ export const uploadPhoto = async (userId, photo) => {
 
   try {
     // Upload the file
-    const downloadURLLists = [];
     
-    for (const ele of photo) {
-        const snapshot = await uploadBytes(storageRef, ele);
-    
-        // Get the download URL
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        downloadURLLists.push(downloadURL);
-    }
-    
+
+    const snapshot = await uploadBytes(storageRef, photo);
+
+    // Get the download URL
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
     // Update the user profile with the new photo URL
-    updateProfilePhotoUrl(userId, downloadURLLists);
+    updatePhotoUrl(userId, downloadURL,imageName);
+    console.log("File uploaded successfully:", downloadURL);
   } catch (error) {
     console.error("Error uploading file:", error);
     throw error;
   }
 };
 
-export const updateProfilePhotoUrl = async (userId, photoUrl) => {
+export const updatePhotoUrl = async (userId, photoUrl,imageName) => {
   const docRef = doc(db, "user-jewelery", userId);
 
   // Update only the imageUrl field, merging it with the existing data
-  await setDoc(docRef, { imagesUrl: photoUrl }, { merge: true });
+  await setDoc(docRef, { [imageName]: photoUrl }, { merge: true });
 };
