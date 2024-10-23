@@ -2,12 +2,12 @@
   <DefaultLayout>
     <div class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center">
       <!-- Title -->
-      <h1 class="text-4xl font-bold mb-8 text-center text-indigo-700 animate-fade-in">
+      <h1 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent  animate-fade-in">
         User Profile
       </h1>
 
       <!-- Loading Spinner -->
-      <div v-if="isLoading" class="text-center text-indigo-600">Loading...</div>
+      <div v-if="isLoading" class="text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">Loading...</div>
 
       <!-- User Profile Details -->
       <div v-else-if="isAuthenticated && userData"
@@ -19,7 +19,7 @@
             @click="triggerFileInput">
             <img v-if="userData && userData.imageUrl" :src="userData.imageUrl"
               class="w-full h-full rounded-full object-cover" @error="handleImageError" />
-            <span v-else class="text-4xl text-indigo-600">
+            <span v-else class="text-4xl bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
               {{
                 userData && userData.name ? userData.name[0].toUpperCase() : ""
               }}
