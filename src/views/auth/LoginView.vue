@@ -6,13 +6,15 @@
       <div class="max-w-md w-full space-y-8">
         <div>
           <img
-            class="mx-auto h-40 w-auto"
+            class="mx-auto h-40 w-auto animate-logo"
             src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
-            <span class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
-            Sign in to your account
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+            >
+              Sign in to your account
             </span>
           </h2>
           <p class="mt-2 text-center text-base text-gray-600">
@@ -65,14 +67,17 @@
               </a>
             </div>
           </div>
-          <div v-if="errorMessage" class="text-red-500 text-center">
+          <div
+            v-if="errorMessage"
+            class="text-red-500 text-center animate-bounce"
+          >
             {{ errorMessage }}
           </div>
 
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate"
             >
               Sign in
             </button>
@@ -127,3 +132,33 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@keyframes spinOnce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-once {
+  animation: spinOnce 1s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1.5s ease-in forwards;
+}
+</style>

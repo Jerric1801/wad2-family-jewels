@@ -1,41 +1,32 @@
 <template>
   <DefaultLayout>
     <div class="container mx-auto px-4 pt-[100px] md:pt-[150px] pb-[20vh]">
-      <div v-if="userLoggedIn">
-        <h1
-          class="font-bold text-xxxl text-center w-auto mb-8">
-          <span
-          class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
-          My Shop</span></h1>
-        <div class="user-dashboard-section bg-gray-100 rounded-lg shadow-md p-6 mb-8">
-          <h2 class="text-xl font-semibold mb-4">Welcome, {{ user.email.split('@')[0] }}!</h2>
-          <div class="flex gap-4">
-            <router-link to="/dashboard" class="bg-purple text-white font-medium py-2 px-4 rounded-lg">
-              Go to Dashboard
-            </router-link>
-            <router-link to="/library" class="bg-blue text-white font-medium py-2 px-4 rounded-lg">
-              My Library
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <h1
-        class="font-bold text-xxxl mb-8 text-center w-auto">
+      <h1 class="font-bold text-xxxl mb-8 text-center w-auto">
         <span
-          class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
-          Marketplace</span>
-        </h1>
+          class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+        >
+          Marketplace</span
+        >
+      </h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div v-for="(item, index) in marketplaceItems" :key="item.id"
+        <div
+          v-for="(item, index) in marketplaceItems"
+          :key="item.id"
           class="bg-white rounded-lg shadow-md overflow-hidden animate-fade-in-up"
-          :style="{ animationDelay: `${index * 0.1}s` }">
-          <img :src="getImageUrl(item.image)" :alt="item.title" class="w-full h-48 object-cover" />
+          :style="{ animationDelay: `${index * 0.1}s` }"
+        >
+          <img
+            :src="getImageUrl(item.image)"
+            :alt="item.title"
+            class="w-full h-48 object-cover"
+          />
           <div class="p-4">
             <h2 class="text-xl font-semibold mb-2">{{ item.title }}</h2>
             <p class="text-gray-600 mb-2">{{ item.description }}</p>
             <p class="text-lg font-bold text-blue-600">${{ item.price }}</p>
-            <button class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue transition-colors">
+            <button
+              class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue transition-colors"
+            >
               View Details
             </button>
           </div>
@@ -75,14 +66,15 @@ export default {
       }
     },
   },
-  async created() { // Removed the duplicate created() hook
+  async created() {
+    // Removed the duplicate created() hook
     try {
       this.marketplaceItems = await getMarketplaceItems();
 
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          console.log(user)
+          console.log(user);
           this.userLoggedIn = true;
           this.user = user;
         } else {

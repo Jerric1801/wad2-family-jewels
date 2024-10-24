@@ -23,31 +23,31 @@
           >Family Jewels</span
         >
       </div>
-      <ul class="flex items-center space-x-6 text-black"> 
+      <ul class="flex items-center space-x-6 text-black">
         <li
           v-for="(item, index) in currentNavItems"
           :key="item.to"
           class="nav-item"
         >
-          <component 
-            :is="item.isLink ? 'router-link' : 'button'" 
+          <component
+            :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium relative" 
+            class="text-lg font-medium relative"
             :class="{
-              'logout-btn': item.text === 'Logout', 
+              'logout-btn': item.text === 'Logout',
               'profile-btn': item.text === 'Profile',
-              'upload-btn': item.text === 'Upload', 
-              'login-btn': item.text === 'Login', 
-              'signup-btn': item.text === 'Signup', 
+              'upload-btn': item.text === 'Upload',
+              'login-btn': item.text === 'Login',
+              'signup-btn': item.text === 'Signup',
             }"
             :style="{ animationDelay: `${index * 0.2}s` }"
           >
             <span v-if="!item.isIcon">{{ item.text }}</span>
-            <font-awesome-icon 
-              v-if="item.isIcon" 
-              :icon="item.icon" 
-              class="text-xl" 
+            <font-awesome-icon
+              v-if="item.isIcon"
+              :icon="item.icon"
+              class="text-xl"
             />
           </component>
         </li>
@@ -62,17 +62,15 @@ import { storeToRefs } from "pinia";
 import { onMounted, onBeforeUnmount, ref, computed } from "vue";
 import { logOut } from "@/services/firebase/auth";
 import { useRouter } from "vue-router";
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';   
-
-
-library.add(faUser, faRightFromBracket); 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+library.add(faUser, faRightFromBracket);
 
 export default {
   name: "NavBar",
   components: {
-    FontAwesomeIcon 
+    FontAwesomeIcon,
   },
   setup() {
     const authStore = useAuthStore();
@@ -85,13 +83,27 @@ export default {
       guest: [
         { to: "/marketplace", text: "Shop", isLink: true },
         { to: "/login", text: "Login", isLink: true },
-        { to: "/signup", text: "Signup", isLink: true }
+        { to: "/signup", text: "Signup", isLink: true },
       ],
       loggedIn: [
-        { to: "/marketplace", text: "Shop", isLink: true },
+        { to: "/dashboard", text: "Dashboard", isLink: true },
+        { to: "/library", text: "Library", isLink: true },
+        { to: "/marketplace", text: "Marketplace", isLink: true },
         { to: "/upload", text: "Upload", isLink: true },
-        { to: "/profile", text: "Profile", isIcon: true, icon: faUser, isLink: true }, 
-        { to: "#", text: "Logout", isIcon: true, icon: faRightFromBracket, isLink: false }, 
+        {
+          to: "/profile",
+          text: "Profile",
+          isIcon: true,
+          icon: faUser,
+          isLink: true,
+        },
+        {
+          to: "#",
+          text: "Logout",
+          isIcon: true,
+          icon: faRightFromBracket,
+          isLink: false,
+        },
       ],
     };
 
@@ -159,8 +171,6 @@ export default {
   animation: slideIn 1s ease-out forwards 0.5s;
 }
 
-
-
 @keyframes fadeInDown {
   to {
     opacity: 1;
@@ -195,27 +205,30 @@ export default {
     opacity: 1;
   }
 }
- 
-.logout-btn, .profile-btn, .upload-btn, .login-btn, .signup-btn { 
-  @apply px-4 py-2 rounded; 
-} 
 
-.profile-btn, .logout-btn { 
-  @apply bg-gray-300 hover:bg-gray-400 text-gray-800; 
+.logout-btn,
+.profile-btn,
+.upload-btn,
+.login-btn,
+.signup-btn {
+  @apply px-4 py-2 rounded;
 }
 
-.upload-btn { 
-  @apply bg-gradient-to-r from-blue to-purple text-white; 
+.profile-btn,
+.logout-btn {
+  @apply bg-gray-300 hover:bg-gray-400 text-gray-800;
 }
 
-.login-btn { 
-  @apply bg-purple text-white; 
+.upload-btn {
+  @apply bg-gradient-to-r from-blue to-purple text-white;
+}
+
+.login-btn {
+  @apply bg-purple text-white;
   margin-left: 1vw;
 }
 
-.signup-btn { 
-  @apply bg-blue text-white; 
+.signup-btn {
+  @apply bg-blue text-white;
 }
-
-
 </style>
