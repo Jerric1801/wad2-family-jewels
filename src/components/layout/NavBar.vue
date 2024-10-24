@@ -20,6 +20,7 @@
         <span
           class="text-xl font-bold animate-text cursor-pointer"
           @click="$router.push('/')"
+          v-if="windowWidth > 800"
           >Family Jewels</span
         >
       </div>
@@ -59,7 +60,7 @@
 <script>
 import { useAuthStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
-import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { onMounted, onBeforeUnmount, ref, computed, watchEffect } from "vue";
 import { logOut } from "@/services/firebase/auth";
 import { useRouter } from "vue-router";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -134,10 +135,24 @@ export default {
       }
     };
 
+    const windowWidth = ref(window.innerWidth);
+
+    watchEffect(() => {
+      window.addEventListener("resize", () => {
+        windowWidth.value = window.innerWidth;
+      });
+    });
+
     onMounted(() => window.addEventListener("scroll", handleScroll));
     onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll));
 
-    return { isVisible, currentNavItems, handleLogout, handleClick };
+    return {
+      isVisible,
+      currentNavItems,
+      handleLogout,
+      handleClick,
+      windowWidth,
+    };
   },
 };
 </script>
