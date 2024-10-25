@@ -9,83 +9,136 @@
         Your Jewelry Library
       </h2>
 
-      <div v-if="combinedImages.length > 0" class="mb-8">
+      <!-- Display listed items -->
+      <div v-if="listedImages.length > 0" class="mb-8">
         <h3 class="text-xl font-semibold mb-4">Listed Items</h3>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 w-full"
         >
           <div
-            v-for="(image, index) in listedImages"
-            :key="index"
+            v-for="(item, index) in listedImages"
+            :key="item.id"
             class="relative"
           >
+            <!-- Display image -->
             <img
-              :src="image.url"
-              alt="Listed Image"
+              :src="item.data.image || tempImg"
+              alt="Item Image"
               class="w-full h-64 object-cover rounded shadow-md mb-4"
             />
-            <span
-              class="absolute top-2 right-2 bg-purple text-white px-2 py-1 rounded-md text-sm"
-              >Listed</span
-            >
-            <button
-              @click="openListModal(index, true)"
-              class="bg-blue text-white font-medium py-2 px-4 rounded-md w-full"
-            >
-              View Details
-            </button>
+            <!-- Display item details -->
+            <div class="p-4">
+              <h4 class="text-lg font-bold">
+                {{ item.data.title || "Item Name" }}
+              </h4>
+              <p class="text-gray-600">
+                {{ item.data.description || "No Description" }}
+              </p>
+              <p class="text-lg pt-3 font-bold">
+                {{
+                  item.data.price ? "$" + item.data.price : "Price Unavailable"
+                }}
+              </p>
+            </div>
+
+            <!-- Open modal to edit item details -->
+            <div class="pt-3">
+              <ButtonComponent
+                variant="primary"
+                size="md"
+                @click="openListModal(index, true)"
+                :class="'absolute bottom-4 right-4 edit-btn'"
+              >
+                Edit Listing
+              </ButtonComponent>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Display unlisted items -->
       <div v-if="unlistedImages.length > 0" class="mb-8">
         <h3 class="text-xl font-semibold mb-4">Unlisted Items</h3>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 w-full"
         >
           <div
-            v-for="(image, index) in unlistedImages"
-            :key="index"
+            v-for="(item, index) in unlistedImages"
+            :key="item.id"
             class="relative"
           >
+            <!-- Display image -->
             <img
-              :src="image.url"
-              alt="Unlisted Image"
+              :src="item.data.image || tempImg"
+              alt="Item Image"
               class="w-full h-64 object-cover rounded shadow-md mb-4"
             />
-            <button
-              @click="openListModal(index)"
-              class="bg-blue text-white font-medium py-2 px-4 rounded-md w-full"
-            >
-              List Item
-            </button>
+            <!-- Display item details -->
+            <div class="p-4">
+              <h4 class="text-lg font-bold">
+                {{ item.data.title || "Item Name" }}
+              </h4>
+              <p class="text-gray-600">
+                {{ item.data.description || "No Description" }}
+              </p>
+              <p class="text-lg pt-3 font-bold">
+                {{
+                  item.data.price ? "$" + item.data.price : "Price Unavailable"
+                }}
+              </p>
+            </div>
+
+            <!-- Open modal to edit item details -->
+            <div class="pt-3">
+              <ButtonComponent
+                variant="primary"
+                size="md"
+                @click="openListModal(index, true)"
+                :class="'absolute bottom-4 right-4 edit-btn'"
+              >
+                Edit Listing
+              </ButtonComponent>
+            </div>
           </div>
         </div>
       </div>
 
-      <div v-if="combinedImages.length === 0" class="text-gray-500 mt-4">
-        You have no saved jewelry images yet.
+      <!-- Show a message if there are no items -->
+      <div
+        v-if="listedImages.length === 0 && unlistedImages.length === 0"
+        class="text-gray-500 mt-4"
+      >
+        You have no saved library items yet.
       </div>
 
+      <!-- Modal for editing item details -->
       <div
         v-if="showListModal"
-        class="modal fixed inset-0 flex items-center justify-center z-50"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       >
-        <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-96">
-          <h3 class="text-xl font-semibold mb-4">
-            {{ modalMode === "list" ? "List Jewelry" : "Listing Details" }}
-          </h3>
-          <form @submit.prevent="listImage">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+          <h3 class="text-xl font-semibold mb-4">Edit Listing Details</h3>
+          <form @submit.prevent="saveItemDetails">
+            <div class="mb-4">
+              <label for="price" class="block text-gray-700 font-medium mb-2"
+                >Title:</label
+              >
+              <input
+                type="text"
+                v-model="listTitle"
+                class="border border-gray-400 p-2 rounded w-full"
+                required
+              />
+            </div>
             <div class="mb-4">
               <label for="price" class="block text-gray-700 font-medium mb-2"
                 >Price:</label
               >
               <input
                 type="number"
-                id="price"
                 v-model="listPrice"
                 class="border border-gray-400 p-2 rounded w-full"
-                :disabled="modalMode === 'view'"
+                required
               />
             </div>
             <div class="mb-4">
@@ -95,35 +148,33 @@
                 >Description:</label
               >
               <textarea
-                id="description"
                 v-model="listDescription"
                 class="border border-gray-400 p-2 rounded w-full"
-                :disabled="modalMode === 'view'"
+                required
               ></textarea>
             </div>
+            <div class="mb-4">
+              <label for="category" class="block text-gray-700 font-medium mb-2"
+                >Category:</label
+              >
+              <select></select>
+            </div>
             <div class="flex justify-end">
-              <button
+              <Button
                 type="button"
                 @click="closeListModal"
-                class="mr-2 px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+                class="px-4 py-2 mr-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
               >
                 Cancel
-              </button>
-              <button
-                v-if="modalMode === 'list'"
-                type="submit"
-                class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
+              </Button>
+              <ButtonComponent
+                variant="primary"
+                size="md"
+                @click="openListModal(index, true)"
+                :class="'absolute bottom-4 right-4'"
               >
-                List Item
-              </button>
-              <button
-                v-if="modalMode === 'view'"
-                type="button"
-                @click="delistItem"
-                class="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
-              >
-                Delist Item
-              </button>
+                Edit Item
+              </ButtonComponent>
             </div>
           </form>
         </div>
@@ -133,51 +184,62 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/store/auth";
+import { getLibraryItems } from "@/services/firebase/library";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import tempImg from "@/assets/images/home/product_2.jpg"; // Make sure this path is correct
-import { ref, computed } from "vue";
+import tempImg from "@/assets/images/home/product_2.jpg";
+import { ref, computed, onMounted, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import ButtonComponent from "@/components/common/ButtonComponent.vue"; // Ensure the path is correct
 
 export default {
   name: "UserLibraryView",
   components: {
     DefaultLayout,
+    ButtonComponent,
+  },
+  data() {
+    return {
+      categories: ["Necklace", "Earrings", "Rings", "Bracelet"],
+    };
   },
   setup() {
+    const authStore = useAuthStore();
+    const { isAuthenticated, user } = storeToRefs(authStore);
+    const router = useRouter();
+
+    const userId = ref("");
+    const libraryItems = ref([]);
     const showListModal = ref(false);
+    const listTitle = ref("");
     const listPrice = ref(0);
     const listDescription = ref("");
+    const listCategory = ref("");
     const imageToListItemIndex = ref(null);
 
-    const combinedImages = ref([
-      { url: tempImg, listed: false },
-      { url: tempImg, listed: true },
-      { url: tempImg, listed: false },
-      { url: tempImg, listed: false },
-      { url: tempImg, listed: true },
-      { url: tempImg, listed: false },
-    ]);
+    const modalMode = ref("list");
 
-    const modalMode = ref("list"); // Can be 'list' or 'view'
+    const checkAuthentication = async () => {
+      if (!isAuthenticated.value) {
+        router.push("/login");
+      } else {
+        userId.value = user.value.uid;
+        libraryItems.value = await getLibraryItems(userId.value);
+      }
+    };
 
     const openListModal = (index, isView = false) => {
       showListModal.value = true;
       imageToListItemIndex.value = index;
 
       if (isView) {
-        modalMode.value = "view";
-        const imageData = combinedImages.value[index];
-        listPrice.value = imageData.price; // Assuming your image data has a price property
-        listDescription.value = imageData.description; // Assuming your image data has a description property
-      } else {
-        modalMode.value = "list";
-        listPrice.value = 0;
-        listDescription.value = "";
+        const imageData = libraryItems.value[index];
+        listTitle.value = imageData.data.title || "";
+        listPrice.value = imageData.data.price || 0;
+        listDescription.value = imageData.data.description || "";
+        listCategory.value = imageData.data.category || "";
       }
-    };
-
-    const delistItem = () => {
-      combinedImages.value[imageToListItemIndex.value].listed = false;
-      closeListModal();
     };
 
     const closeListModal = () => {
@@ -186,45 +248,44 @@ export default {
       listDescription.value = "";
     };
 
-    const listImage = () => {
-      console.log(
-        "Listing image with price:",
-        listPrice.value,
-        "and description:",
-        listDescription.value
-      );
+    const saveItemDetails = () => {
+      const item = libraryItems.value[imageToListItemIndex.value];
+      item.data.price = listPrice.value;
+      item.data.description = listDescription.value;
 
-      // Update the listed status directly in the combinedImages array
-      combinedImages.value[imageToListItemIndex.value].listed = true;
+      // Close the modal
       closeListModal();
     };
 
-    const listedImages = computed(() => {
-      return combinedImages.value.filter((image) => image.listed);
-    });
+    const listedImages = computed(() =>
+      libraryItems.value.filter((item) => item.data.listed)
+    );
+    const unlistedImages = computed(() =>
+      libraryItems.value.filter((item) => !item.data.listed)
+    );
 
-    const unlistedImages = computed(() => {
-      return combinedImages.value.filter((image) => !image.listed);
-    });
+    onMounted(checkAuthentication);
+
+    watch(isAuthenticated, checkAuthentication);
 
     return {
+      isAuthenticated,
+      libraryItems,
       showListModal,
       listPrice,
       listDescription,
       openListModal,
       closeListModal,
-      listImage,
+      saveItemDetails,
       listedImages,
       unlistedImages,
-      combinedImages,
       modalMode,
     };
   },
 };
 </script>
-
 <style scoped>
-.modal {
-  background-color: rgba(0, 0, 0, 0.5);
+.edit-btn {
+  @apply bg-gradient-to-r from-blue to-purple text-white;
 }
 </style>
