@@ -41,28 +41,40 @@
                 }}
               </p>
             </div>
-            <!-- List/Delist Button -->
-            <button
-              @click="updateDbListing(item)"
-              :class="
-                item.data.listed
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-green-500 hover:bg-green-600'
-              "
-              class="text-white font-bold px-4 py-2 rounded-lg transition-colors"
-            >
-              {{ item.data.listed ? "Delist" : "List" }}
-            </button>
-            <!-- Open modal to edit item details -->
-            <div class="pt-3">
+
+            <div class="pt-3 flex space-x-4">
+              <!-- List/Delist Button -->
+              <ButtonComponent
+                @click="updateDbListing(item)"
+                :class="
+                  item.data.listed
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-green-500 hover:bg-green-600'
+                "
+                class="text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                {{ item.data.listed ? "Delist" : "List" }}
+                <FontAwesomeIcon
+                  v-if="item.data.listed"
+                  :icon="faTimesCircle"
+                  style="padding-left: 5px"
+                />
+                <FontAwesomeIcon
+                  v-else
+                  :icon="faCheckCircle"
+                  style="padding-left: 5px"
+                />
+              </ButtonComponent>
+
+              <!-- Open modal to edit item details -->
               <ButtonComponent
                 variant="primary"
                 size="md"
                 @click="openListModal(item)"
-                :class="'absolute bottom-4 right-4 edit-btn'"
+                :class="'edit-btn'"
               >
                 Edit Listing
-                <FontAwesomeIcon :icon="faPencil" />
+                <FontAwesomeIcon :icon="faPencil" style="padding-left: 5px" />
               </ButtonComponent>
             </div>
           </div>
@@ -101,28 +113,40 @@
                 }}
               </p>
             </div>
-            <!-- List/Delist Button -->
-            <button
-              @click="updateDbListing(item)"
-              :class="
-                item.data.listed
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-green-500 hover:bg-green-600'
-              "
-              class="text-white font-bold px-4 py-2 rounded-lg transition-colors"
-            >
-              {{ item.data.listed ? "Delist" : "List" }}
-            </button>
-            <!-- Open modal to edit item details -->
-            <div class="pt-3">
+
+            <div class="pt-3 flex space-x-4">
+              <!-- List/Delist Button -->
+              <ButtonComponent
+                @click="updateDbListing(item)"
+                :class="
+                  item.data.listed
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-green-500 hover:bg-green-600'
+                "
+                class="text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                {{ item.data.listed ? "Delist" : "List" }}
+                <FontAwesomeIcon
+                  v-if="item.data.listed"
+                  :icon="faTimesCircle"
+                  style="padding-left: 5px"
+                />
+                <FontAwesomeIcon
+                  v-else
+                  :icon="faCheckCircle"
+                  style="padding-left: 5px"
+                />
+              </ButtonComponent>
+
+              <!-- Open modal to edit item details -->
               <ButtonComponent
                 variant="primary"
                 size="md"
                 @click="openListModal(item)"
-                :class="'absolute bottom-4 right-4 edit-btn'"
+                :class="'edit-btn'"
               >
                 Edit Listing
-                <FontAwesomeIcon :icon="faPencil" />
+                <FontAwesomeIcon :icon="faPencil" style="padding-left: 5px" />
               </ButtonComponent>
             </div>
           </div>
@@ -249,7 +273,11 @@ import { ref, computed, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import ButtonComponent from "@/components/common/ButtonComponent.vue";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  faPencil,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
@@ -263,7 +291,7 @@ export default {
     const authStore = useAuthStore();
     const { isAuthenticated, user } = storeToRefs(authStore);
     const router = useRouter();
-
+    const loading = ref(false);
     const userId = ref("");
     const libraryItems = ref([]);
     const showListModal = ref(false);
@@ -314,16 +342,30 @@ export default {
       closeListModal();
     };
 
-    const updateDbListing = (item) => {
-      const newListedStatus = !item.data.listed;
-      const success = updateListing(userId.value, item.id, !item.data.listed);
-      if (success) {
-        const itemToUpdate = libraryItems.value.find((i) => i.id === item.id);
-        if (itemToUpdate) {
-          itemToUpdate.data.listed = newListedStatus;
+    const updateDbListing = async (item) => {
+      if (loading.value) return; // Prevents multiple clicks while loading
+      loading.value = true;
+
+      try {
+        const newListedStatus = !item.data.listed;
+        const success = await updateListing(
+          userId.value,
+          item.id,
+          newListedStatus
+        );
+
+        if (success) {
+          const itemToUpdate = libraryItems.value.find((i) => i.id === item.id);
+          if (itemToUpdate) {
+            itemToUpdate.data.listed = newListedStatus;
+          }
+        } else {
+          console.error("Failed to update listing status");
         }
-      } else {
-        console.error("Failed to update listing status");
+      } catch (error) {
+        console.error("Error during listing update:", error);
+      } finally {
+        loading.value = false; // Re-enable button after completion
       }
     };
 
@@ -358,6 +400,9 @@ export default {
       faPencil,
       updateDbListing,
       updateToggle,
+      faTimesCircle,
+      faCheckCircle,
+      loading,
     };
   },
 };
