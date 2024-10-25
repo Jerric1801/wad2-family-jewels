@@ -68,6 +68,7 @@
                 ${{ item.data.price }}
               </p>
               <button
+                @click="showItemModal(item)"
                 class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
               >
                 View Details
@@ -77,6 +78,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Item Modal -->
+    <ItemModal
+      v-if="showModal"
+      :item="selectedItem"
+      @close="showModal = false"
+    />
   </DefaultLayout>
 </template>
 
@@ -84,13 +92,13 @@
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { getAllListedItems } from "@/services/firebase/marketplace";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ItemModal from "@/components/common/ItemModal.vue";
 
 export default {
   name: "MainMarketView",
   components: {
     DefaultLayout,
+    ItemModal,
   },
   data() {
     return {
@@ -101,6 +109,8 @@ export default {
       userLoggedIn: false,
       user: null,
       windowWidth: window.innerWidth,
+      showModal: false,
+      selectedItem: null,
     };
   },
   computed: {
@@ -115,7 +125,12 @@ export default {
       );
     },
   },
-  methods: {},
+  methods: {
+    showItemModal(item) {
+      this.selectedItem = item;
+      this.showModal = true;
+    },
+  },
   async created() {
     try {
       this.marketplaceItems = await getAllListedItems();

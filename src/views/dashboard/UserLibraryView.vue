@@ -1,48 +1,49 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 pt-[100px] md:pt-[150px] flex flex-col justify-center items-center"
+      class="container mx-auto px-4 pt-20 md:pt-32 flex flex-col items-center"
     >
+      <!-- Page Title -->
       <h2
-        class="text-3xl font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        class="pt-3 text-3xl font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
       >
         Your Jewelry Library
       </h2>
 
-      <!-- Display listed items -->
-      <div v-if="listedImages.length > 0" class="mb-8">
-        <h3 class="text-xl font-semibold mb-4">Listed Items</h3>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 w-full"
-        >
+      <!-- Display Listed Items -->
+      <div v-if="listedImages.length > 0" class="w-full mb-12">
+        <h3 class="text-xl font-semibold mb-6">Listed Items</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(item, index) in listedImages"
             :key="item.id"
-            class="relative animate-slide-in"
+            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
-            <!-- Display image -->
+            <!-- Image -->
             <img
               :src="item.data.image || tempImg"
               alt="Item Image"
-              class="w-full h-64 object-cover rounded shadow-md mb-4"
+              class="w-full h-48 object-cover rounded mb-4"
             />
-            <!-- Display item details -->
-            <div class="p-4">
-              <h4 class="text-lg font-bold">
+
+            <!-- Item Details -->
+            <div>
+              <h4 class="text-lg font-bold mb-2">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600">
+              <p class="text-gray-600 mb-2">
                 {{ item.data.description || "No Description" }}
               </p>
-              <p class="text-lg pt-3 font-bold">
+              <p class="text-lg font-semibold">
                 {{
                   item.data.price ? "$" + item.data.price : "Price Unavailable"
                 }}
               </p>
             </div>
 
-            <div class="pt-3 flex space-x-4">
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-4 mt-4">
               <!-- List/Delist Button -->
               <ButtonComponent
                 @click="updateDbListing(item)"
@@ -51,71 +52,64 @@
                     ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-green-500 hover:bg-green-600'
                 "
-                class="text-white px-4 py-2 rounded-lg transition-colors"
+                :disabled="loading"
+                class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
-                  v-if="item.data.listed"
-                  :icon="faTimesCircle"
-                  style="padding-left: 5px"
-                />
-                <FontAwesomeIcon
-                  v-else
-                  :icon="faCheckCircle"
-                  style="padding-left: 5px"
+                  :icon="item.data.listed ? faTimesCircle : faCheckCircle"
+                  class="ml-2"
                 />
               </ButtonComponent>
 
-              <!-- Open modal to edit item details -->
+              <!-- Edit Listing Button -->
               <ButtonComponent
+                @click="openListModal(item)"
                 variant="primary"
                 size="md"
-                @click="openListModal(item)"
-                :class="'edit-btn'"
+                class="edit-btn"
               >
-                Edit Listing
-                <FontAwesomeIcon :icon="faPencil" style="padding-left: 5px" />
+                Edit Listing <FontAwesomeIcon :icon="faPencil" class="ml-2" />
               </ButtonComponent>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Display unlisted items -->
-      <div v-if="unlistedImages.length > 0" class="mb-8">
-        <h3 class="text-xl font-semibold mb-4">Unlisted Items</h3>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 w-full"
-        >
+      <!-- Display Unlisted Items -->
+      <div v-if="unlistedImages.length > 0" class="w-full mb-12">
+        <h3 class="text-xl font-semibold mb-6">Unlisted Items</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(item, index) in unlistedImages"
             :key="item.id"
-            class="relative animate-slide-in"
+            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
-            <!-- Display image -->
+            <!-- Image -->
             <img
               :src="item.data.image || tempImg"
               alt="Item Image"
-              class="w-full h-64 object-cover rounded shadow-md mb-4"
+              class="w-full h-48 object-cover rounded mb-4"
             />
-            <!-- Display item details -->
-            <div class="p-4">
-              <h4 class="text-lg font-bold">
+
+            <!-- Item Details -->
+            <div>
+              <h4 class="text-lg font-bold mb-2">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600">
+              <p class="text-gray-600 mb-2">
                 {{ item.data.description || "No Description" }}
               </p>
-              <p class="text-lg pt-3 font-bold">
+              <p class="text-lg font-semibold">
                 {{
                   item.data.price ? "$" + item.data.price : "Price Unavailable"
                 }}
               </p>
             </div>
 
-            <div class="pt-3 flex space-x-4">
-              <!-- List/Delist Button -->
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-4 mt-4">
               <ButtonComponent
                 @click="updateDbListing(item)"
                 :class="
@@ -123,143 +117,129 @@
                     ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-green-500 hover:bg-green-600'
                 "
-                class="text-white px-4 py-2 rounded-lg transition-colors"
+                :disabled="loading"
+                class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
-                  v-if="item.data.listed"
-                  :icon="faTimesCircle"
-                  style="padding-left: 5px"
-                />
-                <FontAwesomeIcon
-                  v-else
-                  :icon="faCheckCircle"
-                  style="padding-left: 5px"
+                  :icon="item.data.listed ? faTimesCircle : faCheckCircle"
+                  class="ml-2"
                 />
               </ButtonComponent>
 
-              <!-- Open modal to edit item details -->
               <ButtonComponent
+                @click="openListModal(item)"
                 variant="primary"
                 size="md"
-                @click="openListModal(item)"
-                :class="'edit-btn'"
+                class="edit-btn"
               >
-                Edit Listing
-                <FontAwesomeIcon :icon="faPencil" style="padding-left: 5px" />
+                Edit Listing <FontAwesomeIcon :icon="faPencil" class="ml-2" />
               </ButtonComponent>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- No Items Message -->
       <div
         v-if="listedImages.length === 0 && unlistedImages.length === 0"
-        class="text-gray-500 mt-4"
+        class="text-gray-500 mt-8 text-center"
       >
         You have no saved library items yet.
       </div>
 
-      <!-- Modal Background Overlay -->
-      <div
-        v-if="showListModal"
-        class="fixed inset-0 z-40 bg-black bg-opacity-50"
-      ></div>
-
-      <!-- Modal Content with Transition -->
-      <div
-        v-if="showListModal"
-        class="fixed inset-0 z-50 flex items-center justify-center"
-      >
+      <!-- Modal Content -->
+      <transition name="modal-fade">
         <div
-          class="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full transform transition-transform duration-300 scale-100 modal-content"
+          v-if="showListModal"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
         >
-          <h3 class="text-2xl font-semibold text-center mb-6">
-            Edit Listing Details
-          </h3>
-          <form @submit.prevent="saveItemDetails">
-            <!-- Title Field -->
-            <div class="mb-6">
-              <label for="title" class="block text-gray-700 font-medium mb-2"
-                >Title:</label
-              >
-              <input
-                type="text"
-                v-model="listTitle"
-                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
-                required
-              />
-            </div>
-
-            <!-- Price Field -->
-            <div class="mb-6">
-              <label for="price" class="block text-gray-700 font-medium mb-2"
-                >Price:</label
-              >
-              <input
-                type="number"
-                v-model="listPrice"
-                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
-                required
-              />
-            </div>
-
-            <!-- Description Field -->
-            <div class="mb-6">
-              <label
-                for="description"
-                class="block text-gray-700 font-medium mb-2"
-                >Description:</label
-              >
-              <textarea
-                v-model="listDescription"
-                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none"
-                required
-              ></textarea>
-            </div>
-
-            <!-- Category Dropdown -->
-            <div class="mb-6">
-              <label for="category" class="block text-gray-700 font-medium mb-2"
-                >Category:</label
-              >
-              <select
-                v-model="selectedCategory"
-                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
-              >
-                <option disabled value="">Select a category</option>
-                <option
-                  v-for="eachCat in itemCategories"
-                  :key="eachCat"
-                  :value="eachCat"
+          <div
+            class="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full transition-transform transform scale-100"
+          >
+            <h3 class="text-2xl font-semibold text-center mb-6">
+              Edit Listing Details
+            </h3>
+            <form @submit.prevent="saveItemDetails">
+              <!-- Title Field -->
+              <div class="mb-6">
+                <label for="title" class="block text-gray-700 font-medium mb-2"
+                  >Title:</label
                 >
-                  {{ eachCat }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex justify-end space-x-4 mt-6">
-              <ButtonComponent
-                @click="closeListModal"
-                variant="primary"
-                size="md"
-                class="cancel-btn"
-              >
-                Cancel
-              </ButtonComponent>
-              <ButtonComponent
-                @click="saveItemDetails"
-                variant="primary"
-                size="md"
-                class="update-btn"
-              >
-                Update Listing
-              </ButtonComponent>
-            </div>
-          </form>
+                <input
+                  type="text"
+                  v-model="listTitle"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                  required
+                />
+              </div>
+              <!-- Price Field -->
+              <div class="mb-6">
+                <label for="price" class="block text-gray-700 font-medium mb-2"
+                  >Price:</label
+                >
+                <input
+                  type="number"
+                  v-model="listPrice"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                  required
+                />
+              </div>
+              <!-- Description Field -->
+              <div class="mb-6">
+                <label
+                  for="description"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Description:</label
+                >
+                <textarea
+                  v-model="listDescription"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none"
+                  required
+                ></textarea>
+              </div>
+              <!-- Category Field -->
+              <div class="mb-6">
+                <label
+                  for="category"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Category:</label
+                >
+                <select
+                  v-model="selectedCategory"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                >
+                  <option disabled value="">Select a category</option>
+                  <option
+                    v-for="eachCat in itemCategories"
+                    :key="eachCat"
+                    :value="eachCat"
+                  >
+                    {{ eachCat }}
+                  </option>
+                </select>
+              </div>
+              <!-- Action Buttons -->
+              <div class="flex justify-end space-x-4 mt-6">
+                <ButtonComponent
+                  @click="closeListModal"
+                  variant="primary"
+                  size="md"
+                  class="cancel-btn"
+                  >Cancel</ButtonComponent
+                >
+                <ButtonComponent
+                  @click="saveItemDetails"
+                  variant="primary"
+                  size="md"
+                  class="update-btn"
+                  >Update Listing</ButtonComponent
+                >
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </DefaultLayout>
 </template>
@@ -409,31 +389,41 @@ export default {
 </script>
 
 <style scoped>
-/* Modal Content Fade-In Animation */
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.text-gradient {
+  background-image: linear-gradient(to right, #ff7e5f, #feb47b, #ff7e5f);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
-.modal-content {
-  animation: fadeInScale 0.3s ease-out forwards;
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.modal-fade-enter,
+.modal-fade-leave-to {
+  opacity: 0;
 }
 
 .edit-btn {
-  @apply bg-gradient-to-r from-blue to-purple text-white;
+  background: linear-gradient(
+    to right,
+    #3b82f6,
+    #8b5cf6
+  ); /* Blue-500 to Purple-500 hex values */
+  color: white;
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+.edit-btn:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .cancel-btn {
-  @apply bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg shadow-md;
+  @apply bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg shadow-md transition;
 }
 
 .update-btn {
-  @apply bg-green-500 text-white hover:bg-green-600 rounded-lg shadow-md;
+  @apply bg-green-500 text-white hover:bg-green-600 rounded-lg shadow-md transition;
 }
 </style>
