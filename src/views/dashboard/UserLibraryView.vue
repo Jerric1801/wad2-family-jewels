@@ -18,7 +18,8 @@
           <div
             v-for="(item, index) in listedImages"
             :key="item.id"
-            class="relative"
+            class="relative animate-slide-in"
+            :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Display image -->
             <img
@@ -40,16 +41,16 @@
                 }}
               </p>
             </div>
-
             <!-- Open modal to edit item details -->
             <div class="pt-3">
               <ButtonComponent
                 variant="primary"
                 size="md"
-                @click="openListModal(index, true)"
+                @click="openListModal(item)"
                 :class="'absolute bottom-4 right-4 edit-btn'"
               >
                 Edit Listing
+                <FontAwesomeIcon :icon="faPencil" />
               </ButtonComponent>
             </div>
           </div>
@@ -65,7 +66,8 @@
           <div
             v-for="(item, index) in unlistedImages"
             :key="item.id"
-            class="relative"
+            class="relative animate-slide-in"
+            :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Display image -->
             <img
@@ -87,23 +89,22 @@
                 }}
               </p>
             </div>
-
             <!-- Open modal to edit item details -->
             <div class="pt-3">
               <ButtonComponent
                 variant="primary"
                 size="md"
-                @click="openListModal(index, true)"
+                @click="openListModal(item)"
                 :class="'absolute bottom-4 right-4 edit-btn'"
               >
                 Edit Listing
+                <FontAwesomeIcon :icon="faPencil" />
               </ButtonComponent>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Show a message if there are no items -->
       <div
         v-if="listedImages.length === 0 && unlistedImages.length === 0"
         class="text-gray-500 mt-4"
@@ -111,37 +112,52 @@
         You have no saved library items yet.
       </div>
 
-      <!-- Modal for editing item details -->
+      <!-- Modal Background Overlay -->
       <div
         v-if="showListModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        class="fixed inset-0 z-40 bg-black bg-opacity-50"
+      ></div>
+
+      <!-- Modal Content with Transition -->
+      <div
+        v-if="showListModal"
+        class="fixed inset-0 z-50 flex items-center justify-center"
       >
-        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h3 class="text-xl font-semibold mb-4">Edit Listing Details</h3>
+        <div
+          class="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full transform transition-transform duration-300 scale-100 modal-content"
+        >
+          <h3 class="text-2xl font-semibold text-center mb-6">
+            Edit Listing Details
+          </h3>
           <form @submit.prevent="saveItemDetails">
-            <div class="mb-4">
-              <label for="price" class="block text-gray-700 font-medium mb-2"
+            <!-- Title Field -->
+            <div class="mb-6">
+              <label for="title" class="block text-gray-700 font-medium mb-2"
                 >Title:</label
               >
               <input
                 type="text"
                 v-model="listTitle"
-                class="border border-gray-400 p-2 rounded w-full"
+                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
                 required
               />
             </div>
-            <div class="mb-4">
+
+            <!-- Price Field -->
+            <div class="mb-6">
               <label for="price" class="block text-gray-700 font-medium mb-2"
                 >Price:</label
               >
               <input
                 type="number"
                 v-model="listPrice"
-                class="border border-gray-400 p-2 rounded w-full"
+                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
                 required
               />
             </div>
-            <div class="mb-4">
+
+            <!-- Description Field -->
+            <div class="mb-6">
               <label
                 for="description"
                 class="block text-gray-700 font-medium mb-2"
@@ -149,31 +165,48 @@
               >
               <textarea
                 v-model="listDescription"
-                class="border border-gray-400 p-2 rounded w-full"
+                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none"
                 required
               ></textarea>
             </div>
-            <div class="mb-4">
+
+            <!-- Category Dropdown -->
+            <div class="mb-6">
               <label for="category" class="block text-gray-700 font-medium mb-2"
                 >Category:</label
               >
-              <select></select>
-            </div>
-            <div class="flex justify-end">
-              <Button
-                type="button"
-                @click="closeListModal"
-                class="px-4 py-2 mr-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
+              <select
+                v-model="selectedCategory"
+                class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
               >
-                Cancel
-              </Button>
+                <option disabled value="">Select a category</option>
+                <option
+                  v-for="eachCat in itemCategories"
+                  :key="eachCat"
+                  :value="eachCat"
+                >
+                  {{ eachCat }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-4 mt-6">
               <ButtonComponent
+                @click="closeListModal"
                 variant="primary"
                 size="md"
-                @click="openListModal(index, true)"
-                :class="'absolute bottom-4 right-4'"
+                class="cancel-btn"
               >
-                Edit Item
+                Cancel
+              </ButtonComponent>
+              <ButtonComponent
+                @click="saveItemDetails"
+                variant="primary"
+                size="md"
+                class="update-btn"
+              >
+                Update Listing
               </ButtonComponent>
             </div>
           </form>
@@ -191,18 +224,16 @@ import tempImg from "@/assets/images/home/product_2.jpg";
 import { ref, computed, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import ButtonComponent from "@/components/common/ButtonComponent.vue"; // Ensure the path is correct
+import ButtonComponent from "@/components/common/ButtonComponent.vue";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "UserLibraryView",
   components: {
     DefaultLayout,
     ButtonComponent,
-  },
-  data() {
-    return {
-      categories: ["Necklace", "Earrings", "Rings", "Bracelet"],
-    };
+    FontAwesomeIcon,
   },
   setup() {
     const authStore = useAuthStore();
@@ -215,8 +246,9 @@ export default {
     const listTitle = ref("");
     const listPrice = ref(0);
     const listDescription = ref("");
-    const listCategory = ref("");
+    const selectedCategory = ref("");
     const imageToListItemIndex = ref(null);
+    const itemCategories = ref(["Necklaces", "Earrings", "Rings", "Bracelets"]);
 
     const modalMode = ref("list");
 
@@ -229,29 +261,29 @@ export default {
       }
     };
 
-    const openListModal = (index, isView = false) => {
+    const openListModal = (item) => {
       showListModal.value = true;
-      imageToListItemIndex.value = index;
 
-      if (isView) {
-        const imageData = libraryItems.value[index];
-        listTitle.value = imageData.data.title || "";
-        listPrice.value = imageData.data.price || 0;
-        listDescription.value = imageData.data.description || "";
-        listCategory.value = imageData.data.category || "";
-      }
+      // Set the data from the clicked item
+      listTitle.value = item.data.title || "";
+      listPrice.value = item.data.price || 0;
+      listDescription.value = item.data.description || "";
+      selectedCategory.value = item.data.category || "";
     };
 
     const closeListModal = () => {
       showListModal.value = false;
       listPrice.value = 0;
       listDescription.value = "";
+      listTitle.value = "";
     };
 
     const saveItemDetails = () => {
       const item = libraryItems.value[imageToListItemIndex.value];
+      item.data.title = listTitle.value;
       item.data.price = listPrice.value;
       item.data.description = listDescription.value;
+      item.data.category = listCategory.value;
 
       // Close the modal
       closeListModal();
@@ -272,20 +304,49 @@ export default {
       isAuthenticated,
       libraryItems,
       showListModal,
+      listTitle,
       listPrice,
       listDescription,
+      itemCategories,
+      selectedCategory,
       openListModal,
       closeListModal,
       saveItemDetails,
       listedImages,
       unlistedImages,
       modalMode,
+      faPencil,
     };
   },
 };
 </script>
+
 <style scoped>
+/* Modal Content Fade-In Animation */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content {
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
 .edit-btn {
   @apply bg-gradient-to-r from-blue to-purple text-white;
+}
+
+.cancel-btn {
+  @apply bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg shadow-md;
+}
+
+.update-btn {
+  @apply bg-green-500 text-white hover:bg-green-600 rounded-lg shadow-md;
 }
 </style>

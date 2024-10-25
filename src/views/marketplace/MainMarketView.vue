@@ -57,14 +57,16 @@
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
+              :src="item.data.image"
+              :alt="item.data.title"
               class="w-full h-48 object-cover"
             />
             <div class="p-4">
-              <h2 class="text-xl font-semibold mb-2">{{ item.title }}</h2>
-              <p class="text-gray-600 mb-2">{{ item.description }}</p>
-              <p class="text-lg font-bold text-blue-600">${{ item.price }}</p>
+              <h2 class="text-xl font-semibold mb-2">{{ item.data.title }}</h2>
+              <p class="text-gray-600 mb-2">{{ item.data.description }}</p>
+              <p class="text-lg font-bold text-blue-600">
+                ${{ item.data.price }}
+              </p>
               <button
                 class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
               >
@@ -80,8 +82,10 @@
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import { getMarketplaceItems } from "@/services/firebase/marketplace";
+import { getAllListedItems } from "@/services/firebase/marketplace";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "MainMarketView",
@@ -93,7 +97,7 @@ export default {
       marketplaceItems: [],
       searchTerm: "",
       selectedCategory: "",
-      categories: ["Necklace", "Earrings", "Rings", "Bracelet"],
+      categories: ["Necklaces", "Earrings", "Rings", "Bracelets"],
       userLoggedIn: false,
       user: null,
       windowWidth: window.innerWidth,
@@ -103,28 +107,18 @@ export default {
     filteredMarketplaceItems() {
       return this.marketplaceItems.filter(
         (item) =>
-          item.title.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
+          item.data.title
+            .toLowerCase()
+            .includes(this.searchTerm.toLowerCase()) &&
           (this.selectedCategory === "" ||
-            item.category === this.selectedCategory)
+            item.data.category === this.selectedCategory)
       );
     },
   },
-  methods: {
-    getImageUrl(imageName) {
-      try {
-        return new URL(
-          `/src/assets/images/marketplace_images/${imageName}`,
-          import.meta.url
-        ).href;
-      } catch (error) {
-        console.error("Error loading image:", error);
-        return "";
-      }
-    },
-  },
+  methods: {},
   async created() {
     try {
-      this.marketplaceItems = await getMarketplaceItems();
+      this.marketplaceItems = await getAllListedItems();
 
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
