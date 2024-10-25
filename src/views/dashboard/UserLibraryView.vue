@@ -41,6 +41,18 @@
                 }}
               </p>
             </div>
+            <!-- List/Delist Button -->
+            <button
+              @click="updateDbListing(item)"
+              :class="
+                item.data.listed
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-green-500 hover:bg-green-600'
+              "
+              class="text-white font-bold px-4 py-2 rounded-lg transition-colors"
+            >
+              {{ item.data.listed ? "Delist" : "List" }}
+            </button>
             <!-- Open modal to edit item details -->
             <div class="pt-3">
               <ButtonComponent
@@ -89,6 +101,18 @@
                 }}
               </p>
             </div>
+            <!-- List/Delist Button -->
+            <button
+              @click="updateDbListing(item)"
+              :class="
+                item.data.listed
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-green-500 hover:bg-green-600'
+              "
+              class="text-white font-bold px-4 py-2 rounded-lg transition-colors"
+            >
+              {{ item.data.listed ? "Delist" : "List" }}
+            </button>
             <!-- Open modal to edit item details -->
             <div class="pt-3">
               <ButtonComponent
@@ -218,7 +242,7 @@
 
 <script>
 import { useAuthStore } from "@/store/auth";
-import { getLibraryItems } from "@/services/firebase/library";
+import { getLibraryItems, updateListing } from "@/services/firebase/library";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import tempImg from "@/assets/images/home/product_2.jpg";
 import { ref, computed, onMounted, watch } from "vue";
@@ -245,6 +269,7 @@ export default {
     const showListModal = ref(false);
     const listTitle = ref("");
     const listPrice = ref(0);
+    const updateToggle = ref(false);
     const listDescription = ref("");
     const selectedCategory = ref("");
     const imageToListItemIndex = ref(null);
@@ -289,12 +314,27 @@ export default {
       closeListModal();
     };
 
-    const listedImages = computed(() =>
-      libraryItems.value.filter((item) => item.data.listed)
-    );
-    const unlistedImages = computed(() =>
-      libraryItems.value.filter((item) => !item.data.listed)
-    );
+    const updateDbListing = (item) => {
+      const newListedStatus = !item.data.listed;
+      const success = updateListing(userId.value, item.id, !item.data.listed);
+      if (success) {
+        const itemToUpdate = libraryItems.value.find((i) => i.id === item.id);
+        if (itemToUpdate) {
+          itemToUpdate.data.listed = newListedStatus;
+        }
+      } else {
+        console.error("Failed to update listing status");
+      }
+    };
+
+    const listedImages = computed(() => {
+      updateToggle.value;
+      return libraryItems.value.filter((item) => item.data?.listed) || [];
+    });
+    const unlistedImages = computed(() => {
+      updateToggle.value;
+      return libraryItems.value.filter((item) => !item.data?.listed) || [];
+    });
 
     onMounted(checkAuthentication);
 
@@ -316,6 +356,8 @@ export default {
       unlistedImages,
       modalMode,
       faPencil,
+      updateDbListing,
+      updateToggle,
     };
   },
 };

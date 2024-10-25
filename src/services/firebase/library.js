@@ -1,5 +1,5 @@
 import { db } from "@/config/firebase";
-import { getDocs, collection, doc } from "firebase/firestore"; // Make sure 'doc' is imported
+import { getDocs, collection, doc, updateDoc } from "firebase/firestore"; // Make sure 'doc' is imported
 
 export async function getLibraryItems(userId) {
   // Ensure the userId is passed and valid
@@ -25,4 +25,15 @@ export async function getLibraryItems(userId) {
     });
   });
   return itemsData.length ? itemsData : null;
+}
+
+export async function updateListing(userId, itemId, listed) {
+  // Update Firestore database with new 'listed' status
+  try {
+    const itemDocRef = doc(db, "jewellery-lib", userId, "items", itemId);
+    await updateDoc(itemDocRef, { listed: listed });
+    return true; // Return true if successful
+  } catch (error) {
+    console.error("Error updating listing status:", error);
+  }
 }
