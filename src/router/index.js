@@ -31,6 +31,10 @@ import PrivacyPolicyView from "../views/legal/PrivacyPolicyView.vue";
 // Marketplace Views
 import MainMarketView from "../views/marketplace/MainMarketView.vue";
 
+// Success and Error Views
+import Success from "../views/Success.vue";
+import ErrorPage from "../views/ErrorPage.vue";
+
 // Help & Error Views
 import FAQView from "../views/help/FAQView.vue";
 import Error404View from "../views/errors/Error404View.vue";
@@ -134,6 +138,18 @@ const router = createRouter({
       path: "/marketplace",
       name: "marketplace",
       component: MainMarketView,
+    },
+
+    // Success and Error Routes
+    {
+      path: "/success",
+      name: "success",
+      component: Success,
+    },
+    {
+      path: "/error",
+      name: "error",
+      component: ErrorPage,
     },
 
     // Help and Error Routes

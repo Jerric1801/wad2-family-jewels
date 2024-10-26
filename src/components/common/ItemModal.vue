@@ -1,23 +1,15 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-  >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative">
       <!-- Close button (top-right) -->
-      <button
-        @click="$emit('close')"
-        class="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-      >
+      <button @click="$emit('close')" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
         ✕
       </button>
 
       <div class="flex flex-col md:flex-row">
         <!-- Image Section -->
-        <img
-          :src="item.data.image"
-          :alt="item.data.title"
-          class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"
-        />
+        <img :src="item.data.image" :alt="item.data.title"
+          class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4" />
 
         <!-- Details Section -->
         <div class="w-full md:w-1/2">
@@ -34,16 +26,16 @@
 
       <!-- Button group at the bottom -->
       <div class="flex justify-end space-x-4 mt-6">
-        <button
-          class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors purchase-btn"
-          @click="handlePurchase"
-        >
+
+        <!-- Stripe Payment Gateway Integration -->
+        <stripe-checkout ref="checkoutRef" mode="payment" :pk="publishableKey" :line-items="lineItems"
+          :success-url="successURL" :cancel-url="cancelURL" @loading="v => loading = v" />
+
+        <button class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors purchase-btn"
+          @click="handlePurchase">
           Purchase
         </button>
-        <button
-          class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn"
-          @click="$emit('close')"
-        >
+        <button class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn" @click="$emit('close')">
           Close
         </button>
       </div>
@@ -52,7 +44,30 @@
 </template>
 
 <script>
+// Stripe Payment Gateway Integration
+import { StripeCheckout } from '@vue-stripe/vue-stripe';
+
 export default {
+  // Stripe Payment Gateway Integration
+  components: {
+    StripeCheckout,
+  },
+  data() {
+    this.publishableKey = "pk_test_51QE82aBeTAkFeX2nkPsDrWL0A2JzTWdN5S2dFUUCtQZllqShAPORmMLL1AFtlQUx26tBNT7iD5rTBzweEfkYJhXL002g3UDqs4";
+    const priceId = this.item.data.title === "Diamond Ring (Certified)" ? "price_1QE8N4BeTAkFeX2nVXiAdWD0" :
+      this.item.data.title === "Pearl Earrings" ? "price_1QE8UiBeTAkFeX2nSsWRTC8x" : null;
+    return {
+      loading: false,
+      lineItems: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      successURL: 'http://localhost:5173/success',
+      cancelURL: 'http://localhost:5173/error',
+    }
+  },
   props: {
     item: {
       type: Object,
@@ -62,7 +77,10 @@ export default {
   methods: {
     handlePurchase() {
       // Emit a custom event or handle purchase logic here
-      alert(`Purchased ${this.item.data.title} for $${this.item.data.price}`);
+      // alert(`Purchased ${this.item.data.title} for $${this.item.data.price}`);
+
+      // Stripe Payment Gateway Integration (Checkout Page)
+      this.$refs.checkoutRef.redirectToCheckout();
     },
   },
 };
