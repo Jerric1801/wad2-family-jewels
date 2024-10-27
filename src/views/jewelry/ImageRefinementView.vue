@@ -29,10 +29,40 @@
                     <input type="range" id="saturation" v-model="saturation" min="0.5" max="2" step="0.01"
                         class="w-full">
                 </div>
-                <button @click="goToLibraryPage"
-                    class="group relative w-[250px] flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-5">
-                    Save Photo to Library
-                </button>
+                <div>
+                    <label for="image-name" class="sr-only">Product Name</label>
+                    <input id="image-name" name="image-name" type="text" v-model="imageName" autocomplete="image-name"
+                        required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 mt-6 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                        placeholder="Product Name" />
+                    <div v-if='errorMessage != ""'>
+                        <p class="text-red-500 text-xs italic">{{ errorMessage }}</p>
+                    </div>
+
+                </div>
+
+                <div v-if="isLoading">
+                    <button type="button"
+                        class="group relative w-[250px] flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-5"
+                        disabled>
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        Processing...
+                    </button>
+                </div>
+                <div v-else>
+                    <button @click="goToLibraryPage"
+                        class="group relative w-[250px] flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-5">
+                        Save Photo to Library
+                    </button>
+
+                </div>
             </div>
         </div>
 
@@ -42,11 +72,77 @@
 <script>
 import product1 from '@/assets/images/home/product_2.jpg';
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-
+import { useAuthStore } from "@/store/auth";
+import { uploadPhoto } from "@/services/firebase/uploadJewel";
+import { retrieveUserProfile } from "@/services/firebase/profile";
+import { storeToRefs } from "pinia";
+import { onMounted, watch, ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { select } from 'three/webgpu';
 export default {
     name: "ImageRefinementView",
     components: {
         DefaultLayout,
+    },
+    setup() {
+        const authStore = useAuthStore();
+        const router = useRouter();
+        const { isAuthenticated, user } = storeToRefs(authStore);
+        let userid = ref("");
+        let userData = ref(null);
+        let isLoading = ref(false);
+        let selectedImage = ref(product1);
+        let imageName = ref("");
+        let errorMessage = ref("");
+        const checkAuthentication = async () => {
+            if (!isAuthenticated.value) {
+                router.push("/login");
+            } else {
+                userid.value = user.value.uid;
+                userData.value = await retrieveUserProfile(userid.value);
+
+            }
+        };
+        const goToLibraryPage = async () => {
+            //TODO add to store and library (push to cloud?)
+            let imageFile = await dataURLtoFile(selectedImage.value, imageName.value);
+            console.log(imageFile);
+            if (imageName.value != "") {
+                try {
+                    isLoading.value = true;
+                    await uploadPhoto(userid.value, imageFile, imageName.value);
+                    userData.value = await retrieveUserProfile(userid.value);
+                    router.push('/library')
+                    console.log("Photo uploaded successfully");
+                    isLoading.value = false;
+                } catch (error) {
+                    console.error("Error uploading photo:", error);
+                }
+            } else {
+                errorMessage.value = "Please enter a name for the product";
+            }
+        };
+        const dataURLtoFile = (dataurl, filename) => {
+            return fetch(dataurl)
+                .then(async response => {
+                    const contentType = response.headers.get('content-type');
+                    const blob = await response.blob();
+                    const file = new File([blob], filename, { type: contentType });
+                    return file;
+                });
+        }
+        onMounted(checkAuthentication);
+        watch(isAuthenticated, checkAuthentication);
+        return {
+            isAuthenticated,
+            userData,
+            isLoading,
+            selectedImage,
+            goToLibraryPage,
+            imageName,
+            errorMessage,
+
+        };
     },
     data() {
         return {
@@ -68,7 +164,7 @@ export default {
                 { color: '#8d5524' },
                 { color: '#4b2e1f' },
             ],
-            selectedImage: product1,
+            // selectedImage: product1,
         };
     },
     computed: {
@@ -82,10 +178,10 @@ export default {
         selectTone(tone) {
             this.selectedTone = tone.color;
         },
-        goToLibraryPage() {
-            //TODO add to store and library (push to cloud?)
-            this.$router.push('/library')
-        }
+        // goToLibraryPage() {
+        //     //TODO add to store and library (push to cloud?)
+        //     this.$router.push('/library')
+        // }
     }
 };
 </script>
