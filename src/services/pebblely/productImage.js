@@ -1,18 +1,6 @@
 import config from '@/config/pebblely';
 import axios from 'axios';
 
-// Helper function to convert Base64 to Blob
-function base64ToBlob(base64Image) {
-  const byteString = atob(base64Image.split(',')[1]);
-  const mimeString = base64Image.split(',')[0].split(':')[1].split(';')[0];
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ab], { type: mimeString });
-}
-
 export async function fetchModelImages(base64Image, count = 5) {
   return new Promise(async (resolve, reject) => {
     try {
