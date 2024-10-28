@@ -33,7 +33,8 @@
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import Editor from "@/components/jewelry/Editor.vue";
 import { useImageStore } from '@/store/imageStore';
-import { fetchModelImages } from '@/services/pebblely/productImage'; 
+import { fetchModelImages } from '@/services/pebblely/productImage';
+// import tempProduct from '@/assets/images/home/product_3.png'
 
 export default {
   name: "ModelSelectionView",
@@ -58,9 +59,36 @@ export default {
   },
   methods: {
     async generateModelImages() {
-      this.modelImages = await fetchModelImages(this.productImg); 
-      this.selectedImage = this.modelImages[0]; 
+      try {
+        const base64Image = await this.imageToBase64(this.productImg);
+        this.modelImages = await fetchModelImages(base64Image); // This will now contain an array of data URLs
+        this.selectedImage = this.modelImages[0];
+      } catch (error) {
+        console.error('Error generating model images:', error);
+      }
     },
+    imageToBase64(imageUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.height = img.naturalHeight;
+          canvas.width = img.naturalWidth;
+          ctx.drawImage(img, 0, 0);
+          const
+            base64 = canvas.toDataURL('image/png');
+          resolve(base64);
+        };
+        img.onerror = reject;
+        img.src = imageUrl;
+      });
+    },
+    // async generateModelImages() {
+    //   this.modelImages = await fetchModelImages(this.productImg);
+    //   this.selectedImage = this.modelImages[0];
+    // },
     selectImage(image) {
       this.selectedImage = image;
     },
