@@ -80,11 +80,7 @@
     </div>
 
     <!-- Item Modal -->
-    <ItemModal
-      v-if="showModal"
-      :item="selectedItem"
-      @close="showModal = false"
-    />
+    <ItemModal v-if="showModal" :item="selectedItem" @close="closeItemModal" />
   </DefaultLayout>
 </template>
 
@@ -129,6 +125,10 @@ export default {
     showItemModal(item) {
       this.selectedItem = item;
       this.showModal = true;
+    },
+    closeItemModal() {
+      this.showModal = false;
+      this.selectedItem = null; // Reset selected item if needed
     },
   },
   async created() {

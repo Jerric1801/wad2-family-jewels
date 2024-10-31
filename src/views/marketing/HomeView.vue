@@ -128,7 +128,10 @@
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
           Start Creating Stunning Jewelry Images Today!
         </h2>
-        <a href="/login" class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white">
+        <a
+          href="/upload"
+          class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white"
+        >
           <button class="w-[100%] h-[100%]">Start Here!</button>
         </a>
       </div>
