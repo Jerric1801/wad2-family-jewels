@@ -39,6 +39,32 @@ export async function retrieveUserAddresses(userId) {
   return itemsData.length ? itemsData : null;
 }
 
+export async function retrieveUserPastOrders(userId) {
+  // Ensure the userId is passed and valid
+  if (!userId) {
+    console.error("UserID is undefined");
+    return null;
+  }
+
+  // Reference to the user's document inside 'jewellery-lib' collection
+  const userDocRef = doc(db, "user-orders", userId);
+
+  // Get the 'collections' sub-collection inside the user's document
+  const itemsCollectionRef = collection(userDocRef, "orders");
+
+  const itemsSnapshot = await getDocs(itemsCollectionRef);
+
+  const itemsData = [];
+
+  itemsSnapshot.forEach((doc) => {
+    itemsData.push({
+      id: doc.id,
+      data: doc.data(),
+    });
+  });
+  return itemsData.length ? itemsData : null;
+}
+
 export const uploadPhoto = async (userId, photo) => {
   const storage = getStorage();
   const storageRef = ref(

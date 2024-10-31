@@ -261,17 +261,35 @@
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
             >
-              Profile Information
+              Personal Information
             </span>
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Name</p>
-              <p class="text-xl font-medium">{{ userData.fullName }}</p>
+            <div
+              class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-600 mb-1">Email</p>
+                <p class="text-xl font-medium">{{ userData.email }}</p>
+              </div>
+              <button
+                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
+              >
+                Edit
+              </button>
             </div>
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Email</p>
-              <p class="text-xl font-medium">{{ userData.email }}</p>
+            <div
+              class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
+            >
+              <div>
+                <p class="text-gray-600 mb-1">fullName</p>
+                <p class="text-xl font-medium">{{ userData.fullName }}</p>
+              </div>
+              <button
+                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
+              >
+                Edit
+              </button>
             </div>
           </div>
           <!-- User Bio -->
@@ -308,6 +326,10 @@
               <p class="text-gray-600 mb-1">Email</p>
               <p class="text-xl font-medium">{{ userData.email }}</p>
             </div>
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <p class="text-gray-600 mb-1">Phone Number</p>
+              <p class="text-xl font-medium">{{ userData.phoneNumber }}</p>
+            </div>
           </div>
         </div>
 
@@ -323,10 +345,139 @@
               Order History
             </span>
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Email</p>
-              <p class="text-xl font-medium">{{ userData.email }}</p>
+
+          <!-- Order Filter and Search Section -->
+          <div class="flex justify-between items-center mb-6">
+            <p class="text-gray-700">5 orders placed in</p>
+            <select class="border rounded px-3 py-2">
+              <option>Past three months</option>
+              <option>Past six months</option>
+              <option>Past year</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Search all orders"
+              class="border rounded px-3 py-2 w-1/3"
+            />
+            <button class="bg-gray-600 text-white px-4 py-2 rounded">
+              Search Orders
+            </button>
+          </div>
+
+          <!-- Order List Section -->
+          <div class="space-y-6">
+            <div
+              v-for="(order, index) in pastOrders"
+              :key="index"
+              class="border rounded-lg shadow-sm p-6 bg-white mb-6"
+            >
+              <!-- Order Summary -->
+              <div class="flex justify-between mb-6">
+                <div>
+                  <p class="text-gray-600">
+                    <strong>Order Placed on:</strong> {{ order.data.date }}
+                  </p>
+                  <p class="text-gray-600">
+                    <strong>Total Price:</strong>
+                    ${{ order.data.total | currency }}
+                  </p>
+                  <p class="text-gray-600">
+                    <strong>Deliver to:</strong>
+                    <span class="text-blue-600">{{
+                      order.data.receipientName
+                    }}</span>
+                  </p>
+                </div>
+                <div class="text-right">
+                  <p class="text-gray-600">
+                    <strong>ORDER #</strong> {{ order.data.orderNumber }}
+                  </p>
+                  <div class="flex space-x-2">
+                    <a href="#" class="text-blue-600 hover:underline"
+                      >View order details</a
+                    >
+                    <a href="#" class="text-blue-600 hover:underline"
+                      >Receipt</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Item Details & Actions -->
+              <div class="flex justify-between items-start">
+                <!-- Product Details -->
+                <div class="flex">
+                  <img
+                    :src="order.data.imageUrl"
+                    alt="Product image"
+                    class="w-24 h-24 rounded shadow mr-6"
+                  />
+                  <div>
+                    <p class="font-semibold text-lg">
+                      {{ order.data.productName }}
+                    </p>
+                    <p class="text-gray-500">
+                      Return eligible through {{ order.data.returnDate }}
+                    </p>
+                    <div class="flex mt-4 space-x-4">
+                      <button
+                        class="flex items-center bg-yellow-400 hover:bg-yellow-500 text-black font-medium px-4 py-2 rounded shadow transition ease-in-out duration-200"
+                      >
+                        Buy it again
+                      </button>
+                      <button
+                        class="flex items-center border border-gray-400 text-gray-700 font-medium px-4 py-2 rounded hover:bg-gray-100 transition ease-in-out duration-200"
+                      >
+                        View your item
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Order Action Buttons -->
+                <div class="grid gap-2 w-48 text-right">
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Track package
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Return items
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Share gift receipt
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Get help
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Leave seller feedback
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Leave delivery feedback
+                  </button>
+                  <button
+                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
+                  >
+                    Write a product review
+                  </button>
+                </div>
+              </div>
+
+              <!-- Archive Order Link -->
+              <a href="#" class="text-blue-600 hover:underline mt-4 block"
+                >Archive order</a
+              >
             </div>
           </div>
         </div>
@@ -449,22 +600,23 @@
                 @click="subscribeToEmails"
               >
                 <!-- SVG Icon -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#7d77d2"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-user-round-check w-6 h-6"
-                >
-                  <path d="M2 21a8 8 0 0 1 13.292-6" />
-                  <circle cx="10" cy="8" r="5" />
-                  <path d="m16 19 2 2 4-4" />
-                </svg>
+                <span class="svg-container"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#7d77d2"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-user-round-check w-6 h-6"
+                  >
+                    <path d="M2 21a8 8 0 0 1 13.292-6" />
+                    <circle cx="10" cy="8" r="5" />
+                    <path d="m16 19 2 2 4-4" /></svg
+                ></span>
                 <!-- Text -->
                 <span>Subscribe</span>
               </button>
@@ -472,22 +624,24 @@
                 class="btn-unsubscribe flex items-center space-x-2 space-y-2"
                 @click="unsubscribeFromEmails"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#7d77d2"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-user-round-x w-6 h-6"
-                >
-                  <path d="M2 21a8 8 0 0 1 11.873-7" />
-                  <circle cx="10" cy="8" r="5" />
-                  <path d="m17 17 5 5" />
-                  <path d="m22 17-5 5" /></svg
+                <span class="svg-container">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#7d77d2"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-user-round-x w-6 h-6"
+                  >
+                    <path d="M2 21a8 8 0 0 1 11.873-7" />
+                    <circle cx="10" cy="8" r="5" />
+                    <path d="m17 17 5 5" />
+                    <path d="m22 17-5 5" />
+                  </svg> </span
                 ><span>Unsubscribe</span>
               </button>
             </div>
@@ -555,6 +709,7 @@ import {
   uploadPhoto,
   updateUserProfile,
   retrieveUserAddresses,
+  retrieveUserPastOrders,
 } from "@/services/firebase/profile";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { storeToRefs } from "pinia";
@@ -572,12 +727,13 @@ export default {
     let userid = ref("");
     let userData = ref(null);
     let userAddresses = ref(null);
+    let pastOrders = ref(null);
     let isLoading = ref(true);
     const fileInput = ref(null);
     const showEditModal = ref(false);
     const editedName = ref("");
     const editedBio = ref("");
-    const activeTab = ref("profile"); // Added to manage active tab
+    const activeTab = ref("personalInfo"); // Added to manage active tab
 
     const checkAuthentication = async () => {
       if (!isAuthenticated.value) {
@@ -586,6 +742,7 @@ export default {
         userid.value = user.value.uid;
         userData.value = await retrieveUserProfile(userid.value);
         userAddresses.value = await retrieveUserAddresses(userid.value);
+        pastOrders.value = await retrieveUserPastOrders(userid.value);
         isLoading.value = false;
       }
     };
@@ -601,6 +758,10 @@ export default {
           console.error("Error uploading photo:", error);
         }
       }
+    };
+
+    const addAddress = () => {
+      console.log("Addred");
     };
 
     const triggerFileInput = () => {
@@ -638,6 +799,7 @@ export default {
     return {
       isAuthenticated,
       userData,
+      pastOrders,
       userAddresses,
       isLoading,
       handleUploadPhoto,
@@ -649,7 +811,9 @@ export default {
       saveChanges,
       editedName,
       editedBio,
-      activeTab, // Added to expose activeTab to the template
+      activeTab,
+      retrieveUserPastOrders,
+      addAddress,
     };
   },
 };
@@ -688,7 +852,11 @@ export default {
 
 button {
   @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
-  color: black;
+}
+button:hover {
+  background: linear-gradient(to right, #5e1a91, #007bbf);
+  color: white;
+  box-shadow: 0px 6px 10px;
 }
 
 /* Primary Button - Subscribe (Gradient Only, No Background Color) */
@@ -702,7 +870,7 @@ button {
     #5e1a91,
     #007bbf
   ); /* Darker Purple to Blue */
-  box-shadow: 0px 6px 10px rgba(0, 170, 255, 0.5);
+  box-shadow: 0px 6px 10px;
   transform: scale(1.05);
   color: white;
 }
@@ -713,12 +881,15 @@ button {
 }
 
 .btn-unsubscribe:hover {
-  background: linear-gradient(
-    to right,
-    #ccaa00,
-    #cc5e00
-  ); /* Darker Yellow to Orange */
-  box-shadow: 0px 6px 10px rgba(255, 126, 0, 0.5);
+  background: linear-gradient(to right, #79016d, #300054);
+  box-shadow: 0px 6px 10px;
   transform: scale(1.05);
+  color: white;
+}
+.btn-subscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
+}
+.btn-unsubscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
 }
 </style>
