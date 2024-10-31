@@ -3,7 +3,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center relative">
             <!-- Success Icon -->
             <div class="flex justify-center mb-4">
-                <span class="text-green-500 text-6xl">✔️</span>
+                <span class="text-6xl">🎉</span>
             </div>
             <!-- Success Message -->
             <h2 class="text-3xl font-bold text-green-600 mb-2">Payment Successful!</h2>

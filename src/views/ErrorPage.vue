@@ -3,7 +3,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center relative">
             <!-- Failure Icon -->
             <div class="flex justify-center mb-4">
-                <span class="text-red-500 text-6xl">❌</span>
+                <span class="text-6xl">❌</span>
             </div>
             <!-- Failure Message -->
             <h2 class="text-3xl font-bold text-red-600 mb-2">Payment Failed</h2>
