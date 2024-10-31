@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center"
+      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center w-full"
     >
       <!-- Title -->
       <h1
@@ -21,7 +21,7 @@
       <!-- User Profile Details -->
       <div
         v-else-if="isAuthenticated && userData"
-        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl animate-fade-in-up"
+        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-full animate-fade-in-up"
       >
         <!-- Profile Image -->
         <div class="flex flex-col items-center mb-8 relative">
@@ -57,7 +57,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM19 21H5c-1.105 0-2-.895-2-2V7c0-1.105.895-2 2-2h2.586c.526 0 1.04.21 1.414.586l1.414 1.414c.374.374.888.586 1.414.586H19c1.105 0 2 .895 2 2v12c0 1.105-.895 2-2 2z"
+                  d="M12 11c1.657 0 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM19 21H5c-1.105 0-2-.895-2-2V7c0-1.105.895-2 2-2h2.586c.526 0 1.04.21 1.414.586l1.414 1.414c.374.374.888.586 1.414.586H19c1.105 0 2 .895 2 2v12c0 1.105-.895 2-2 2z"
                 ></path>
               </svg>
             </div>
@@ -90,8 +90,37 @@
           </div>
         </div>
 
+        <!-- Tabs -->
+        <div class="flex justify-center mb-8">
+          <button
+            :class="[
+              'px-4 py-2 rounded-lg font-semibold transition-all duration-300',
+              activeTab === 'profile'
+                ? 'bg-indigo-600 text-white'
+                : 'bg-gray-200 text-indigo-600',
+            ]"
+            @click="activeTab = 'profile'"
+          >
+            Profile
+          </button>
+          <button
+            :class="[
+              'px-4 py-2 rounded-lg font-semibold transition-all duration-300',
+              activeTab === 'library'
+                ? 'bg-indigo-600 text-white'
+                : 'bg-gray-200 text-indigo-600',
+            ]"
+            @click="activeTab = 'library'"
+          >
+            Library
+          </button>
+        </div>
+
         <!-- Profile Information -->
-        <div class="border-t border-gray-200 pt-6">
+        <div
+          v-if="activeTab === 'profile'"
+          class="border-t border-gray-200 pt-6"
+        >
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
@@ -109,6 +138,21 @@
               <p class="text-xl font-medium">{{ userData.email }}</p>
             </div>
           </div>
+        </div>
+
+        <!-- Library Information -->
+        <div
+          v-if="activeTab === 'library'"
+          class="border-t border-gray-200 pt-6"
+        >
+          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+            >
+              Library
+            </span>
+          </h3>
+          <!-- Library content will be added here -->
         </div>
 
         <!-- User Bio -->
@@ -207,6 +251,7 @@ export default {
     const showEditModal = ref(false);
     const editedName = ref("");
     const editedBio = ref("");
+    const activeTab = ref("profile"); // Added to manage active tab
 
     const checkAuthentication = async () => {
       if (!isAuthenticated.value) {
@@ -276,12 +321,14 @@ export default {
       saveChanges,
       editedName,
       editedBio,
+      activeTab, // Added to expose activeTab to the template
     };
   },
 };
 </script>
 
 <style scoped>
+/* Use your existing styles and animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
