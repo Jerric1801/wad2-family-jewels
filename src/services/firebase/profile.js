@@ -1,5 +1,5 @@
 import { db } from "@/config/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const retrieveUserProfile = async (userId) => {
@@ -12,6 +12,32 @@ export const retrieveUserProfile = async (userId) => {
     return null;
   }
 };
+
+export async function retrieveUserAddresses(userId) {
+  // Ensure the userId is passed and valid
+  if (!userId) {
+    console.error("UserID is undefined");
+    return null;
+  }
+
+  // Reference to the user's document inside 'jewellery-lib' collection
+  const userDocRef = doc(db, "user-address", userId);
+
+  // Get the 'collections' sub-collection inside the user's document
+  const itemsCollectionRef = collection(userDocRef, "addresses");
+
+  const itemsSnapshot = await getDocs(itemsCollectionRef);
+
+  const itemsData = [];
+
+  itemsSnapshot.forEach((doc) => {
+    itemsData.push({
+      id: doc.id,
+      data: doc.data(),
+    });
+  });
+  return itemsData.length ? itemsData : null;
+}
 
 export const uploadPhoto = async (userId, photo) => {
   const storage = getStorage();

@@ -91,34 +91,170 @@
         </div>
 
         <!-- Tabs -->
-        <div class="flex justify-center mb-8">
-          <button
-            :class="[
-              'px-4 py-2 rounded-lg font-semibold transition-all duration-300',
-              activeTab === 'profile'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-indigo-600',
-            ]"
-            @click="activeTab = 'profile'"
+        <div
+          class="flex justify-center mb-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <ul
+            class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
           >
-            Profile
-          </button>
-          <button
-            :class="[
-              'px-4 py-2 rounded-lg font-semibold transition-all duration-300',
-              activeTab === 'library'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-gray-200 text-indigo-600',
-            ]"
-            @click="activeTab = 'library'"
-          >
-            Library
-          </button>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'personalInfo'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'personalInfo'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-venetian-mask w-8 h-8 pr-2"
+                >
+                  <path
+                    d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"
+                  />
+                  <path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z" />
+                  <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" /></svg
+                >Personal Information
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'signInInformation'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'signInInformation'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-file-user w-8 h-8 pr-2"
+                >
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M15 18a3 3 0 1 0-6 0" />
+                  <path
+                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
+                  />
+                  <circle cx="12" cy="13" r="2" /></svg
+                >Sign-in Information
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'preferences'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'preferences'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-settings-2 w-8 h-8 pr-2"
+                >
+                  <path d="M20 7h-9" />
+                  <path d="M14 17H5" />
+                  <circle cx="17" cy="17" r="3" />
+                  <circle cx="7" cy="7" r="3" /></svg
+                >Preferences
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'orderHistory'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'orderHistory'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-history w-8 h-8 pr-2"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                  <path d="M12 7v5l4 2" />
+                </svg>
+                Order History
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'addresses'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'addresses'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-map-pin-house w-8 h-8 pr-2"
+                >
+                  <path
+                    d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z"
+                  />
+                  <path
+                    d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2"
+                  />
+                  <path d="M18 22v-3" />
+                  <circle cx="10" cy="10" r="3" /></svg
+                >Addresses
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <!-- Profile Information -->
+        <!-- Tabs Information - Profile -->
         <div
-          v-if="activeTab === 'profile'"
+          v-if="activeTab === 'personalInfo'"
           class="border-t border-gray-200 pt-6"
         >
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
@@ -138,41 +274,229 @@
               <p class="text-xl font-medium">{{ userData.email }}</p>
             </div>
           </div>
+          <!-- User Bio -->
+          <div class="border-t border-gray-200 pt-6 mt-6">
+            <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+              <span
+                class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+                >User Bio</span
+              >
+            </h3>
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <p class="text-gray-600 mb-1">About Me</p>
+              <p class="text-xl font-medium">
+                {{ (userData && userData.bio) || "No bio available" }}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <!-- Library Information -->
+        <!-- Tabs Information - Profile -->
         <div
-          v-if="activeTab === 'library'"
+          v-if="activeTab === 'signInInformation'"
           class="border-t border-gray-200 pt-6"
         >
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
             >
-              Library
+              Sign-in Information
             </span>
           </h3>
-          <!-- Library content will be added here -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <p class="text-gray-600 mb-1">Email</p>
+              <p class="text-xl font-medium">{{ userData.email }}</p>
+            </div>
+          </div>
         </div>
 
-        <!-- User Bio -->
-        <div class="border-t border-gray-200 pt-6 mt-6">
+        <!-- Tabs Information - Order History -->
+        <div
+          v-if="activeTab === 'orderHistory'"
+          class="border-t border-gray-200 pt-6"
+        >
           <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-              >User Bio</span
             >
+              Order History
+            </span>
           </h3>
-          <div class="bg-gray-100 p-4 rounded-lg">
-            <p class="text-gray-600 mb-1">About Me</p>
-            <p class="text-xl font-medium">
-              {{ (userData && userData.bio) || "No bio available" }}
-            </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <p class="text-gray-600 mb-1">Email</p>
+              <p class="text-xl font-medium">{{ userData.email }}</p>
+            </div>
           </div>
+        </div>
+
+        <!-- Tabs Information - Address -->
+        <div
+          v-if="activeTab === 'addresses'"
+          class="border-t border-gray-200 pt-6"
+        >
+          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+            >
+              Your Addresses
+            </span>
+          </h3>
+
+          <!-- Address Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Add Address Card -->
+            <div
+              class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-gray-600 cursor-pointer hover:bg-gray-50"
+              @click="addAddress"
+            >
+              <div class="text-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-12 h-12 mx-auto mb-2 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <span class="font-medium">Add Address</span>
+              </div>
+            </div>
+
+            <!-- Address Cards -->
+            <div v-if="userAddresses.length > 0">
+              <div
+                v-for="(address, index) in userAddresses"
+                :key="index"
+                class="border rounded-lg p-4 shadow-md bg-gray-100 mt-3"
+              >
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="font-semibold text-lg">
+                      {{ address.data.fullName }}
+                    </p>
+                    <p class="text-gray-600">{{ address.data.address }}</p>
+                    <p class="text-gray-600">{{ address.data.unitNumber }}</p>
+                    <p class="text-gray-600">{{ address.data.country }}</p>
+                    <p class="text-gray-600">{{ address.country }}</p>
+                    <p class="text-gray-600">
+                      Phone number: {{ address.data.phoneNumber }}
+                    </p>
+                  </div>
+                  <span
+                    v-if="address.default"
+                    class="text-xs text-orange-600 font-medium mt-1"
+                    >Default</span
+                  >
+                </div>
+
+                <div class="flex mt-4 space-x-2">
+                  <button
+                    @click="editAddress(address.id)"
+                    class="text-blue-600 font-medium"
+                  >
+                    Edit
+                  </button>
+                  <span class="text-gray-400 mt-3">|</span>
+                  <button
+                    @click="removeAddress(address.id)"
+                    class="text-blue-600 font-medium"
+                  >
+                    Remove
+                  </button>
+                  <span v-if="!address.default" class="text-gray-400 mt-3"
+                    >|</span
+                  >
+                  <button
+                    v-if="!address.default"
+                    @click="setDefaultAddress(address.id)"
+                    class="text-blue-400 font-small"
+                  >
+                    Set as Default
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs Information - Email Subscription -->
+        <div
+          v-if="activeTab === 'preferences'"
+          class="border-t border-gray-200 pt-6"
+        >
+          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+            <span
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+            >
+              Preferences - Join our Email Subscription!
+            </span>
+            <p class="mb-4 text-gray-600 mt-4 text-lg">
+              By joining our email list, you will be the first to know about
+              exciting new designs, special events, store openings, and much
+              more.
+            </p>
+            <div class="flex space-x-4">
+              <button
+                class="btn-subscribe flex items-center space-x-2 space-y-2"
+                @click="subscribeToEmails"
+              >
+                <!-- SVG Icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#7d77d2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-round-check w-6 h-6"
+                >
+                  <path d="M2 21a8 8 0 0 1 13.292-6" />
+                  <circle cx="10" cy="8" r="5" />
+                  <path d="m16 19 2 2 4-4" />
+                </svg>
+                <!-- Text -->
+                <span>Subscribe</span>
+              </button>
+              <button
+                class="btn-unsubscribe flex items-center space-x-2 space-y-2"
+                @click="unsubscribeFromEmails"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#7d77d2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-round-x w-6 h-6"
+                >
+                  <path d="M2 21a8 8 0 0 1 11.873-7" />
+                  <circle cx="10" cy="8" r="5" />
+                  <path d="m17 17 5 5" />
+                  <path d="m22 17-5 5" /></svg
+                ><span>Unsubscribe</span>
+              </button>
+            </div>
+          </h3>
         </div>
       </div>
     </div>
 
+    <!-- Modal Stuff -->
     <div
       v-if="showEditModal"
       class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
@@ -230,6 +554,7 @@ import {
   retrieveUserProfile,
   uploadPhoto,
   updateUserProfile,
+  retrieveUserAddresses,
 } from "@/services/firebase/profile";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { storeToRefs } from "pinia";
@@ -246,6 +571,7 @@ export default {
     const { isAuthenticated, user } = storeToRefs(authStore);
     let userid = ref("");
     let userData = ref(null);
+    let userAddresses = ref(null);
     let isLoading = ref(true);
     const fileInput = ref(null);
     const showEditModal = ref(false);
@@ -259,6 +585,7 @@ export default {
       } else {
         userid.value = user.value.uid;
         userData.value = await retrieveUserProfile(userid.value);
+        userAddresses.value = await retrieveUserAddresses(userid.value);
         isLoading.value = false;
       }
     };
@@ -311,6 +638,7 @@ export default {
     return {
       isAuthenticated,
       userData,
+      userAddresses,
       isLoading,
       handleUploadPhoto,
       triggerFileInput,
@@ -328,7 +656,6 @@ export default {
 </script>
 
 <style scoped>
-/* Use your existing styles and animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -357,5 +684,41 @@ export default {
 
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
+}
+
+button {
+  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+  color: black;
+}
+
+/* Primary Button - Subscribe (Gradient Only, No Background Color) */
+.btn-subscribe {
+  box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
+}
+
+.btn-subscribe:hover {
+  background: linear-gradient(
+    to right,
+    #5e1a91,
+    #007bbf
+  ); /* Darker Purple to Blue */
+  box-shadow: 0px 6px 10px rgba(0, 170, 255, 0.5);
+  transform: scale(1.05);
+  color: white;
+}
+
+/* Secondary Button - Unsubscribe (Gradient Only, No Background Color) */
+.btn-unsubscribe {
+  box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
+}
+
+.btn-unsubscribe:hover {
+  background: linear-gradient(
+    to right,
+    #ccaa00,
+    #cc5e00
+  ); /* Darker Yellow to Orange */
+  box-shadow: 0px 6px 10px rgba(255, 126, 0, 0.5);
+  transform: scale(1.05);
 }
 </style>
