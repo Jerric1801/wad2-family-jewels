@@ -59,7 +59,7 @@
                         <button @click="goToModelsPage"
                             class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Continue to Models
-                    </button>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { removeBackground } from '@imgly/background-removal';
-import { useImageStore } from '@/store/imageStore'; 
+import { useImageStore } from '@/store/imageStore';
 
 export default {
     name: "JewelryUpload",
@@ -133,13 +133,33 @@ export default {
             }
             return new File([u8arr], filename, { type: mime });
         },
-        goToModelsPage() {
+        imageToBase64(imageUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous"; // For CORS if needed
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.height = img.naturalHeight;
+                    canvas.width = img.naturalWidth;
+                    ctx.drawImage(img, 0, 0);
+                    const base64 = canvas.toDataURL('image/png');
+                    resolve(base64);
+                };
+                img.onerror = reject;
+                img.src = imageUrl;
+            });
+        },
+        async goToModelsPage() {
             const imageStore = useImageStore();
-            imageStore.setImage(this.mainImg);
+            const base64Image = await this.imageToBase64(this.mainImg);
+            console.log(base64Image)
+            imageStore.setImage(base64Image);
             this.$router.push({
                 name: 'model-selection',
             });
         },
+        
     }
 };
 </script>

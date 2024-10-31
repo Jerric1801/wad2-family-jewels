@@ -33,8 +33,14 @@
 export default {
     name: 'Editor',
     props: {
-        imgSrc: String,
-        productSrc: String
+        imgSrc: {
+            type: String,
+            default: null, // Or a default image URL
+        },
+        productSrc: {
+            type: String,
+            default: null, // Or a default image URL
+        },
     },
     data() {
         return {
@@ -53,6 +59,7 @@ export default {
                 opacity: this.opacity
             };
         }
-    }
+    },
+
 }
 </script>

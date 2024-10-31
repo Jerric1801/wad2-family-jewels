@@ -6,12 +6,15 @@ import "./assets/main.css";
 import { auth } from "./config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAuthStore } from "./store/auth";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
+pinia.use(piniaPluginPersistedstate)
 
 const authStore = useAuthStore(pinia);
 
