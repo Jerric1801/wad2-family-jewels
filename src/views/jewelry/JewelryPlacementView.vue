@@ -53,7 +53,7 @@
     mounted() {
       this.jewelryImage = this.imageStore.processedImage;
     },
-    methods: {
+    methods: {      
       startDrag(e) {
         this.isDragging = true;
         this.offsetX = e.clientX - this.jewelryPosition.x;
@@ -101,4 +101,48 @@
       }
     }
   };
+
+    
   </script>
+
+
+<a type="hidden">
+  /** def generate_images(products, themes):
+    endpoint_url = "https://api.pebblely.com/create-background/v2/"
+
+    for product_info in products:
+        product = product_info["product"]
+        image_url = product_info["image_url"]
+
+        for set_theme in themes:
+            theme_name = set_theme["name"]
+            description = set_theme["description"]
+            negative = set_theme["negative"]
+            style_image = set_theme.get("style_image", None)
+            
+            response = requests.post(
+                endpoint_url,
+                headers={
+                    "Content-Type": "application/json",
+                    "X-Pebblely-Access-Token": "",
+                },
+                json={
+                    "images": [image_url],
+                    "description": description,
+                    "negative": negative,
+                    "style_image": style_image,
+                    "autoresize": True,
+                    "generate_plus": False,
+                    "width": 1024,
+                    "height": 1024
+                }
+            )
+
+            # Process Base64 output and save locally 
+            image_b64 = response.json()["data"]
+            image_encoded = image_b64.encode("utf-8")
+            image_bytes = io.BytesIO(base64.b64decode(image_encoded))
+            image = Image.open(image_bytes)
+            filename = f"{product}_{theme_name}.jpg"
+            image.save(os.path.join("/Users/gabri/Desktop/Prompt_testing/watch_testing/watch_test_9", filename)) **\
+</a>
