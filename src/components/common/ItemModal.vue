@@ -59,7 +59,7 @@
 
 <script>
 // Stripe Payment Gateway Integration
-import StripeCheckout from "@vue-stripe/vue-stripe";
+import { StripeCheckout } from "@vue-stripe/vue-stripe";
 
 export default {
   // Stripe Payment Gateway Integration
