@@ -12,7 +12,7 @@
             </select>
           </div>
         </div>
-        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5">
+        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-grey">
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
             <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
               <img :src="`/src/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
@@ -23,7 +23,7 @@
       </div>
       <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
         <div class="w-full h-[68%] overflow-hidden">
-          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" />
+          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages"/>
         </div>
         <div class="w-[100%] h-[35%]">
           <div class="w-[100%] h-full flex flex-col items-center bg-grey rounded-md">
@@ -86,8 +86,9 @@ export default {
   methods: {
     async generateModelImages() {
       try {
+        console.log('called')
         const base64Image = await this.imageToBase64(this.productImg);
-        this.modelImages = await fetchModelImages(base64Image);
+        // this.modelImages = await fetchModelImages(base64Image);
         this.selectedImage = this.modelImages[0];
       } catch (error) {
         console.error('Error generating model images:', error);

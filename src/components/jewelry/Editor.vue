@@ -10,21 +10,25 @@
                 @mouseup="endDrag" @mouseleave="endDrag">
             </canvas>
         </div>
-        <div class="w-[30%] h-full flex flex-col items-center">
-            <div class="h-[25%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md mt-[10%]">
+        <div class="w-[30%] h-full flex flex-col items-center gap-5 pt-[5%]">
+            <div class="h-[20%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Toolbar</b></p>
                 <p class="mt-2">Opacity</p>
                 <div class="w-full flex flex-col justify-center items-center">
                     <input type="range" min="0" max="1" step="0.1" v-model="opacity" />
                 </div>
             </div>
-            <div class="h-[60%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md mt-[5%]">
+            <div class="h-[55%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Selected Product</b></p>
                 <p class="mt-2">Product Name</p>
                 <div class="w-[50%] h-[50%] relative overflow-hidden bg-grey flex items-center">
                     <img :src="productSrc" alt="Product Image" class="absolute object-cover">
                 </div>
                 <p>Select Another Product</p>
+            </div>
+            <div class="h-[10%] w-[90%] bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
+            transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="$emit('generate')">
+                <p class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
             </div>
         </div>
     </div>
@@ -111,7 +115,7 @@ export default {
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
 
-                // Calculate the scaling factor
+                // Calculate the scaling factor for the model image
                 const scaleFactor = Math.max(canvas.width / baseImage.width, canvas.height / baseImage.height) * this.zoomLevel;
 
                 // Calculate the scaled dimensions of the background image
@@ -123,11 +127,14 @@ export default {
                 const yOffset = (canvas.height - scaledHeight) / 2;
 
                 // Draw the background image with scaling and centering
+                ctx.globalAlpha = this.opacity; // Apply opacity to the model image
                 ctx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
 
                 // Draw the product image without scaling
-                ctx.globalAlpha = this.opacity;
-                ctx.drawImage(productImage, this.offsetX, this.offsetY, productImage.width / 2, productImage.height / 2);
+                const productWidth = productImage.width / 2.5;
+                const productHeight = productImage.height / 2.5;
+                ctx.globalAlpha = 1; // Reset opacity for the product image
+                ctx.drawImage(productImage, this.offsetX, this.offsetY, productWidth, productHeight);
             };
         },
         startDrag(event) {
