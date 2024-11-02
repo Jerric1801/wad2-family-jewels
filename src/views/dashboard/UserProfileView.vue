@@ -68,26 +68,6 @@
             class="hidden"
             @change="handleUploadPhoto"
           />
-          <!-- Edit Bio Button -->
-          <div
-            class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer"
-            @click="editBio"
-          >
-            <svg
-              class="w-6 h-6 text-indigo-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.232 5.232l3.536 3.536M9 11l6-6 3.536 3.536-6 6H9v-3.536zM19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 2 0 002 2h14a2 2 2 0 002-2v-7h-2v7z"
-              ></path>
-            </svg>
-          </div>
         </div>
 
         <!-- Tabs -->
@@ -265,27 +245,31 @@
             </span>
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Full Name Field-->
             <div
               class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
             >
               <div>
-                <p class="text-gray-600 mb-1">Email</p>
-                <p class="text-xl font-medium">{{ userData.email }}</p>
+                <p class="text-gray-600 mb-1">Full Name</p>
+                <p class="text-xl font-medium">{{ userData.fullName }}</p>
               </div>
               <button
+                @click="openEditModal('Full Name', userData.fullName)"
                 class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
               >
                 Edit
               </button>
             </div>
+            <!-- Phone Number Field-->
             <div
               class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
             >
               <div>
-                <p class="text-gray-600 mb-1">fullName</p>
-                <p class="text-xl font-medium">{{ userData.fullName }}</p>
+                <p class="text-gray-600 mb-1">Phone Number</p>
+                <p class="text-xl font-medium">{{ userData.phoneNumber }}</p>
               </div>
               <button
+                @click="openEditModal('Phone Number', userData.phoneNumber)"
                 class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
               >
                 Edit
@@ -300,11 +284,21 @@
                 >User Bio</span
               >
             </h3>
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">About Me</p>
-              <p class="text-xl font-medium">
-                {{ (userData && userData.bio) || "No bio available" }}
-              </p>
+            <div
+              class="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
+            >
+              <div>
+                <p class="text-gray-600 mb-1">About Me</p>
+                <p class="text-xl font-medium">
+                  {{ (userData && userData.bio) || "No bio available" }}
+                </p>
+              </div>
+              <button
+                @click="openEditModal('Bio', userData.bio)"
+                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
+              >
+                Edit
+              </button>
             </div>
           </div>
         </div>
@@ -657,28 +651,28 @@
     >
       <div class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up">
         <h2 class="text-2xl font-semibold mb-4 text-indigo-600">
-          Edit Profile
+          Edit {{ currentField }}
         </h2>
         <form @submit.prevent="saveChanges">
           <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-medium mb-2"
-              >Name</label
+            <label
+              :for="currentField"
+              class="block text-gray-700 font-medium mb-2"
+              >{{ currentField }}</label
             >
             <input
+              v-if="currentField !== 'Bio'"
               type="text"
-              id="name"
-              v-model="editedName"
+              :id="currentField"
+              v-model="currentValue"
               class="border border-gray-400 p-2 rounded-lg w-full"
             />
-          </div>
-          <div class="mb-4">
-            <label for="bio" class="block text-gray-700 font-medium mb-2"
-              >Bio</label
-            >
             <textarea
-              id="bio"
-              v-model="editedBio"
+              v-else
+              :id="currentField"
+              v-model="currentValue"
               class="border border-gray-400 p-2 rounded-lg w-full"
+              style="height: 150px; width: 100%"
             ></textarea>
           </div>
           <div class="flex justify-end">
@@ -724,16 +718,19 @@ export default {
     const authStore = useAuthStore();
     const router = useRouter();
     const { isAuthenticated, user } = storeToRefs(authStore);
-    let userid = ref("");
-    let userData = ref(null);
-    let userAddresses = ref(null);
-    let pastOrders = ref(null);
-    let isLoading = ref(true);
+
+    const userid = ref("");
+    const userData = ref(null);
+    const userAddresses = ref(null);
+    const pastOrders = ref(null);
+    const isLoading = ref(true);
     const fileInput = ref(null);
+    const activeTab = ref("personalInfo");
+    const isPhotoLoading = ref(false);
+
     const showEditModal = ref(false);
-    const editedName = ref("");
-    const editedBio = ref("");
-    const activeTab = ref("personalInfo"); // Added to manage active tab
+    const currentField = ref("");
+    const currentValue = ref("");
 
     const checkAuthentication = async () => {
       if (!isAuthenticated.value) {
@@ -747,21 +744,57 @@ export default {
       }
     };
 
-    const handleUploadPhoto = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        try {
-          await uploadPhoto(userid.value, file);
-          userData.value = await retrieveUserProfile(userid.value);
-          console.log("Photo uploaded successfully");
-        } catch (error) {
-          console.error("Error uploading photo:", error);
+    const openEditModal = (field, value) => {
+      currentField.value = field;
+      currentValue.value = value;
+      showEditModal.value = true;
+    };
+
+    const saveChanges = async () => {
+      try {
+        if (currentField.value === "Full Name") {
+          userData.value.fullName = currentValue.value;
+        } else if (currentField.value === "Phone Number") {
+          userData.value.phoneNumber = currentValue.value;
+        } else if (currentField.value === "Bio") {
+          userData.value.bio = currentValue.value;
         }
+
+        // Log the updated userData before sending it to Firestore
+        console.log("Updated userData:", {
+          fullName: userData.value.fullName,
+          phoneNumber: userData.value.phoneNumber,
+          bio: userData.value.bio,
+        });
+
+        await updateUserProfile(
+          userid.value,
+          userData.value.fullName,
+          userData.value.phoneNumber,
+          userData.value.bio
+        );
+
+        showEditModal.value = false;
+      } catch (error) {
+        console.error("Error updating profile:", error);
       }
     };
 
-    const addAddress = () => {
-      console.log("Addred");
+    const handleUploadPhoto = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        isPhotoLoading.value = true;
+        try {
+          await uploadPhoto(userid.value, file);
+          const updatedProfile = await retrieveUserProfile(userid.value);
+          userData.value.imageUrl = updatedProfile.imageUrl;
+          console.log("Photo uploaded successfully");
+        } catch (error) {
+          console.error("Error uploading photo:", error);
+        } finally {
+          isPhotoLoading.value = false;
+        }
+      }
     };
 
     const triggerFileInput = () => {
@@ -770,27 +803,6 @@ export default {
 
     const handleImageError = () => {
       console.error("Error loading image");
-    };
-
-    const editBio = () => {
-      editedName.value = userData.value.fullName;
-      editedBio.value = userData.value.bio || "";
-      showEditModal.value = true;
-    };
-
-    const saveChanges = async () => {
-      try {
-        await updateUserProfile(
-          userid.value,
-          editedName.value,
-          editedBio.value
-        );
-        userData.value = await retrieveUserProfile(userid.value);
-        showEditModal.value = false;
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        // Handle error, e.g., show an error message to the user
-      }
     };
 
     onMounted(checkAuthentication);
@@ -806,14 +818,13 @@ export default {
       triggerFileInput,
       fileInput,
       handleImageError,
-      showEditModal,
-      editBio,
+      isPhotoLoading,
+      openEditModal,
       saveChanges,
-      editedName,
-      editedBio,
+      showEditModal,
+      currentField,
+      currentValue,
       activeTab,
-      retrieveUserPastOrders,
-      addAddress,
     };
   },
 };

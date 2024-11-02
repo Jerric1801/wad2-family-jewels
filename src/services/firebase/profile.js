@@ -94,11 +94,11 @@ export const updateProfilePhotoUrl = async (userId, photoUrl) => {
   await setDoc(docRef, { imageUrl: photoUrl }, { merge: true });
 };
 
-export const updateUserProfile = async (userId, fullName, bio) => {
+export const updateUserProfile = async (userId, fullName, phoneNumber, bio) => {
   const docRef = doc(db, "user-profile", userId);
 
   try {
-    await setDoc(docRef, { fullName, bio }, { merge: true });
+    await setDoc(docRef, { fullName, phoneNumber, bio }, { merge: true });
   } catch (error) {
     console.error("Error updating user profile:", error);
     throw error;
