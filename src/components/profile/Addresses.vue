@@ -42,11 +42,24 @@
               Phone number: {{ address.data.phoneNumber }}
             </p>
           </div>
-          <span
-            v-if="address.default"
-            class="text-xs text-orange-600 font-medium mt-1"
-            >Default</span
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-file-badge"
+            v-if="address.data.isDefault"
           >
+            <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3" />
+            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+            <path d="M5 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+            <path d="M7 16.5 8 22l-3-1-3 1 1-5.5" />
+          </svg>
         </div>
         <div class="flex mt-4 space-x-2">
           <button
@@ -62,7 +75,7 @@
             Remove
           </button>
           <button
-            v-if="!address.default"
+            v-if="!address.data.isDefault"
             @click="setDefaultAddress(address.id)"
             class="text-blue-400 font-small"
           >
@@ -161,8 +174,11 @@
 </template>
 
 <script>
-import { addNewUserAddress } from "../../services/firebase/profile";
-import { removeUserAddress } from "../../services/firebase/profile";
+import {
+  addNewUserAddress,
+  removeUserAddress,
+  setDefaultAddress,
+} from "../../services/firebase/profile";
 
 export default {
   props: {
@@ -197,8 +213,13 @@ export default {
         console.error("Failed to remove address:", error);
       }
     },
-    setDefaultAddress(id) {
-      console.log("Set as default address", id);
+    async setDefaultAddress(addressId) {
+      if (!this.userId) throw new Error("User ID is required");
+      try {
+        await setDefaultAddress(this.userId, addressId);
+      } catch (error) {
+        console.error(error);
+      }
     },
     async saveNewAddress() {
       if (!this.userId) throw new Error("User ID is required");

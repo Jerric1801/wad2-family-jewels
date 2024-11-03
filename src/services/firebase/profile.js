@@ -7,6 +7,7 @@ import {
   getDocs,
   addDoc,
   deleteDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -70,6 +71,39 @@ export async function removeUserAddress(userId, addressId) {
   } catch (error) {
     console.error("Error removing address:", error);
     throw error;
+  }
+}
+
+export async function setDefaultAddress(userId, addressId) {
+  try {
+    // Reference to the addresses collection
+    const addressesRef = collection(db, "user-address", userId, "addresses");
+
+    // Retrieve all addresses for the user
+    const allAddresses = await getDocs(addressesRef);
+
+    // Initialize a batch for updating documents
+    const batch = writeBatch(db);
+
+    // Loop through addresses and set the default status
+    allAddresses.forEach((docSnapshot) => {
+      const addressRef = doc(
+        db,
+        "user-address",
+        userId,
+        "addresses",
+        docSnapshot.id
+      );
+      const isDefault = docSnapshot.id === addressId;
+      batch.update(addressRef, { isDefault }); // Setting isDefault field based on match
+    });
+
+    // Commit the batch
+    await batch.commit();
+
+    window.location.reload();
+  } catch (error) {
+    console.error("Error setting default address:", error);
   }
 }
 
