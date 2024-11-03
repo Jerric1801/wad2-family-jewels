@@ -11,23 +11,23 @@
             </canvas>
         </div>
         <div class="w-[30%] h-full flex flex-col items-center gap-5 pt-[5%]">
-            <div class="h-[20%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md">
+            <div class="h-[20%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Toolbar</b></p>
                 <p class="mt-2">Opacity</p>
                 <div class="w-full flex flex-col justify-center items-center">
                     <input type="range" min="0" max="1" step="0.1" v-model="opacity" />
                 </div>
             </div>
-            <div class="h-[55%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md">
+            <div class="h-[55%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Selected Product</b></p>
                 <p class="mt-2">Product Name</p>
-                <div class="w-[50%] h-[50%] relative overflow-hidden bg-grey flex items-center">
+                <div class="w-[50%] h-[50%] relative overflow-hidden bg-gray-200 flex items-center">
                     <img :src="productSrc" alt="Product Image" class="absolute object-cover">
                 </div>
                 <p>Select Another Product</p>
             </div>
             <div class="h-[10%] w-[90%] bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
-            transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="$emit('generate')">
+                transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="$emit('generate')">
                 <p class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
             </div>
         </div>
@@ -57,11 +57,15 @@ export default {
             offsetY: 0,
             startX: 0,
             startY: 0,
+            productImage: null,
+            initialProductWidth: null,
+            initialProductHeight: null,
         };
     },
     mounted() {
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
+        this.loadProductImage();
     },
     beforeUnmount() {
         window.removeEventListener('resize', this.resizeCanvas);
@@ -74,10 +78,10 @@ export default {
             this.drawCanvas();
         },
         imgSrc() {
-            this.drawCanvas();
+            this.loadBackgroundImage(); // Reload when imgSrc changes
         },
         productSrc() {
-            this.drawCanvas();
+            this.loadProductImage();
         }
     },
     methods: {
@@ -86,8 +90,7 @@ export default {
             const containerWidth = canvas.parentElement.offsetWidth;
             const containerHeight = canvas.parentElement.offsetHeight;
 
-            // Calculate canvas dimensions based on container and aspect ratio
-            const aspectRatio = 550 / 500; // Based on your initial dimensions
+            const aspectRatio = 550 / 500;
             let newWidth = containerWidth;
             let newHeight = containerWidth / aspectRatio;
 
@@ -98,65 +101,97 @@ export default {
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-            // Redraw canvas content if necessary
             this.drawCanvas();
         },
 
+        loadProductImage() {
+            this.productImage = new Image();
+            this.productImage.src = this.productSrc;
+            this.productImage.onload = () => {
+                this.initialProductWidth = this.productImage.width;
+                this.initialProductHeight = this.productImage.height;
+                this.drawCanvas();
+
+                // Emit initial transform coordinates after image loads
+                this.$emit('updateTransformCoordinates', {
+                    x: this.offsetX,
+                    y: this.offsetY,
+                    xScale: this.initialProductWidth ? this.initialProductWidth / 2.5 / this.initialProductWidth : 1,
+                    yScale: this.initialProductHeight ? this.initialProductHeight / 2.5 / this.initialProductHeight : 1,
+                });
+            };
+        },
+
+        loadBackgroundImage() {
+            const baseImage = new Image();
+            baseImage.src = this.imgSrc;
+            baseImage.onload = () => {
+                this.drawCanvas();
+            };
+        },
+
         drawCanvas() {
+            if (!this.productImage || !this.productImage.complete) return;
+
             const canvas = this.$refs.canvas;
             const ctx = canvas.getContext('2d');
-            const baseImage = new Image();
-            const productImage = new Image();
 
+            // Create an offscreen canvas
+            const offscreenCanvas = document.createElement('canvas');
+            const offscreenCtx = offscreenCanvas.getContext('2d');
+            offscreenCanvas.width
+                = canvas.width;
+            offscreenCanvas.height = canvas.height;
+
+
+            const baseImage = new Image();
             baseImage.src = this.imgSrc;
-            productImage.src = this.productSrc;
 
             baseImage.onload = () => {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-
-                // Calculate the scaling factor for the model image
                 const scaleFactor = Math.max(canvas.width / baseImage.width, canvas.height / baseImage.height) * this.zoomLevel;
 
-                // Calculate the scaled dimensions of the background image
                 const scaledWidth = baseImage.width * scaleFactor;
                 const scaledHeight = baseImage.height * scaleFactor;
 
-                // Calculate the x and y offsets to center the image
                 const xOffset = (canvas.width - scaledWidth) / 2;
                 const yOffset = (canvas.height - scaledHeight) / 2;
 
-                // Draw the background image with scaling and centering
-                ctx.globalAlpha = this.opacity; // Apply opacity to the model image
-                ctx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
+                // Draw on the offscreen canvas
+                offscreenCtx.globalAlpha = this.opacity;
+                offscreenCtx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
 
-                // Draw the product image without scaling
-                const productWidth = productImage.width / 2.5;
-                const productHeight = productImage.height / 2.5;
-                ctx.globalAlpha = 1; // Reset opacity for the product image
-                ctx.drawImage(productImage, this.offsetX, this.offsetY, productWidth, productHeight);
+                const productWidth = this.initialProductWidth / 2.5;
+                const productHeight = this.initialProductHeight / 2.5;
+                offscreenCtx.globalAlpha = 1;
+                offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
+
+                // Draw the offscreen canvas onto the visible canvas
+                ctx.drawImage(offscreenCanvas, 0, 0);
             };
         },
+
         startDrag(event) {
             this.isDragging = true;
             this.startX = event.offsetX - this.offsetX;
             this.startY = event.offsetY - this.offsetY;
         },
+
         drag(event) {
-            if (!this.isDragging) return;
+            if (!this.isDragging || !this.productImage) return;
 
             this.offsetX = event.offsetX - this.startX;
             this.offsetY = event.offsetY - this.startY;
 
             this.drawCanvas();
 
-            // Calculate and emit transform coordinates from the center
-            const centerX = this.$refs.canvas.width / 2;
-            const centerY = this.$refs.canvas.height / 2;
-            const transformX = this.offsetX + this.$refs.canvas.width / 2 - centerX;
-            const transformY = this.offsetY + this.$refs.canvas.height / 2 - centerY;
-            this.$emit('transform-coordinates', { x: transformX, y: transformY });
+            this.$emit('updateTransformCoordinates', {
+                x: this.offsetX,
+                y: this.offsetY,
+                xScale: this.initialProductWidth ? this.initialProductWidth / 2.5 / this.initialProductWidth : 1,
+                yScale: this.initialProductHeight ? this.initialProductHeight / 2.5 / this.initialProductHeight : 1,
+            });
         },
+
         endDrag() {
             this.isDragging = false;
         },

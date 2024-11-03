@@ -12,7 +12,7 @@
             </select>
           </div>
         </div>
-        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-grey">
+        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200"> 
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
             <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
               <img :src="`/src/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
@@ -23,25 +23,40 @@
       </div>
       <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
         <div class="w-full h-[68%] overflow-hidden">
-          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages"/>
+          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates"/> 
         </div>
         <div class="w-[100%] h-[35%]">
-          <div class="w-[100%] h-full flex flex-col items-center bg-grey rounded-md">
-            <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2">
-              <img :src="image" alt="Model" class="w-full rounded-md"
-                :class="{ 'border-2 border-blue': selectedImage === image }" @click="selectImage(image)" />
-              <div v-if="selectedImage === image" class="fixed inset-0 flex items-center justify-center z-50">
-                <div class="absolute inset-0 bg-black opacity-50"></div>
-                <div class="bg-white p-4 rounded-md z-10">
-                  <img :src="image" alt="Larger Image" class="w-full rounded-md mb-4">
-                  <button @click="refineImage(image)">Refine Image</button>
-                  <button @click="downloadImage(image)">Download Image</button>
-                  <button @click="addToLibrary(image)">Add to Library</button>
-                  <button @click="closeModal">Close</button>
-                </div>
-              </div>
+          <div class="w-[100%] h-full flex flex-col items-center bg-gray-200 rounded-md p-4"> 
+            <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]"> 
+              <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer"
+                :class="{ 'border-2 border-blue-500': selectedImage === image }" @click="selectImage(image)" />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="selectedImage" class="fixed inset-0 flex items-center justify-center z-50">
+      <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div> 
+      <div class="bg-white p-6 rounded-lg z-10 max-w-lg w-full relative"> 
+        <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">   
+
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>   
+
+        </button>
+        <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain"> 
+        <div class="flex flex-col gap-2"> 
+          <button @click="refineImage(selectedImage)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Refine Image
+          </button>
+          <button @click="downloadImage(selectedImage)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Download Image
+          </button>
+          <button @click="addToLibrary(selectedImage)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+            Add to Library
+          </button>
         </div>
       </div>
     </div>
@@ -76,7 +91,11 @@ export default {
         'necklace_4.png'
         // ...other image filenames for necklace
       ],
-      selectedPresetImagePath: null, // Store the path of the selected preset image
+      selectedPresetImagePath: null,
+      xVal: 0, // Default x-coordinate
+      yVal: 0, // Default y-coordinate
+      xScale: 0.5, // Default x-scale
+      yScale: 0.5, // Default y-scale
     };
   },
   mounted() {
@@ -84,12 +103,34 @@ export default {
     this.updatePresetImages();
   },
   methods: {
+    updateTransformCoordinates(coordinates) {
+      this.xVal = coordinates.x;
+      this.yVal = coordinates.y;
+      this.xScale = coordinates.xScale;
+      this.yScale = coordinates.yScale;
+    },
     async generateModelImages() {
       try {
-        console.log('called')
-        const base64Image = await this.imageToBase64(this.productImg);
-        // this.modelImages = await fetchModelImages(base64Image);
-        this.selectedImage = this.modelImages[0];
+        const base64ProductImage = await this.productImg
+        const base64SelectedImage = await this.imageToBase64(this.selectedPresetImagePath);
+        console.log(
+          this.productImg,{
+          base64ProductImage,
+          base64SelectedImage,
+          xVal: this.xVal,
+          yVal: this.yVal,
+          xScale: this.xScale,
+          yScale: this.yScale
+        });
+        this.modelImages = await fetchModelImages(
+          base64ProductImage,
+          base64SelectedImage,
+          this.xVal,
+          this.yVal,
+          this.xScale,
+          this.yScale,
+          this.selectedJewelleryType
+        );
       } catch (error) {
         console.error('Error generating model images:', error);
       }
