@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       searchQuery: "",
-      dateRange: "999", // default to 3 months
+      dateRange: "999", // default to show all orders
     };
   },
   computed: {
@@ -101,8 +101,15 @@ export default {
       return this.pastOrders.filter((order) => {
         const orderDate = this.parseDate(order.data.date);
 
+        // If parsing fails, ignore this order
+        if (isNaN(orderDate.getTime())) {
+          console.warn(`Invalid date format for order: ${order.data.date}`);
+          return false;
+        }
+
         // Filter by date range
-        if (orderDate < rangeStartDate) return false;
+        if (this.dateRange !== "999" && orderDate < rangeStartDate)
+          return false;
 
         // Filter by search query
         const query = this.searchQuery.toLowerCase();
@@ -116,8 +123,29 @@ export default {
   },
   methods: {
     parseDate(dateString) {
-      // Convert "31 October 2024" to a Date object
-      return new Date(dateString);
+      // Split the date string into parts and create a Date object
+      const [day, month, year] = dateString.split(" ");
+      const monthIndex = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ].indexOf(month);
+
+      if (monthIndex === -1) {
+        console.warn(`Invalid month format in date: ${dateString}`);
+        return new Date(NaN); // return an invalid date if month is invalid
+      }
+
+      return new Date(year, monthIndex, parseInt(day, 10));
     },
   },
 };
