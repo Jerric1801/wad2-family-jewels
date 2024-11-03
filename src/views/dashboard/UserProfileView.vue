@@ -70,7 +70,7 @@
           />
         </div>
 
-        <!-- Tabs -->
+        <!-- Tab Titles -->
         <div
           class="flex justify-center mb-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -232,415 +232,31 @@
           </ul>
         </div>
 
-        <!-- Tabs Information - Profile -->
-        <div
+        <!-- Tab Content - Personal Information -->
+        <PersonalInformation
           v-if="activeTab === 'personalInfo'"
-          class="border-t border-gray-200 pt-6"
-        >
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Personal Information
-            </span>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Full Name Field-->
-            <div
-              class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
-            >
-              <div>
-                <p class="text-gray-600 mb-1">Full Name</p>
-                <p class="text-xl font-medium">{{ userData.fullName }}</p>
-              </div>
-              <button
-                @click="openEditModal('Full Name', userData.fullName)"
-                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
-              >
-                Edit
-              </button>
-            </div>
-            <!-- Phone Number Field-->
-            <div
-              class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
-            >
-              <div>
-                <p class="text-gray-600 mb-1">Phone Number</p>
-                <p class="text-xl font-medium">{{ userData.phoneNumber }}</p>
-              </div>
-              <button
-                @click="openEditModal('Phone Number', userData.phoneNumber)"
-                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
-              >
-                Edit
-              </button>
-            </div>
-          </div>
-          <!-- User Bio -->
-          <div class="border-t border-gray-200 pt-6 mt-6">
-            <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-              <span
-                class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-                >User Bio</span
-              >
-            </h3>
-            <div
-              class="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
-            >
-              <div>
-                <p class="text-gray-600 mb-1">About Me</p>
-                <p class="text-xl font-medium">
-                  {{ (userData && userData.bio) || "No bio available" }}
-                </p>
-              </div>
-              <button
-                @click="openEditModal('Bio', userData.bio)"
-                class="border border-gray-400 text-gray-700 px-4 py-1 rounded-full hover:bg-gray-100 transition duration-200"
-              >
-                Edit
-              </button>
-            </div>
-          </div>
-        </div>
+          :userData="userData"
+          :openEditModal="openEditModal"
+        />
 
-        <!-- Tabs Information - Profile -->
-        <div
+        <!-- Tab Content - Sign-in Information -->
+        <SignInInformation
           v-if="activeTab === 'signInInformation'"
-          class="border-t border-gray-200 pt-6"
-        >
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Sign-in Information
-            </span>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Email</p>
-              <p class="text-xl font-medium">{{ userData.email }}</p>
-            </div>
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Phone Number</p>
-              <p class="text-xl font-medium">{{ userData.phoneNumber }}</p>
-            </div>
-          </div>
-        </div>
+          :userData="userData"
+        />
 
-        <!-- Tabs Information - Order History -->
-        <div
+        <!-- Tab Content - Preferences -->
+        <Preferences v-if="activeTab === 'preferences'" />
+        <OrderHistory
           v-if="activeTab === 'orderHistory'"
-          class="border-t border-gray-200 pt-6"
-        >
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Order History
-            </span>
-          </h3>
+          :pastOrders="pastOrders"
+        />
 
-          <!-- Order Filter and Search Section -->
-          <div class="flex justify-between items-center mb-6">
-            <p class="text-gray-700">5 orders placed in</p>
-            <select class="border rounded px-3 py-2">
-              <option>Past three months</option>
-              <option>Past six months</option>
-              <option>Past year</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Search all orders"
-              class="border rounded px-3 py-2 w-1/3"
-            />
-            <button class="bg-gray-600 text-white px-4 py-2 rounded">
-              Search Orders
-            </button>
-          </div>
-
-          <!-- Order List Section -->
-          <div class="space-y-6">
-            <div
-              v-for="(order, index) in pastOrders"
-              :key="index"
-              class="border rounded-lg shadow-sm p-6 bg-white mb-6"
-            >
-              <!-- Order Summary -->
-              <div class="flex justify-between mb-6">
-                <div>
-                  <p class="text-gray-600">
-                    <strong>Order Placed on:</strong> {{ order.data.date }}
-                  </p>
-                  <p class="text-gray-600">
-                    <strong>Total Price:</strong>
-                    ${{ order.data.total | currency }}
-                  </p>
-                  <p class="text-gray-600">
-                    <strong>Deliver to:</strong>
-                    <span class="text-blue-600">{{
-                      order.data.receipientName
-                    }}</span>
-                  </p>
-                </div>
-                <div class="text-right">
-                  <p class="text-gray-600">
-                    <strong>ORDER #</strong> {{ order.data.orderNumber }}
-                  </p>
-                  <div class="flex space-x-2">
-                    <a href="#" class="text-blue-600 hover:underline"
-                      >View order details</a
-                    >
-                    <a href="#" class="text-blue-600 hover:underline"
-                      >Receipt</a
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <!-- Order Item Details & Actions -->
-              <div class="flex justify-between items-start">
-                <!-- Product Details -->
-                <div class="flex">
-                  <img
-                    :src="order.data.imageUrl"
-                    alt="Product image"
-                    class="w-24 h-24 rounded shadow mr-6"
-                  />
-                  <div>
-                    <p class="font-semibold text-lg">
-                      {{ order.data.productName }}
-                    </p>
-                    <p class="text-gray-500">
-                      Return eligible through {{ order.data.returnDate }}
-                    </p>
-                    <div class="flex mt-4 space-x-4">
-                      <button
-                        class="flex items-center bg-yellow-400 hover:bg-yellow-500 text-black font-medium px-4 py-2 rounded shadow transition ease-in-out duration-200"
-                      >
-                        Buy it again
-                      </button>
-                      <button
-                        class="flex items-center border border-gray-400 text-gray-700 font-medium px-4 py-2 rounded hover:bg-gray-100 transition ease-in-out duration-200"
-                      >
-                        View your item
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Order Action Buttons -->
-                <div class="grid gap-2 w-48 text-right">
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Track package
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Return items
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Share gift receipt
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Get help
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Leave seller feedback
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Leave delivery feedback
-                  </button>
-                  <button
-                    class="border border-gray-400 text-gray-700 px-4 py-2 rounded w-full hover:bg-gray-100 transition ease-in-out duration-200"
-                  >
-                    Write a product review
-                  </button>
-                </div>
-              </div>
-
-              <!-- Archive Order Link -->
-              <a href="#" class="text-blue-600 hover:underline mt-4 block"
-                >Archive order</a
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- Tabs Information - Address -->
-        <div
+        <!-- Tab Content - Addresses -->
+        <Addresses
           v-if="activeTab === 'addresses'"
-          class="border-t border-gray-200 pt-6"
-        >
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Your Addresses
-            </span>
-          </h3>
-
-          <!-- Address Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Add Address Card -->
-            <div
-              class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-gray-600 cursor-pointer hover:bg-gray-50"
-              @click="addAddress"
-            >
-              <div class="text-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-12 h-12 mx-auto mb-2 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                <span class="font-medium">Add Address</span>
-              </div>
-            </div>
-
-            <!-- Address Cards -->
-            <div v-if="userAddresses.length > 0">
-              <div
-                v-for="(address, index) in userAddresses"
-                :key="index"
-                class="border rounded-lg p-4 shadow-md bg-gray-100 mt-3"
-              >
-                <div class="flex justify-between items-start">
-                  <div>
-                    <p class="font-semibold text-lg">
-                      {{ address.data.fullName }}
-                    </p>
-                    <p class="text-gray-600">{{ address.data.address }}</p>
-                    <p class="text-gray-600">{{ address.data.unitNumber }}</p>
-                    <p class="text-gray-600">{{ address.data.country }}</p>
-                    <p class="text-gray-600">{{ address.country }}</p>
-                    <p class="text-gray-600">
-                      Phone number: {{ address.data.phoneNumber }}
-                    </p>
-                  </div>
-                  <span
-                    v-if="address.default"
-                    class="text-xs text-orange-600 font-medium mt-1"
-                    >Default</span
-                  >
-                </div>
-
-                <div class="flex mt-4 space-x-2">
-                  <button
-                    @click="editAddress(address.id)"
-                    class="text-blue-600 font-medium"
-                  >
-                    Edit
-                  </button>
-                  <span class="text-gray-400 mt-3">|</span>
-                  <button
-                    @click="removeAddress(address.id)"
-                    class="text-blue-600 font-medium"
-                  >
-                    Remove
-                  </button>
-                  <span v-if="!address.default" class="text-gray-400 mt-3"
-                    >|</span
-                  >
-                  <button
-                    v-if="!address.default"
-                    @click="setDefaultAddress(address.id)"
-                    class="text-blue-400 font-small"
-                  >
-                    Set as Default
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tabs Information - Email Subscription -->
-        <div
-          v-if="activeTab === 'preferences'"
-          class="border-t border-gray-200 pt-6"
-        >
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Preferences - Join our Email Subscription!
-            </span>
-            <p class="mb-4 text-gray-600 mt-4 text-lg">
-              By joining our email list, you will be the first to know about
-              exciting new designs, special events, store openings, and much
-              more.
-            </p>
-            <div class="flex space-x-4">
-              <button
-                class="btn-subscribe flex items-center space-x-2 space-y-2"
-                @click="subscribeToEmails"
-              >
-                <!-- SVG Icon -->
-                <span class="svg-container"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#7d77d2"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-user-round-check w-6 h-6"
-                  >
-                    <path d="M2 21a8 8 0 0 1 13.292-6" />
-                    <circle cx="10" cy="8" r="5" />
-                    <path d="m16 19 2 2 4-4" /></svg
-                ></span>
-                <!-- Text -->
-                <span>Subscribe</span>
-              </button>
-              <button
-                class="btn-unsubscribe flex items-center space-x-2 space-y-2"
-                @click="unsubscribeFromEmails"
-              >
-                <span class="svg-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#7d77d2"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-user-round-x w-6 h-6"
-                  >
-                    <path d="M2 21a8 8 0 0 1 11.873-7" />
-                    <circle cx="10" cy="8" r="5" />
-                    <path d="m17 17 5 5" />
-                    <path d="m22 17-5 5" />
-                  </svg> </span
-                ><span>Unsubscribe</span>
-              </button>
-            </div>
-          </h3>
-        </div>
+          :userAddresses="userAddresses"
+        />
       </div>
     </div>
 
@@ -709,10 +325,20 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { storeToRefs } from "pinia";
 import { onMounted, watch, ref } from "vue";
 import { useRouter } from "vue-router";
+import Addresses from "../../components/profile/Addresses.vue";
+import OrderHistory from "../../components/profile/OrderHistory.vue";
+import PersonalInformation from "../../components/profile/PersonalInformation.vue";
+import Preferences from "../../components/profile/Preferences.vue";
+import SignInInformation from "../../components/profile/SignInInformation.vue";
 
 export default {
   components: {
     DefaultLayout,
+    PersonalInformation,
+    SignInInformation,
+    Preferences,
+    OrderHistory,
+    Addresses,
   },
   setup() {
     const authStore = useAuthStore();
