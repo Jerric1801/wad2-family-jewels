@@ -1,5 +1,13 @@
 import { db } from "@/config/firebase";
-import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const retrieveUserProfile = async (userId) => {
@@ -37,6 +45,32 @@ export async function retrieveUserAddresses(userId) {
     });
   });
   return itemsData.length ? itemsData : null;
+}
+
+export async function addNewUserAddress(userId, newAddress) {
+  try {
+    // Reference to the user's addresses collection
+    const userDocRef = doc(db, "user-address", userId);
+    const addressesCollectionRef = collection(userDocRef, "addresses");
+
+    // Add a new document to the addresses subcollection
+    const docRef = await addDoc(addressesCollectionRef, newAddress);
+    return docRef.id; // Return the ID of the new document
+  } catch (error) {
+    console.error("Error adding new address:", error);
+    throw error;
+  }
+}
+
+export async function removeUserAddress(userId, addressId) {
+  try {
+    const addressRef = doc(db, `user-address/${userId}/addresses`, addressId);
+    await deleteDoc(addressRef);
+    console.log(`Address ${addressId} deleted successfully.`);
+  } catch (error) {
+    console.error("Error removing address:", error);
+    throw error;
+  }
 }
 
 export async function retrieveUserPastOrders(userId) {

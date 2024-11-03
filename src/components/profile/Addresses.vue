@@ -2,6 +2,7 @@
   <div class="border-t border-gray-200 pt-6">
     <h3 class="text-2xl font-semibold mb-4 text-indigo-600">Your Addresses</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Add New Address Card-->
       <div
         class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:bg-gray-50"
         @click="addAddress"
@@ -24,6 +25,8 @@
           <span class="font-medium">Add Address</span>
         </div>
       </div>
+
+      <!-- Existing Addresses -->
       <div
         v-for="(address, index) in userAddresses"
         :key="index"
@@ -67,28 +70,172 @@
           </button>
         </div>
       </div>
+
+      <!-- Popup Modal for Adding New Address -->
+      <div
+        v-if="showAddModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
+      >
+        <div
+          class="bg-white rounded-lg p-6 w-full max-w-md"
+          style="height: 80%; overflow-y-auto"
+        >
+          <h2 class="text-xl font-semibold mb-4 text-indigo-600">
+            Add New Address
+          </h2>
+          <form @submit.prevent="saveNewAddress" class="space-y-3">
+            <div>
+              <label class="block text-gray-700 font-medium mb-1"
+                >Full Name</label
+              >
+              <input
+                type="text"
+                v-model="newAddress.fullName"
+                class="border border-gray-300 p-2 rounded-lg w-full"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-gray-700 font-medium mb-1"
+                >Address</label
+              >
+              <input
+                type="text"
+                v-model="newAddress.address"
+                class="border border-gray-300 p-2 rounded-lg w-full"
+                required
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-gray-700 font-medium mb-1"
+                  >Unit Number</label
+                >
+                <input
+                  type="text"
+                  v-model="newAddress.unitNumber"
+                  class="border border-gray-300 p-2 rounded-lg w-full"
+                />
+              </div>
+              <div>
+                <label class="block text-gray-700 font-medium mb-1"
+                  >Country</label
+                >
+                <input
+                  type="text"
+                  v-model="newAddress.country"
+                  class="border border-gray-300 p-2 rounded-lg w-full"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-medium mb-1"
+                >Phone Number</label
+              >
+              <input
+                type="text"
+                v-model="newAddress.phoneNumber"
+                class="border border-gray-300 p-2 rounded-lg w-full"
+              />
+            </div>
+            <div class="flex justify-end mt-4 space-x-2">
+              <button
+                type="button"
+                @click="showAddModal = false"
+                class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { addNewUserAddress } from "../../services/firebase/profile";
+import { removeUserAddress } from "../../services/firebase/profile";
+
 export default {
   props: {
     userAddresses: Array,
+    userId: String,
+  },
+  data() {
+    return {
+      showAddModal: false,
+      newAddress: {
+        fullName: "",
+        address: "",
+        unitNumber: "",
+        country: "",
+        phoneNumber: "",
+      },
+    };
   },
   methods: {
     addAddress() {
-      console.log("Add address");
+      this.showAddModal = true;
     },
     editAddress(id) {
       console.log("Edit address", id);
     },
-    removeAddress(id) {
-      console.log("Remove address", id);
+    async removeAddress(addressId) {
+      try {
+        await removeUserAddress(this.userId, addressId);
+        // Filter out the deleted address from local state to update the UI
+        this.$emit("addressRemoved", addressId); // Notify parent to refresh data
+      } catch (error) {
+        console.error("Failed to remove address:", error);
+      }
     },
     setDefaultAddress(id) {
       console.log("Set as default address", id);
     },
+    async saveNewAddress() {
+      if (!this.userId) throw new Error("User ID is required");
+      try {
+        const newAddressId = await addNewUserAddress(
+          this.userId,
+          this.newAddress
+        );
+        this.userAddresses.push({
+          data: { ...this.newAddress },
+          id: newAddressId,
+        });
+
+        // Clear the form and close the modal
+        this.newAddress = {
+          fullName: "",
+          address: "",
+          unitNumber: "",
+          country: "",
+          phoneNumber: "",
+        };
+        this.showAddModal = false;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>
+
+<style scoped>
+button {
+  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+}
+button:hover {
+  background: linear-gradient(to right, #5e1a91, #007bbf);
+  color: white;
+  box-shadow: 0px 6px 10px;
+}
+</style>

@@ -69,14 +69,40 @@ export default {
 </script>
 
 <style scoped>
-.btn-subscribe,
+button {
+  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+}
+
+.btn-subscribe {
+  box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
+}
+
+.btn-subscribe:hover {
+  background: linear-gradient(
+    to right,
+    #5e1a91,
+    #007bbf
+  ); /* Darker Purple to Blue */
+  box-shadow: 0px 6px 10px;
+  transform: scale(1.05);
+  color: white;
+}
+
+/* Secondary Button - Unsubscribe (Gradient Only, No Background Color) */
 .btn-unsubscribe {
   box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
 }
-.btn-subscribe:hover,
+
 .btn-unsubscribe:hover {
-  background: linear-gradient(to right, #5e1a91, #007bbf);
-  color: white;
+  background: linear-gradient(to right, #79016d, #300054);
+  box-shadow: 0px 6px 10px;
   transform: scale(1.05);
+  color: white;
+}
+.btn-subscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
+}
+.btn-unsubscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
 }
 </style>

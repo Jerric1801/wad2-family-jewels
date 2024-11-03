@@ -253,9 +253,17 @@
         />
 
         <!-- Tab Content - Addresses -->
-        <Addresses
+        <!-- <Addresses
           v-if="activeTab === 'addresses'"
           :userAddresses="userAddresses"
+          :userId="userid"
+        /> -->
+
+        <Addresses
+          v-if="activeTab === 'addresses' && userid"
+          :userAddresses="userAddresses"
+          :userId="userid"
+          @addressRemoved="onAddressRemoved"
         />
       </div>
     </div>
@@ -340,12 +348,20 @@ export default {
     OrderHistory,
     Addresses,
   },
+  methods: {
+    onAddressRemoved(addressId) {
+      // Filter out the removed address to update the local state
+      this.userAddresses = this.userAddresses.filter(
+        (address) => address.id !== addressId
+      );
+    },
+  },
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
     const { isAuthenticated, user } = storeToRefs(authStore);
 
-    const userid = ref("");
+    const userid = ref(null);
     const userData = ref(null);
     const userAddresses = ref(null);
     const pastOrders = ref(null);
@@ -436,6 +452,7 @@ export default {
 
     return {
       isAuthenticated,
+      userid,
       userData,
       pastOrders,
       userAddresses,
@@ -496,7 +513,6 @@ button:hover {
   box-shadow: 0px 6px 10px;
 }
 
-/* Primary Button - Subscribe (Gradient Only, No Background Color) */
 .btn-subscribe {
   box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
 }
