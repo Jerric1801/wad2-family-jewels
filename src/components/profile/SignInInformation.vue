@@ -8,10 +8,6 @@
         <p class="text-gray-600 mb-1">Email</p>
         <p class="text-xl font-medium">{{ userData.email }}</p>
       </div>
-      <div class="bg-gray-100 p-4 rounded-lg">
-        <p class="text-gray-600 mb-1">Phone Number</p>
-        <p class="text-xl font-medium">{{ userData.phoneNumber }}</p>
-      </div>
     </div>
   </div>
 </template>
