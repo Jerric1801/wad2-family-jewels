@@ -1,5 +1,14 @@
 import { db } from "@/config/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  writeBatch,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const retrieveUserProfile = async (userId) => {
@@ -12,6 +21,117 @@ export const retrieveUserProfile = async (userId) => {
     return null;
   }
 };
+
+export async function retrieveUserAddresses(userId) {
+  // Ensure the userId is passed and valid
+  if (!userId) {
+    console.error("UserID is undefined");
+    return null;
+  }
+
+  // Reference to the user's document inside 'jewellery-lib' collection
+  const userDocRef = doc(db, "user-address", userId);
+
+  // Get the 'collections' sub-collection inside the user's document
+  const itemsCollectionRef = collection(userDocRef, "addresses");
+
+  const itemsSnapshot = await getDocs(itemsCollectionRef);
+
+  const itemsData = [];
+
+  itemsSnapshot.forEach((doc) => {
+    itemsData.push({
+      id: doc.id,
+      data: doc.data(),
+    });
+  });
+  return itemsData.length ? itemsData : null;
+}
+
+export async function addNewUserAddress(userId, newAddress) {
+  try {
+    // Reference to the user's addresses collection
+    const userDocRef = doc(db, "user-address", userId);
+    const addressesCollectionRef = collection(userDocRef, "addresses");
+
+    // Add a new document to the addresses subcollection
+    const docRef = await addDoc(addressesCollectionRef, newAddress);
+    return docRef.id; // Return the ID of the new document
+  } catch (error) {
+    console.error("Error adding new address:", error);
+    throw error;
+  }
+}
+
+export async function removeUserAddress(userId, addressId) {
+  try {
+    const addressRef = doc(db, `user-address/${userId}/addresses`, addressId);
+    await deleteDoc(addressRef);
+    console.log(`Address ${addressId} deleted successfully.`);
+  } catch (error) {
+    console.error("Error removing address:", error);
+    throw error;
+  }
+}
+
+export async function setDefaultAddress(userId, addressId) {
+  try {
+    // Reference to the addresses collection
+    const addressesRef = collection(db, "user-address", userId, "addresses");
+
+    // Retrieve all addresses for the user
+    const allAddresses = await getDocs(addressesRef);
+
+    // Initialize a batch for updating documents
+    const batch = writeBatch(db);
+
+    // Loop through addresses and set the default status
+    allAddresses.forEach((docSnapshot) => {
+      const addressRef = doc(
+        db,
+        "user-address",
+        userId,
+        "addresses",
+        docSnapshot.id
+      );
+      const isDefault = docSnapshot.id === addressId;
+      batch.update(addressRef, { isDefault }); // Setting isDefault field based on match
+    });
+
+    // Commit the batch
+    await batch.commit();
+
+    window.location.reload();
+  } catch (error) {
+    console.error("Error setting default address:", error);
+  }
+}
+
+export async function retrieveUserPastOrders(userId) {
+  // Ensure the userId is passed and valid
+  if (!userId) {
+    console.error("UserID is undefined");
+    return null;
+  }
+
+  // Reference to the user's document inside 'jewellery-lib' collection
+  const userDocRef = doc(db, "user-orders", userId);
+
+  // Get the 'collections' sub-collection inside the user's document
+  const itemsCollectionRef = collection(userDocRef, "orders");
+
+  const itemsSnapshot = await getDocs(itemsCollectionRef);
+
+  const itemsData = [];
+
+  itemsSnapshot.forEach((doc) => {
+    itemsData.push({
+      id: doc.id,
+      data: doc.data(),
+    });
+  });
+  return itemsData.length ? itemsData : null;
+}
 
 export const uploadPhoto = async (userId, photo) => {
   const storage = getStorage();
@@ -42,11 +162,11 @@ export const updateProfilePhotoUrl = async (userId, photoUrl) => {
   await setDoc(docRef, { imageUrl: photoUrl }, { merge: true });
 };
 
-export const updateUserProfile = async (userId, fullName, bio) => {
+export const updateUserProfile = async (userId, fullName, phoneNumber, bio) => {
   const docRef = doc(db, "user-profile", userId);
 
   try {
-    await setDoc(docRef, { fullName, bio }, { merge: true });
+    await setDoc(docRef, { fullName, phoneNumber, bio }, { merge: true });
   } catch (error) {
     console.error("Error updating user profile:", error);
     throw error;

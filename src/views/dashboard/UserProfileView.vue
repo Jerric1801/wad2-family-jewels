@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center"
+      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center w-full"
     >
       <!-- Title -->
       <h1
@@ -21,7 +21,7 @@
       <!-- User Profile Details -->
       <div
         v-else-if="isAuthenticated && userData"
-        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl animate-fade-in-up"
+        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-full animate-fade-in-up"
       >
         <!-- Profile Image -->
         <div class="flex flex-col items-center mb-8 relative">
@@ -57,7 +57,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM19 21H5c-1.105 0-2-.895-2-2V7c0-1.105.895-2 2-2h2.586c.526 0 1.04.21 1.414.586l1.414 1.414c.374.374.888.586 1.414.586H19c1.105 0 2 .895 2 2v12c0 1.105-.895 2-2 2z"
+                  d="M12 11c1.657 0 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM19 21H5c-1.105 0-2-.895-2-2V7c0-1.105.895-2 2-2h2.586c.526 0 1.04.21 1.414.586l1.414 1.414c.374.374.888.586 1.414.586H19c1.105 0 2 .895 2 2v12c0 1.105-.895 2-2 2z"
                 ></path>
               </svg>
             </div>
@@ -68,95 +68,235 @@
             class="hidden"
             @change="handleUploadPhoto"
           />
-          <!-- Edit Bio Button -->
-          <div
-            class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer"
-            @click="editBio"
+        </div>
+
+        <!-- Tab Titles -->
+        <div
+          class="flex justify-center mb-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <ul
+            class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
           >
-            <svg
-              class="w-6 h-6 text-indigo-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.232 5.232l3.536 3.536M9 11l6-6 3.536 3.536-6 6H9v-3.536zM19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 2 0 002 2h14a2 2 2 0 002-2v-7h-2v7z"
-              ></path>
-            </svg>
-          </div>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'personalInfo'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'personalInfo'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-venetian-mask w-8 h-8 pr-2"
+                >
+                  <path
+                    d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"
+                  />
+                  <path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z" />
+                  <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" /></svg
+                >Personal Information
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'signInInformation'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'signInInformation'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-file-user w-8 h-8 pr-2"
+                >
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M15 18a3 3 0 1 0-6 0" />
+                  <path
+                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
+                  />
+                  <circle cx="12" cy="13" r="2" /></svg
+                >Sign-in Information
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'preferences'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'preferences'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-settings-2 w-8 h-8 pr-2"
+                >
+                  <path d="M20 7h-9" />
+                  <path d="M14 17H5" />
+                  <circle cx="17" cy="17" r="3" />
+                  <circle cx="7" cy="7" r="3" /></svg
+                >Preferences
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'orderHistory'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'orderHistory'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-history w-8 h-8 pr-2"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                  <path d="M12 7v5l4 2" />
+                </svg>
+                Order History
+              </a>
+            </li>
+            <li class="me-2">
+              <a
+                :class="[
+                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  activeTab === 'addresses'
+                    ? 'text-black border-black'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                ]"
+                @click="activeTab = 'addresses'"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-map-pin-house w-8 h-8 pr-2"
+                >
+                  <path
+                    d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z"
+                  />
+                  <path
+                    d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2"
+                  />
+                  <path d="M18 22v-3" />
+                  <circle cx="10" cy="10" r="3" /></svg
+                >Addresses
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <!-- Profile Information -->
-        <div class="border-t border-gray-200 pt-6">
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-            >
-              Profile Information
-            </span>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Name</p>
-              <p class="text-xl font-medium">{{ userData.fullName }}</p>
-            </div>
-            <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-gray-600 mb-1">Email</p>
-              <p class="text-xl font-medium">{{ userData.email }}</p>
-            </div>
-          </div>
-        </div>
+        <!-- Tab Content - Personal Information -->
+        <PersonalInformation
+          v-if="activeTab === 'personalInfo'"
+          :userData="userData"
+          :openEditModal="openEditModal"
+        />
 
-        <!-- User Bio -->
-        <div class="border-t border-gray-200 pt-6 mt-6">
-          <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
-            <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
-              >User Bio</span
-            >
-          </h3>
-          <div class="bg-gray-100 p-4 rounded-lg">
-            <p class="text-gray-600 mb-1">About Me</p>
-            <p class="text-xl font-medium">
-              {{ (userData && userData.bio) || "No bio available" }}
-            </p>
-          </div>
-        </div>
+        <!-- Tab Content - Sign-in Information -->
+        <SignInInformation
+          v-if="activeTab === 'signInInformation'"
+          :userData="userData"
+        />
+
+        <!-- Tab Content - Preferences -->
+        <Preferences v-if="activeTab === 'preferences'" />
+        <OrderHistory
+          v-if="activeTab === 'orderHistory'"
+          :pastOrders="pastOrders"
+        />
+
+        <!-- Tab Content - Addresses -->
+        <!-- <Addresses
+          v-if="activeTab === 'addresses'"
+          :userAddresses="userAddresses"
+          :userId="userid"
+        /> -->
+
+        <Addresses
+          v-if="activeTab === 'addresses' && userid"
+          :userAddresses="userAddresses"
+          :userId="userid"
+          @addressRemoved="onAddressRemoved"
+        />
       </div>
     </div>
 
+    <!-- Modal Stuff -->
     <div
       v-if="showEditModal"
       class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
     >
       <div class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up">
         <h2 class="text-2xl font-semibold mb-4 text-indigo-600">
-          Edit Profile
+          Edit {{ currentField }}
         </h2>
         <form @submit.prevent="saveChanges">
           <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-medium mb-2"
-              >Name</label
+            <label
+              :for="currentField"
+              class="block text-gray-700 font-medium mb-2"
+              >{{ currentField }}</label
             >
             <input
+              v-if="currentField !== 'Bio'"
               type="text"
-              id="name"
-              v-model="editedName"
+              :id="currentField"
+              v-model="currentValue"
               class="border border-gray-400 p-2 rounded-lg w-full"
             />
-          </div>
-          <div class="mb-4">
-            <label for="bio" class="block text-gray-700 font-medium mb-2"
-              >Bio</label
-            >
             <textarea
-              id="bio"
-              v-model="editedBio"
+              v-else
+              :id="currentField"
+              v-model="currentValue"
               class="border border-gray-400 p-2 rounded-lg w-full"
+              style="height: 150px; width: 100%"
             ></textarea>
           </div>
           <div class="flex justify-end">
@@ -186,27 +326,53 @@ import {
   retrieveUserProfile,
   uploadPhoto,
   updateUserProfile,
+  retrieveUserAddresses,
+  retrieveUserPastOrders,
 } from "@/services/firebase/profile";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { storeToRefs } from "pinia";
 import { onMounted, watch, ref } from "vue";
 import { useRouter } from "vue-router";
+import Addresses from "../../components/profile/Addresses.vue";
+import OrderHistory from "../../components/profile/OrderHistory.vue";
+import PersonalInformation from "../../components/profile/PersonalInformation.vue";
+import Preferences from "../../components/profile/Preferences.vue";
+import SignInInformation from "../../components/profile/SignInInformation.vue";
 
 export default {
   components: {
     DefaultLayout,
+    PersonalInformation,
+    SignInInformation,
+    Preferences,
+    OrderHistory,
+    Addresses,
+  },
+  methods: {
+    onAddressRemoved(addressId) {
+      // Filter out the removed address to update the local state
+      this.userAddresses = this.userAddresses.filter(
+        (address) => address.id !== addressId
+      );
+    },
   },
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
     const { isAuthenticated, user } = storeToRefs(authStore);
-    let userid = ref("");
-    let userData = ref(null);
-    let isLoading = ref(true);
+
+    const userid = ref(null);
+    const userData = ref(null);
+    const userAddresses = ref(null);
+    const pastOrders = ref(null);
+    const isLoading = ref(true);
     const fileInput = ref(null);
+    const activeTab = ref("personalInfo");
+    const isPhotoLoading = ref(false);
+
     const showEditModal = ref(false);
-    const editedName = ref("");
-    const editedBio = ref("");
+    const currentField = ref("");
+    const currentValue = ref("");
 
     const checkAuthentication = async () => {
       if (!isAuthenticated.value) {
@@ -214,19 +380,61 @@ export default {
       } else {
         userid.value = user.value.uid;
         userData.value = await retrieveUserProfile(userid.value);
+        userAddresses.value = await retrieveUserAddresses(userid.value);
+        pastOrders.value = await retrieveUserPastOrders(userid.value);
         isLoading.value = false;
+      }
+    };
+
+    const openEditModal = (field, value) => {
+      currentField.value = field;
+      currentValue.value = value;
+      showEditModal.value = true;
+    };
+
+    const saveChanges = async () => {
+      try {
+        if (currentField.value === "Full Name") {
+          userData.value.fullName = currentValue.value;
+        } else if (currentField.value === "Phone Number") {
+          userData.value.phoneNumber = currentValue.value;
+        } else if (currentField.value === "Bio") {
+          userData.value.bio = currentValue.value;
+        }
+
+        // Log the updated userData before sending it to Firestore
+        console.log("Updated userData:", {
+          fullName: userData.value.fullName,
+          phoneNumber: userData.value.phoneNumber,
+          bio: userData.value.bio,
+        });
+
+        await updateUserProfile(
+          userid.value,
+          userData.value.fullName,
+          userData.value.phoneNumber,
+          userData.value.bio
+        );
+
+        showEditModal.value = false;
+      } catch (error) {
+        console.error("Error updating profile:", error);
       }
     };
 
     const handleUploadPhoto = async (event) => {
       const file = event.target.files[0];
       if (file) {
+        isPhotoLoading.value = true;
         try {
           await uploadPhoto(userid.value, file);
-          userData.value = await retrieveUserProfile(userid.value);
+          const updatedProfile = await retrieveUserProfile(userid.value);
+          userData.value.imageUrl = updatedProfile.imageUrl;
           console.log("Photo uploaded successfully");
         } catch (error) {
           console.error("Error uploading photo:", error);
+        } finally {
+          isPhotoLoading.value = false;
         }
       }
     };
@@ -239,43 +447,27 @@ export default {
       console.error("Error loading image");
     };
 
-    const editBio = () => {
-      editedName.value = userData.value.fullName;
-      editedBio.value = userData.value.bio || "";
-      showEditModal.value = true;
-    };
-
-    const saveChanges = async () => {
-      try {
-        await updateUserProfile(
-          userid.value,
-          editedName.value,
-          editedBio.value
-        );
-        userData.value = await retrieveUserProfile(userid.value);
-        showEditModal.value = false;
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        // Handle error, e.g., show an error message to the user
-      }
-    };
-
     onMounted(checkAuthentication);
     watch(isAuthenticated, checkAuthentication);
 
     return {
       isAuthenticated,
+      userid,
       userData,
+      pastOrders,
+      userAddresses,
       isLoading,
       handleUploadPhoto,
       triggerFileInput,
       fileInput,
       handleImageError,
-      showEditModal,
-      editBio,
+      isPhotoLoading,
+      openEditModal,
       saveChanges,
-      editedName,
-      editedBio,
+      showEditModal,
+      currentField,
+      currentValue,
+      activeTab,
     };
   },
 };
@@ -310,5 +502,47 @@ export default {
 
 .animate-fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
+}
+
+button {
+  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+}
+button:hover {
+  background: linear-gradient(to right, #5e1a91, #007bbf);
+  color: white;
+  box-shadow: 0px 6px 10px;
+}
+
+.btn-subscribe {
+  box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
+}
+
+.btn-subscribe:hover {
+  background: linear-gradient(
+    to right,
+    #5e1a91,
+    #007bbf
+  ); /* Darker Purple to Blue */
+  box-shadow: 0px 6px 10px;
+  transform: scale(1.05);
+  color: white;
+}
+
+/* Secondary Button - Unsubscribe (Gradient Only, No Background Color) */
+.btn-unsubscribe {
+  box-shadow: 0px 4px 6px rgba(0, 170, 255, 0.3);
+}
+
+.btn-unsubscribe:hover {
+  background: linear-gradient(to right, #79016d, #300054);
+  box-shadow: 0px 6px 10px;
+  transform: scale(1.05);
+  color: white;
+}
+.btn-subscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
+}
+.btn-unsubscribe:hover .svg-container svg {
+  stroke: white; /* Changes SVG color to white on hover */
 }
 </style>
