@@ -1,58 +1,200 @@
 <template>
-    <div class="w-[100%] h-[100%] flex bg-white rounded-md">
-        <div class="w-[15%] h-full flex flex-col items-center space-y-4 justify-end">
+    <div class="w-[100%] h-[100%] flex bg-white rounded-md relative">
+        <div class="w-[15%] h-full flex flex-col items-center space-y-4 justify-end absolute left-0 top-0 z-10">
             <div class="w-[90%]">
                 <input type="range" min="1" :max="maxZoom" v-model="zoomLevel" orientation="vertical" />
             </div>
         </div>
-        <div class="w-[55%] h-full flex justify-center items-center">
-            <div class="w-[90%] h-[90%] relative overflow-hidden bg-grey flex items-center rounder-md">
-                <img :src="imgSrc" alt="Product Image" class="absolute" :style="zoomStyle">
-            </div>
+        <div class="w-[55%] ml-[10%] h-full flex justify-center items-center relative">
+            <canvas ref="canvas" class="max-w-full max-h-full rounded-md" @mousedown="startDrag" @mousemove="drag"
+                @mouseup="endDrag" @mouseleave="endDrag">
+            </canvas>
         </div>
-        <div class="w-[30%] h-full flex flex-col items-center">
-            <div class="h-[25%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md mt-[10%]">
+        <div class="w-[30%] h-full flex flex-col items-center gap-5 pt-[5%]">
+            <div class="h-[20%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Toolbar</b></p>
                 <p class="mt-2">Opacity</p>
                 <div class="w-full flex flex-col justify-center items-center">
                     <input type="range" min="0" max="1" step="0.1" v-model="opacity" />
                 </div>
             </div>
-            <div class="h-[60%] w-[90%] bg-grey flex flex-col justify-start items-center rounded-md mt-[5%]">
+            <div class="h-[55%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
                 <p class="mt-2"><b>Selected Product</b></p>
                 <p class="mt-2">Product Name</p>
-                <div class="w-[50%] h-[50%] relative overflow-hidden bg-grey flex items-center">
-                    <img :src=productSrc alt="Product Image" class="absolute object-cover">
+                <div class="w-[50%] h-[50%] relative overflow-hidden bg-gray-200 flex items-center">
+                    <img :src="productSrc" alt="Product Image" class="absolute object-cover">
                 </div>
                 <p>Select Another Product</p>
+            </div>
+            <div class="h-[10%] w-[90%] bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
+                transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="$emit('generate')">
+                <p class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
             </div>
         </div>
     </div>
 </template>
+
 <script>
 export default {
     name: 'Editor',
     props: {
-        imgSrc: String,
-        productSrc: String
+        imgSrc: {
+            type: String,
+            default: null,
+        },
+        productSrc: {
+            type: String,
+            default: null,
+        },
     },
     data() {
         return {
-            zoomLevel: 2,
+            zoomLevel: 1,
             maxZoom: 10,
-            opacity: 1
+            opacity: 1,
+            isDragging: false,
+            offsetX: 0,
+            offsetY: 0,
+            startX: 0,
+            startY: 0,
+            productImage: null,
+            initialProductWidth: null,
+            initialProductHeight: null,
         };
     },
-    computed: {
-        zoomStyle() {
-            return {
-                transform: `scale(${this.zoomLevel})`,
-                transformOrigin: 'center',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                opacity: this.opacity
-            };
+    mounted() {
+        this.resizeCanvas();
+        window.addEventListener('resize', this.resizeCanvas);
+        this.loadProductImage();
+    },
+    beforeUnmount() {
+        window.removeEventListener('resize', this.resizeCanvas);
+    },
+    watch: {
+        zoomLevel() {
+            this.drawCanvas();
+        },
+        opacity() {
+            this.drawCanvas();
+        },
+        imgSrc() {
+            this.loadBackgroundImage(); // Reload when imgSrc changes
+        },
+        productSrc() {
+            this.loadProductImage();
         }
-    }
-}
+    },
+    methods: {
+        resizeCanvas() {
+            const canvas = this.$refs.canvas;
+            const containerWidth = canvas.parentElement.offsetWidth;
+            const containerHeight = canvas.parentElement.offsetHeight;
+
+            const aspectRatio = 550 / 500;
+            let newWidth = containerWidth;
+            let newHeight = containerWidth / aspectRatio;
+
+            if (newHeight > containerHeight) {
+                newHeight = containerHeight;
+                newWidth = containerHeight * aspectRatio;
+            }
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            this.drawCanvas();
+        },
+
+        loadProductImage() {
+            this.productImage = new Image();
+            this.productImage.src = this.productSrc;
+            this.productImage.onload = () => {
+                this.initialProductWidth = this.productImage.width;
+                this.initialProductHeight = this.productImage.height;
+                this.drawCanvas();
+
+                // Emit initial transform coordinates after image loads
+                this.$emit('updateTransformCoordinates', {
+                    x: this.offsetX,
+                    y: this.offsetY,
+                    xScale: this.initialProductWidth ? this.initialProductWidth / 2.5 / this.initialProductWidth : 1,
+                    yScale: this.initialProductHeight ? this.initialProductHeight / 2.5 / this.initialProductHeight : 1,
+                });
+            };
+        },
+
+        loadBackgroundImage() {
+            const baseImage = new Image();
+            baseImage.src = this.imgSrc;
+            baseImage.onload = () => {
+                this.drawCanvas();
+            };
+        },
+
+        drawCanvas() {
+            if (!this.productImage || !this.productImage.complete) return;
+
+            const canvas = this.$refs.canvas;
+            const ctx = canvas.getContext('2d');
+
+            // Create an offscreen canvas
+            const offscreenCanvas = document.createElement('canvas');
+            const offscreenCtx = offscreenCanvas.getContext('2d');
+            offscreenCanvas.width
+                = canvas.width;
+            offscreenCanvas.height = canvas.height;
+
+
+            const baseImage = new Image();
+            baseImage.src = this.imgSrc;
+
+            baseImage.onload = () => {
+                const scaleFactor = Math.max(canvas.width / baseImage.width, canvas.height / baseImage.height) * this.zoomLevel;
+
+                const scaledWidth = baseImage.width * scaleFactor;
+                const scaledHeight = baseImage.height * scaleFactor;
+
+                const xOffset = (canvas.width - scaledWidth) / 2;
+                const yOffset = (canvas.height - scaledHeight) / 2;
+
+                // Draw on the offscreen canvas
+                offscreenCtx.globalAlpha = this.opacity;
+                offscreenCtx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
+
+                const productWidth = this.initialProductWidth / 2.5;
+                const productHeight = this.initialProductHeight / 2.5;
+                offscreenCtx.globalAlpha = 1;
+                offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
+
+                // Draw the offscreen canvas onto the visible canvas
+                ctx.drawImage(offscreenCanvas, 0, 0);
+            };
+        },
+
+        startDrag(event) {
+            this.isDragging = true;
+            this.startX = event.offsetX - this.offsetX;
+            this.startY = event.offsetY - this.offsetY;
+        },
+
+        drag(event) {
+            if (!this.isDragging || !this.productImage) return;
+
+            this.offsetX = event.offsetX - this.startX;
+            this.offsetY = event.offsetY - this.startY;
+
+            this.drawCanvas();
+
+            this.$emit('updateTransformCoordinates', {
+                x: this.offsetX,
+                y: this.offsetY,
+                xScale: this.initialProductWidth ? this.initialProductWidth / 2.5 / this.initialProductWidth : 1,
+                yScale: this.initialProductHeight ? this.initialProductHeight / 2.5 / this.initialProductHeight : 1,
+            });
+        },
+
+        endDrag() {
+            this.isDragging = false;
+        },
+    },
+};
 </script>

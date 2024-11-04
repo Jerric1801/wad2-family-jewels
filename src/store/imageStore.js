@@ -1,4 +1,3 @@
-// store/imageStore.js
 import { defineStore } from 'pinia';
 
 export const useImageStore = defineStore('imageStore', {
@@ -9,5 +8,14 @@ export const useImageStore = defineStore('imageStore', {
     setImage(image) {
       this.processedImage = image;
     }
+  },
+  persist: { 
+    enabled: true,
+    strategies: [
+      {
+        key: 'imageStore', 
+        storage: localStorage, 
+      },
+    ],
   }
 });
