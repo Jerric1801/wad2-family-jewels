@@ -72,15 +72,15 @@
 
         <!-- Tab Titles -->
         <div
-          class="flex justify-center mb-4 border-b border-gray-200 dark:border-gray-700"
+          class="flex justify-center mb-4 border-gray-200 dark:border-gray-700 overflow-hidden w-full"
         >
           <ul
-            class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400"
+            class="flex flex-wrap justify-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-full"
           >
             <li class="me-2">
               <a
                 :class="[
-                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'personalInfo'
                     ? 'text-black border-black'
                     : 'text-gray-700 hover:text-black hover:border-gray-400',
@@ -97,20 +97,23 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-venetian-mask w-8 h-8 pr-2"
+                  class="lucide lucide-venetian-mask w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
                 >
                   <path
                     d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"
                   />
                   <path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z" />
-                  <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" /></svg
-                >Personal Information
+                  <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" />
+                </svg>
+                <span class="text-xs md:text-base">Personal Info</span>
               </a>
             </li>
+
+            <!-- Repeat similar structure for other tabs with responsive classes -->
             <li class="me-2">
               <a
                 :class="[
-                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'signInInformation'
                     ? 'text-black border-black'
                     : 'text-gray-700 hover:text-black hover:border-gray-400',
@@ -127,21 +130,22 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-file-user w-8 h-8 pr-2"
+                  class="lucide lucide-file-user w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
                 >
                   <path d="M14 2v4a2 2 0 0 0 2 2h4" />
                   <path d="M15 18a3 3 0 1 0-6 0" />
                   <path
                     d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
                   />
-                  <circle cx="12" cy="13" r="2" /></svg
-                >Sign-in Information
+                  <circle cx="12" cy="13" r="2" />
+                </svg>
+                <span class="text-xs md:text-base">Sign-in Info</span>
               </a>
             </li>
             <li class="me-2">
               <a
                 :class="[
-                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'preferences'
                     ? 'text-black border-black'
                     : 'text-gray-700 hover:text-black hover:border-gray-400',
@@ -158,19 +162,21 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-settings-2 w-8 h-8 pr-2"
+                  class="lucide lucide-settings-2 w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
                 >
                   <path d="M20 7h-9" />
                   <path d="M14 17H5" />
                   <circle cx="17" cy="17" r="3" />
-                  <circle cx="7" cy="7" r="3" /></svg
-                >Preferences
+                  <circle cx="7" cy="7" r="3" />
+                </svg>
+                <span class="text-xs md:text-base">Preferences</span>
               </a>
             </li>
+
             <li class="me-2">
               <a
                 :class="[
-                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'orderHistory'
                     ? 'text-black border-black'
                     : 'text-gray-700 hover:text-black hover:border-gray-400',
@@ -187,19 +193,20 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-history w-8 h-8 pr-2"
+                  class="lucide lucide-history w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
                 >
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                   <path d="M3 3v5h5" />
                   <path d="M12 7v5l4 2" />
                 </svg>
-                Order History
+                <span class="text-xs md:text-base">Order History</span>
               </a>
             </li>
+
             <li class="me-2">
               <a
                 :class="[
-                  'inline-flex text-xl items-center justify-center p-4 border-b-2 rounded-t-lg group',
+                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'addresses'
                     ? 'text-black border-black'
                     : 'text-gray-700 hover:text-black hover:border-gray-400',
@@ -216,7 +223,7 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-map-pin-house w-8 h-8 pr-2"
+                  class="lucide lucide-map-pin-house w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
                 >
                   <path
                     d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z"
@@ -225,8 +232,9 @@
                     d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2"
                   />
                   <path d="M18 22v-3" />
-                  <circle cx="10" cy="10" r="3" /></svg
-                >Addresses
+                  <circle cx="10" cy="10" r="3" />
+                </svg>
+                <span class="text-xs md:text-base">Addresses</span>
               </a>
             </li>
           </ul>

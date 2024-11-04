@@ -1,14 +1,23 @@
 <template>
   <div class="border-t border-gray-200 pt-6">
-    <h3 class="text-2xl font-semibold mb-4 text-indigo-600">Order History</h3>
+    <h3
+      class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-indigo-600 text-center sm:text-left"
+    >
+      Order History
+    </h3>
 
     <!-- Filter and Search Section -->
-    <div class="flex justify-between items-center mb-6">
-      <div class="flex items-center">
-        <p class="text-gray-700">
+    <div
+      class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0"
+    >
+      <div class="flex flex-col sm:flex-row items-center">
+        <p class="text-gray-700 text-center sm:text-left">
           {{ filteredOrders.length }} orders placed in
         </p>
-        <select v-model="dateRange" class="border rounded px-3 py-2 ml-2">
+        <select
+          v-model="dateRange"
+          class="border rounded px-3 py-2 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-auto"
+        >
           <option value="999">All</option>
           <option value="3">Past three months</option>
           <option value="6">Past six months</option>
@@ -19,7 +28,7 @@
         type="text"
         v-model="searchQuery"
         placeholder="Search all orders"
-        class="border rounded px-3 py-2 w-1/3"
+        class="border rounded px-3 py-2 w-full sm:w-1/3"
       />
     </div>
 
@@ -28,12 +37,12 @@
       <div
         v-for="(order, index) in filteredOrders"
         :key="index"
-        class="border rounded-lg shadow-md p-6 bg-white mb-6 hover:shadow-lg transition-shadow duration-300"
+        class="border rounded-lg shadow-md p-4 sm:p-6 bg-white hover:shadow-lg transition-shadow duration-300"
       >
-        <div class="flex justify-between mb-4 items-start">
+        <div class="flex flex-col sm:flex-row justify-between mb-4 items-start">
           <!-- Order Image -->
           <div
-            class="w-24 h-24 rounded overflow-hidden mr-6 flex-shrink-0 shadow-md"
+            class="w-full sm:w-24 h-24 rounded overflow-hidden mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 shadow-md"
           >
             <img
               :src="order.data.imageUrl"
@@ -44,29 +53,35 @@
 
           <!-- Order Details -->
           <div class="flex-1">
-            <p class="text-gray-600 mb-1">
+            <p class="text-gray-600 text-sm sm:text-base mb-1">
               <strong>Item Name:</strong> {{ order.data.productName }}
             </p>
-            <p class="text-gray-600 mb-1">
-              <strong>Order Placed on:</strong> {{ order.data.date }}
+            <p class="text-gray-600 text-sm sm:text-base mb-1">
+              <strong>Order Placed:</strong> {{ order.data.date }}
             </p>
-            <p class="text-gray-600 mb-1">
+            <p class="text-gray-600 text-sm sm:text-base mb-1">
               <strong>Total Price:</strong> ${{ order.data.total }}
             </p>
-            <p class="text-gray-600 mb-1">
+            <p class="text-gray-600 text-sm sm:text-base mb-1">
               <strong>Deliver to:</strong> {{ order.data.receipientName }}
             </p>
           </div>
 
           <!-- Order ID and Actions -->
-          <div class="text-right flex flex-col items-end space-y-2">
-            <p class="text-gray-600 font-semibold">
-              <strong>ORDER #</strong> {{ order.data.orderNumber }}
+          <div
+            class="text-right flex flex-col items-start sm:items-end space-y-2 mt-4 sm:mt-0"
+          >
+            <p class="text-gray-600 font-semibold text-sm sm:text-base">
+              # {{ order.data.orderNumber }}
             </p>
-            <button class="text-indigo-600 hover:underline">
+            <button
+              class="text-indigo-600 text-sm sm:text-base hover:underline"
+            >
               View Order Details
             </button>
-            <button class="text-indigo-600 hover:underline">
+            <button
+              class="text-indigo-600 text-sm sm:text-base hover:underline"
+            >
               Download Receipt
             </button>
           </div>
