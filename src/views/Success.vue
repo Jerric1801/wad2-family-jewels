@@ -50,12 +50,14 @@ export default {
             // Format the order number
             const orderNo = `${firstSegment}-${secondSegment}-${thirdSegment}`;
 
+            // console.log(JSON.parse(localStorage.getItem("user")));
+
             const orderData = {
                 date: new Date(),
                 imageUrl: item.data.image,
                 orderNumber: orderNo,
                 productName: item.data.title,
-                recipientName: userId, // How to get name from userId?
+                recipientName: JSON.parse(localStorage.getItem("user")).displayName,
                 price: item.data.price,
             };
 
