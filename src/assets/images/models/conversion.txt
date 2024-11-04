@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Set the desired resolution
+width=1024
+height=1024
+
+# Loop through all image files in the current directory
+find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -print0 | while IFS= read -r -d $'\0' image; do 
+  # Extract filename without extension
+  filename=$(basename "$image")
+  extension="${filename##*.}"
+  filename="${filename%.*}"
+
+  # Resize and crop the image using ImageMagick
+  magick "$image" -resize "${width}x${height}^" -gravity center -extent "${width}x${height}" "${filename}.${extension}"
+
+  echo "Resized and cropped: $image to ${filename}.${extension}"
+done

@@ -12,7 +12,7 @@
             </select>
           </div>
         </div>
-        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200"> 
+        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200">
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
             <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
               <img :src="`/src/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
@@ -23,13 +23,14 @@
       </div>
       <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
         <div class="w-full h-[68%] overflow-hidden">
-          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates"/> 
+          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages"
+            @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
         <div class="w-[100%] h-[35%]">
-          <div class="w-[100%] h-full flex flex-col items-center bg-gray-200 rounded-md p-4"> 
-            <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]"> 
-              <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer"
-                :class="{ 'border-2 border-blue-500': selectedImage === image }" @click="selectImage(image)" />
+          <div class="w-[100%] h-full flex items-start bg-gray-200 rounded-md p-4">
+            <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
+              <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
+                :class="{ 'border-2 border-blue-500 ': selectedImage === image }" @click="selectImage(image)" />
             </div>
           </div>
         </div>
@@ -37,24 +38,28 @@
     </div>
 
     <div v-if="selectedImage" class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div> 
-      <div class="bg-white p-6 rounded-lg z-10 max-w-lg w-full relative"> 
+      <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div>
+      <div class="bg-white p-6 rounded-lg z-10 max-w-lg w-full relative">
         <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">   
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             
 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>   
+          </svg>  
 
         </button>
-        <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain"> 
-        <div class="flex flex-col gap-2"> 
-          <button @click="refineImage(selectedImage)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain">
+        <div class="flex flex-col gap-2">
+          <button @click="refineImage(selectedImage)"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Refine Image
           </button>
-          <button @click="downloadImage(selectedImage)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          <button @click="downloadImage(selectedImage)"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Download Image
           </button>
-          <button @click="addToLibrary(selectedImage)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+          <button @click="addToLibrary(selectedImage)"
+            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
             Add to Library
           </button>
         </div>
@@ -87,9 +92,6 @@ export default {
       selectedImage: null,
       selectedJewelleryType: 'necklace', // Default jewellery type
       presetImages: [
-        '1.jpeg',
-        'necklace_4.png'
-        // ...other image filenames for necklace
       ],
       selectedPresetImagePath: null,
       xVal: 0, // Default x-coordinate
@@ -114,7 +116,7 @@ export default {
         const base64ProductImage = await this.productImg
         const base64SelectedImage = await this.imageToBase64(this.selectedPresetImagePath);
         console.log(
-          this.productImg,{
+          this.productImg, {
           base64ProductImage,
           base64SelectedImage,
           xVal: this.xVal,
@@ -163,15 +165,41 @@ export default {
       // Update this.presetImages with the appropriate filenames for the selectedJewelleryType
       if (this.selectedJewelleryType === 'necklace') {
         this.presetImages = [
-          'necklace_4.png'
-          // ...other image filenames for necklace
+          'necklace_1.jpg',
+          'necklace_2.jpg',
+          'necklace_3.jpg',
+          'necklace_4.jpg',
+          'necklace_5.jpg',
+          'necklace_6.jpg',
         ];
       } else if (this.selectedJewelleryType === 'earrings') {
         this.presetImages = [
-          '1.jpeg',
-          // ... image filenames for earrings
+          'earrings_1.jpg',
+          'earrings_2.jpg',
+          'earrings_3.jpg',
+          'earrings_4.jpg',
+          'earrings_5.jpg',
+          'earrings_6.jpg',
         ];
-      } // ... and so on for other jewellery types
+      } else if (this.selectedJewelleryType === 'bracelets') {
+        this.presetImages = [
+          'bracelets_1.jpg',
+          'bracelets_2.jpg',
+          'bracelets_3.jpg',
+          'bracelets_4.jpg',
+          'bracelets_5.jpg',
+          'bracelets_6.jpg',
+        ];
+      } else if (this.selectedJewelleryType === 'rings') {
+        this.presetImages = [
+          'rings_1.jpg',
+          'rings_2.jpg',
+          'rings_3.jpg',
+          'rings_4.jpg',
+          'rings_5.jpg',
+          'rings_6.jpg',
+        ];
+      }
     },
     selectPresetImage(image) {
       // Construct the full path to the selected preset image
