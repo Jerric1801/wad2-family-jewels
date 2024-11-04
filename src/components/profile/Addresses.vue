@@ -61,25 +61,81 @@
             <path d="M7 16.5 8 22l-3-1-3 1 1-5.5" />
           </svg>
         </div>
-        <div class="flex mt-4 space-x-2">
+
+        <!-- Address Card Buttons -->
+        <div class="flex justify-around items-center mt-4">
           <button
             @click="editAddress(address.id)"
-            class="text-blue-600 font-medium"
+            class="flex flex-col items-center text-blue-600 font-medium w-1/4"
           >
-            Edit
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-user-pen mb-1"
+            >
+              <path d="M11.5 15H7a4 4 0 0 0-4 4v2" />
+              <path
+                d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"
+              />
+              <circle cx="10" cy="7" r="4" />
+            </svg>
+            <span class="text-xs font-normal">Edit</span>
           </button>
+
           <button
             @click="removeAddress(address.id)"
-            class="text-blue-600 font-medium"
+            class="flex flex-col items-center text-blue-600 font-medium w-1/4"
           >
-            Remove
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-file-x-2 mb-1"
+            >
+              <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <path d="m8 12.5-5 5" />
+              <path d="m3 12.5 5 5" />
+            </svg>
+            <span class="text-xs font-normal">Remove</span>
           </button>
+
           <button
             v-if="!address.data.isDefault"
             @click="setDefaultAddress(address.id)"
-            class="text-blue-400 font-small"
+            class="flex flex-col items-center text-blue-400 font-medium w-1/4"
           >
-            Set as Default
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-settings-2 mb-1"
+            >
+              <path d="M20 7h-9" />
+              <path d="M14 17H5" />
+              <circle cx="17" cy="17" r="3" />
+              <circle cx="7" cy="7" r="3" />
+            </svg>
+            <span class="text-xs font-normal -mt-1">Set Default</span>
           </button>
         </div>
       </div>
@@ -155,13 +211,13 @@
               <button
                 type="button"
                 @click="showAddModal = false"
-                class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                class="px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-300 ease-in-out"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white"
+                class="px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 ease-in-out"
               >
                 Save
               </button>
@@ -252,7 +308,7 @@ export default {
 
 <style scoped>
 button {
-  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+  @apply px-1 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
 }
 button:hover {
   background: linear-gradient(to right, #5e1a91, #007bbf);
