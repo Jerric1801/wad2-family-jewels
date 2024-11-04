@@ -2,17 +2,27 @@
   <DefaultLayout>
     <div class="bg-white h-[130vh] w-[100vw] flex flex-row justify-center relative p-[20px]">
       <div class="w-[27.5%] mt-[20vh] flex flex-col justify-center h-[100vh]">
-        <div class="h-[10%] w-full flex justify-center items-center">
-          <div>
-            <select v-model="selectedJewelleryType" @change="updatePresetImages">
-              <option value="necklace">Necklace</option>
-              <option value="earrings">Earrings</option>
-              <option value="rings">Rings</option>
-              <option value="bracelets">Bracelets</option>
-            </select>
+        <div class="h-[30%] w-full flex flex-col justify-center items-start">
+          <div class="w-[90%]">
+            <div class="mb-4">
+              <div class="mb-4">
+                <h3>Image Description</h3>
+                <textarea id="image-description" v-model="imageDescription" rows="4"
+                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Describe your image"></textarea>
+              </div>
+              <h3>Jewellery Type</h3>
+              <select v-model="selectedJewelleryType" @change="updatePresetImages"
+                class="w-full mt-1 px-3 py-2 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="necklace">Necklace</option>
+                <option value="earrings">Earrings</option>
+                <option value="rings">Rings</option>
+                <option value="bracelets">Bracelets</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="h-[90%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200">
+        <div class="h-[70%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200">
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
             <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
               <img :src="`/src/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
@@ -94,6 +104,7 @@ export default {
       presetImages: [
       ],
       selectedPresetImagePath: null,
+      imageDescription: '',
       xVal: 0, // Default x-coordinate
       yVal: 0, // Default y-coordinate
       xScale: 0.5, // Default x-scale
@@ -131,7 +142,8 @@ export default {
           this.yVal,
           this.xScale,
           this.yScale,
-          this.selectedJewelleryType
+          this.selectedJewelleryType,
+          this.imageDescription
         );
       } catch (error) {
         console.error('Error generating model images:', error);
