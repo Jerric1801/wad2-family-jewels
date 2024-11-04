@@ -37,7 +37,7 @@
             @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
         <div class="w-[100%] h-[35%]">
-          <div class="w-[100%] h-full flex items-start bg-gray-200 rounded-md p-4">
+          <div class="w-[95%] h-full flex items-start bg-gray-200 rounded-md p-4">
             <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
               <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
                 :class="{ 'border-2 border-blue-500 ': selectedImage === image }" @click="selectImage(image)" />
@@ -83,6 +83,9 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import Editor from "@/components/jewelry/Editor.vue";
 import { useImageStore } from '@/store/imageStore';
 import { fetchModelImages } from '@/services/pebblely/productImage';
+import { uploadPhoto, retrieveImagesFromDatabase } from "@/services/firebase/generated";
+
+const user = JSON.parse(localStorage.getItem('user'))
 
 export default {
   name: "ModelSelectionView",
@@ -145,6 +148,23 @@ export default {
           this.selectedJewelleryType,
           this.imageDescription
         );
+
+        if (user) {
+          this.modelImages.forEach(async (image, index) => {
+            try {
+              // Assuming your fetchModelImages returns an array of base64 image strings
+              const imageName = `${user.uid}_${Date.now()}_${index}.png`; // Unique name for each image
+              console.log(imageName)
+              await uploadPhoto(user.uid, image, imageName);
+              console.log(`Image ${imageName} uploaded successfully`);
+            } catch (error) {
+              console.error(`Error uploading image ${index}:`, error);
+            }
+          });
+        } else {
+          console.error("User ID not found in localStorage.");
+        }
+
       } catch (error) {
         console.error('Error generating model images:', error);
       }

@@ -69,13 +69,13 @@
             </div>
             <div class="h-[30%] w-[90%]">
                 <h3 class="text-lg font-semibold mb-2">Previously Uploaded Images</h3>
-                <div class="h-full w-full bg-gray-100 p-4 mt-8 bottom-0 left-0 right-0 rounded-md overflow-x-scroll">
-                    <div v-for="image in images" :key="image.name" class="h-[95%] w-auto rounded-lg relative">
+                <div class="h-[100%] w-[100%] bg-gray-100 p-4 mt-8 rounded-md overflow-hidden flex gap-4"> 
+                    <div v-for="image in images" :key="image.name" class="w-[20%] max-w-[20%] h-[90%] p-2 relative">  
                         <img :src="image.url" @click="selectPreviousImage(image.name)"
-                            class="h-[100%] object-cover cursor-pointer absolute" />
+                            class="h-[100%] object-cover cursor-pointer rounded-lg absolute" /> 
                     </div>
                 </div>
-            </div>
+              </div>
         </div>
     </DefaultLayout>
 </template>
@@ -171,21 +171,21 @@ export default {
         downloadImageFromCanvas() {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-          
+
             const img = new Image();
-            img.src = this.mainImg; 
-          
+            img.src = this.mainImg;
+
             img.onload = () => {
-              canvas.width = img.width;
-              canvas.height = img.height;
-              ctx.drawImage(img, 0, 0);
-          
-              const link = document.createElement('a');
-              link.download = 'downloaded_image.png'; 
-              link.href = canvas.toDataURL('image/png');
-              link.click();
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                const link = document.createElement('a');
+                link.download = 'downloaded_image.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
             };
-          },
+        },
 
         reselectImage() {
             this.uploadImage();
