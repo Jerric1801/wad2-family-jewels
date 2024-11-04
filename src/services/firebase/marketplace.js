@@ -59,7 +59,7 @@ export async function getAllListedItems() {
 export async function addOrder(userId, orderData) {
   try {
     // Reference to the user's orders collection
-    const userDocRef = doc(db, "user-orders", userId); // Assuming user ID is used in 'users' collection
+    const userDocRef = doc(db, "user-orders", userId);
     const ordersCollectionRef = collection(userDocRef, "orders");
 
     // Add a new document to the orders subcollection

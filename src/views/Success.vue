@@ -43,11 +43,11 @@ export default {
             console.log("Adding new order on success page");
 
             // Generate the segments for the order number
-            const firstSegment = Math.floor(Math.random() * 900) + 100; // Random number between 100 and 999
-            const secondSegment = Math.floor(1000000 + Math.random() * 9000000); // Random 7-digit number
-            const thirdSegment = Math.floor(1000000 + Math.random() * 9000000); // Random 7-digit number
+            const firstSegment = Math.floor(Math.random() * 900) + 100; 
+            const secondSegment = Math.floor(1000000 + Math.random() * 9000000); 
+            const thirdSegment = Math.floor(1000000 + Math.random() * 9000000); 
 
-            // Format the order number as "firstSegment-secondSegment-thirdSegment"
+            // Format the order number
             const orderNo = `${firstSegment}-${secondSegment}-${thirdSegment}`;
 
             const orderData = {
@@ -55,7 +55,7 @@ export default {
                 imageUrl: item.data.image,
                 orderNumber: orderNo,
                 productName: item.data.title,
-                recipientName: userId, // This is where the user ID is passed
+                recipientName: userId, // How to get name from userId?
                 price: item.data.price,
             };
 
