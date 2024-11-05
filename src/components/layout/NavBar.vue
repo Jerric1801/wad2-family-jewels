@@ -11,8 +11,9 @@
   >
     <div class="container mx-auto flex justify-between items-center">
       <!-- Logo Section -->
-      <div v-if="!isMobileMenuOpen" class="flex items-center logo-container">
+      <div class="flex items-center logo-container">
         <img
+          v-if="!isMobileMenuOpen"
           src="@/assets/images/logo/logo.png"
           alt="Family Jewels Logo"
           class="h-20 w-auto mr-2 animate-logo cursor-pointer"
@@ -31,7 +32,6 @@
         @click="isMobileMenuOpen = !isMobileMenuOpen"
         class="lg:hidden text-black"
       >
-        <!-- Hamburger button -->
         <svg
           v-if="!isMobileMenuOpen"
           xmlns="http://www.w3.org/2000/svg"
@@ -51,16 +51,169 @@
         </svg>
       </button>
 
-      <!-- Navigation Links -->
+      <!-- Desktop Navigation Links -->
+      <ul class="hidden lg:flex lg:flex-row items-center text-black">
+        <li
+          v-for="(item, index) in currentNavItems"
+          :key="item.to"
+          class="nav-item w-auto"
+        >
+          <component
+            :is="item.isLink ? 'router-link' : 'button'"
+            :to="item.to"
+            @click="handleClick(item.text)"
+            class="text-lg font-medium flex items-center justify-center relative py-2 px-4 rounded-lg transition-all duration-300"
+            :style="{ animationDelay: `${index * 0.1}s` }"
+          >
+            <!-- Desktop Icons -->
+            <template v-if="item.text === 'Dashboard'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="27"
+                height="27"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-gauge mr-2"
+              >
+                <path d="m12 14 4-4" />
+                <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else-if="item.text === 'Library'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-library-big mr-2"
+              >
+                <rect width="8" height="18" x="3" y="3" rx="1" />
+                <path d="M7 3v18" />
+                <path
+                  d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z"
+                />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else-if="item.text === 'Marketplace'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-store mr-2"
+              >
+                <path
+                  d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                />
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
+                <path d="M2 7h20" />
+                <path
+                  d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else-if="item.text === 'Upload'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-image-up mr-2"
+              >
+                <path
+                  d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21"
+                />
+                <path d="m14 19.5 3-3 3 3" />
+                <path d="M17 22v-5.5" />
+                <circle cx="9" cy="9" r="2" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else-if="item.text === 'Profile'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="35"
+                height="35"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-circle-user pr-2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else-if="item.text === 'Logout'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="35"
+                height="35"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-log-out pr-2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+
+            <template v-else>
+              {{ item.text }}
+            </template>
+          </component>
+        </li>
+      </ul>
+
+      <!-- Mobile Navigation Links -->
       <ul
-        :class="[
-          'flex flex-col lg:flex-row items-center lg:space-x-6 text-black bg-white lg:bg-transparent',
-          { 'hidden lg:flex': !isMobileMenuOpen },
-        ]"
-        class="space-y-4 lg:space-y-0 mt-4 lg:mt-0 shadow-lg lg:shadow-none rounded-lg p-4 lg:p-0"
+        v-if="isMobileMenuOpen"
+        class="lg:hidden flex flex-col items-center text-black bg-white shadow-lg rounded-lg p-4 space-y-4 mt-4"
       >
-        <li v-if="isMobileMenuOpen" class="text-right mt-2">
-          <button @click="isMobileMenuOpen = !isMobileMenuOpen">
+        <!-- Button to close Mobile Menu -->
+        <div class="relative w-full flex justify-end">
+          <button
+            @click="isMobileMenuOpen = !isMobileMenuOpen"
+            class="text-black"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -77,37 +230,174 @@
               <path d="m6 6 12 12" />
             </svg>
           </button>
+        </div>
+        <li class="profile-list-item">
+          <div class="profile-content">
+            <div class="profile-photo">
+              <img :src="userProfile?.imageUrl" alt="Profile photo" />
+            </div>
+            <span class="profile-name">{{ userProfile?.fullName }}</span>
+          </div>
         </li>
+
+        <!-- Horizontal Line Divider -->
+        <hr class="w-full border-t border-gray-300 my-4" />
+
         <li
           v-for="(item, index) in currentNavItems"
           :key="item.to"
-          class="nav-item w-full lg:w-auto"
+          class="w-full"
         >
           <component
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium flex items-center justify-center relative w-full lg:w-auto py-2 px-4 rounded-lg transition-all duration-300"
-            :class="{
-              'bg-indigo-600 text-white hover:bg-indigo-500':
-                item.text === 'Logout',
-              'bg-gray-200 hover:bg-gray-300 text-gray-700':
-                item.text === 'Profile',
-              'bg-blue-500 text-white hover:bg-blue-400':
-                item.text === 'Upload',
-              'bg-green-500 text-white hover:bg-green-400':
-                item.text === 'Login',
-              'bg-purple-500 text-white hover:bg-purple-400':
-                item.text === 'Signup',
-            }"
+            class="text-lg font-medium flex items-center justify-start w-full py-2 px-4 rounded-lg transition-all duration-300"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
-            <span v-if="!item.isIcon">{{ item.text }}</span>
-            <font-awesome-icon
-              v-if="item.isIcon"
-              :icon="item.icon"
-              class="text-xl"
-            />
+            <span
+              v-if="
+                ![
+                  'Dashboard',
+                  'Library',
+                  'Marketplace',
+                  'Upload',
+                  'Profile',
+                  'Logout',
+                ].includes(item.text)
+              "
+              >{{ item.text }}</span
+            >
+            <!-- Custom SVG for Dashboard -->
+            <template v-if="item.text === 'Dashboard'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-gauge mr-2"
+              >
+                <path d="m12 14 4-4" />
+                <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+            <!-- Custom SVG for Library -->
+            <template v-if="item.text === 'Library'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-library-big mr-2"
+              >
+                <rect width="8" height="18" x="3" y="3" rx="1" />
+                <path d="M7 3v18" />
+                <path
+                  d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z"
+                />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+            <!-- Custom SVG for Marketplace -->
+            <template v-if="item.text === 'Marketplace'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-store mr-2"
+              >
+                <path
+                  d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                />
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
+                <path d="M2 7h20" />
+                <path
+                  d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+            <!-- Custom SVG for Upload -->
+            <template v-if="item.text === 'Upload'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-image-up mr-2"
+              >
+                <path
+                  d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21"
+                />
+                <path d="m14 19.5 3-3 3 3" />
+                <path d="M17 22v-5.5" />
+                <circle cx="9" cy="9" r="2" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+            <!-- Custom SVG for Profile -->
+            <template v-if="item.text === 'Profile'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-circle-user mr-2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
+            <!-- Custom SVG for Logout -->
+            <template v-if="item.text === 'Logout'">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-log-out mr-2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+              </svg>
+              <span>{{ item.text }}</span>
+            </template>
           </component>
         </li>
       </ul>
@@ -118,12 +408,13 @@
 <script>
 import { useAuthStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
-import { onMounted, onBeforeUnmount, ref, computed, watchEffect } from "vue";
+import { onMounted, onBeforeUnmount, ref, computed } from "vue";
 import { logOut } from "@/services/firebase/auth";
 import { useRouter } from "vue-router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { retrieveUserProfile } from "../../services/firebase/profile";
 library.add(faUser, faRightFromBracket);
 
 export default {
@@ -133,9 +424,11 @@ export default {
   },
   setup() {
     const authStore = useAuthStore();
-    const { isAuthenticated } = storeToRefs(authStore);
+    const { isAuthenticated, user } = storeToRefs(authStore);
     const router = useRouter();
 
+    const userId = ref(null);
+    const userProfile = ref(null); // User Profile
     const isVisible = ref(true);
     const lastScrollY = ref(0);
     const isMobileMenuOpen = ref(false); // To control mobile menu visibility
@@ -172,6 +465,17 @@ export default {
       isAuthenticated.value ? navItems.loggedIn : navItems.guest
     );
 
+    const retrieveUserDetails = async () => {
+      try {
+        userId.value = user.value.uid;
+        userProfile.value = await retrieveUserProfile(userId.value);
+        console.log("TT ", userProfile.value);
+        console.log(userProfile.value.fullName);
+      } catch (error) {
+        console.error("Failed to retrieve user profile:", error);
+      }
+    };
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       isVisible.value =
@@ -195,7 +499,11 @@ export default {
       }
     };
 
-    onMounted(() => window.addEventListener("scroll", handleScroll));
+    onMounted(async () => {
+      await retrieveUserDetails(); // Call user profile retrieval on mount
+      window.addEventListener("scroll", handleScroll);
+    });
+
     onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll));
 
     return {
@@ -204,6 +512,10 @@ export default {
       handleLogout,
       handleClick,
       isMobileMenuOpen,
+      userProfile,
+      retrieveUserProfile,
+      userId,
+      retrieveUserDetails,
     };
   },
 };
@@ -277,7 +589,6 @@ export default {
 /* Button styles */
 .logout-btn,
 .profile-btn,
-.upload-btn,
 .login-btn,
 .signup-btn {
   @apply px-4 py-2 rounded;
@@ -288,10 +599,6 @@ export default {
   @apply bg-gray-300 hover:bg-gray-400 text-gray-800;
 }
 
-.upload-btn {
-  @apply bg-gradient-to-r from-blue to-purple text-white;
-}
-
 .login-btn {
   @apply bg-purple text-white;
   margin-left: 1vw;
@@ -299,5 +606,37 @@ export default {
 
 .signup-btn {
   @apply bg-blue text-white;
+}
+
+.profile-list-item {
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-photo {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 2px solid black;
+  overflow: hidden;
+  margin-bottom: 0.5rem; /* Space between photo and name */
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 1.2rem;
+  color: black;
+  text-align: center;
 }
 </style>
