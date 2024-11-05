@@ -69,13 +69,13 @@
             </div>
             <div class="h-[30%] w-[90%]">
                 <h3 class="text-lg font-semibold mb-2">Previously Uploaded Images</h3>
-                <div class="h-[100%] w-[100%] bg-gray-100 p-4 mt-8 rounded-md overflow-hidden flex gap-4"> 
-                    <div v-for="image in images" :key="image.name" class="w-[20%] max-w-[20%] h-[90%] p-2 relative">  
+                <div class="h-[100%] w-[100%] bg-gray-100 p-4 mt-8 rounded-md overflow-hidden flex gap-4">
+                    <div v-for="image in images" :key="image.name" class="w-[20%] max-w-[20%] h-[90%] p-2 relative">
                         <img :src="image.url" @click="selectPreviousImage(image.name)"
-                            class="h-[100%] object-cover cursor-pointer rounded-lg absolute" /> 
+                            class="h-[100%] object-cover cursor-pointer rounded-lg absolute" />
                     </div>
                 </div>
-              </div>
+            </div>
         </div>
     </DefaultLayout>
 </template>
@@ -157,13 +157,13 @@ export default {
         async selectPreviousImage(name) {
             this.imageSelected = true;
             this.imageConfirmed = false;
-            console.log(name)
-            try {
-                const blob = await getImageBlob(user.uid, name); // Pass the imageURL
-                const file = new File([blob], "image.png", { type: blob.type });
+            console.log(name);
 
-                // Now you can use the 'file' object with removeBackground
-                this.mainImg = URL.createObjectURL(file);
+            try {
+                const blob = await getImageBlob(user.uid, name);
+                // No need to create a File object here
+                this.mainImg = URL.createObjectURL(blob);
+
             } catch (error) {
                 console.error("Error setting selected image:", error);
             }

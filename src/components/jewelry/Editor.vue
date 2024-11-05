@@ -60,12 +60,13 @@ export default {
             productImage: null,
             initialProductWidth: null,
             initialProductHeight: null,
+            baseImage: new Image(),
         };
     },
     mounted() {
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
-        this.loadProductImage();
+        this.loadBackgroundImage();
     },
     beforeUnmount() {
         window.removeEventListener('resize', this.resizeCanvas);
@@ -123,20 +124,20 @@ export default {
         },
 
         loadBackgroundImage() {
-            const baseImage = new Image();
-            baseImage.src = this.imgSrc;
-            baseImage.onload = () => {
+            this.baseImage.src = this.imgSrc; // Load the image into the baseImage variable
+            this.baseImage.onload = () => {
                 this.drawCanvas();
             };
         },
-
         drawCanvas() {
+            this.loadProductImage();
             if (!this.productImage || !this.productImage.complete) return;
 
             const canvas = this.$refs.canvas;
             const ctx = canvas.getContext('2d');
 
-            // Create an offscreen canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             const offscreenCanvas = document.createElement('canvas');
             const offscreenCtx = offscreenCanvas.getContext('2d');
             offscreenCanvas.width
@@ -144,30 +145,24 @@ export default {
             offscreenCanvas.height = canvas.height;
 
 
-            const baseImage = new Image();
-            baseImage.src = this.imgSrc;
+            // Use the pre-loaded baseImage instead of creating a new Image each time
+            const scaleFactor = Math.max(canvas.width / this.baseImage.width, canvas.height / this.baseImage.height) * this.zoomLevel;
 
-            baseImage.onload = () => {
-                const scaleFactor = Math.max(canvas.width / baseImage.width, canvas.height / baseImage.height) * this.zoomLevel;
+            const scaledWidth = this.baseImage.width * scaleFactor;
+            const scaledHeight = this.baseImage.height * scaleFactor;
 
-                const scaledWidth = baseImage.width * scaleFactor;
-                const scaledHeight = baseImage.height * scaleFactor;
+            const xOffset = (canvas.width - scaledWidth) / 2;
+            const yOffset = (canvas.height - scaledHeight) / 2;
 
-                const xOffset = (canvas.width - scaledWidth) / 2;
-                const yOffset = (canvas.height - scaledHeight) / 2;
+            offscreenCtx.globalAlpha = this.opacity;
+            offscreenCtx.drawImage(this.baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
 
-                // Draw on the offscreen canvas
-                offscreenCtx.globalAlpha = this.opacity;
-                offscreenCtx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
+            offscreenCtx.globalAlpha = 1;
+            const productWidth = this.initialProductWidth / 2.5;
+            const productHeight = this.initialProductHeight / 2.5;
+            offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
 
-                const productWidth = this.initialProductWidth / 2.5;
-                const productHeight = this.initialProductHeight / 2.5;
-                offscreenCtx.globalAlpha = 1;
-                offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
-
-                // Draw the offscreen canvas onto the visible canvas
-                ctx.drawImage(offscreenCanvas, 0, 0);
-            };
+            ctx.drawImage(offscreenCanvas, 0, 0);
         },
 
         startDrag(event) {

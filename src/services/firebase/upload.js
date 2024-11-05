@@ -1,6 +1,6 @@
 import { db } from "@/config/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL, getBlob } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const uploadPhoto = async (userId, photo, imageName) => {
     const storage = getStorage();
@@ -66,8 +66,22 @@ export async function getImageBlob(userId, imageName) {
     const storageRef = ref(storage, `${userId}/${imageName}`);
   
     try {
-      const response = await getBlob(storageRef);
-      return await response.blob();
+      const url = await getDownloadURL(storageRef);
+  
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = (event) => {
+          const blob = xhr.response; 
+          resolve(blob); // Resolve the Promise with the blob
+        };
+        xhr.onerror = (error) => {
+          reject(error); // Reject the Promise if there's an error
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      });
+  
     } catch (error) {
       console.error("Error retrieving image blob:", error);
       throw error;
