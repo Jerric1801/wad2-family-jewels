@@ -43,22 +43,30 @@ export default {
             console.log("Adding new order on success page");
 
             // Generate the segments for the order number
-            const firstSegment = Math.floor(Math.random() * 900) + 100; 
-            const secondSegment = Math.floor(1000000 + Math.random() * 9000000); 
-            const thirdSegment = Math.floor(1000000 + Math.random() * 9000000); 
+            const firstSegment = Math.floor(Math.random() * 900) + 100;
+            const secondSegment = Math.floor(1000000 + Math.random() * 9000000);
+            const thirdSegment = Math.floor(1000000 + Math.random() * 9000000);
 
             // Format the order number
             const orderNo = `${firstSegment}-${secondSegment}-${thirdSegment}`;
+            
+            // Format the date
+            const date = new Date();
+            const newDate = date.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
 
             // console.log(JSON.parse(localStorage.getItem("user")));
 
             const orderData = {
-                date: new Date(),
+                date: newDate,
                 imageUrl: item.data.image,
                 orderNumber: orderNo,
                 productName: item.data.title,
                 recipientName: JSON.parse(localStorage.getItem("user")).displayName,
-                price: item.data.price,
+                total: item.data.price,
             };
 
             try {
