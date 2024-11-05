@@ -67,6 +67,7 @@ export default {
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
         this.loadBackgroundImage();
+        // this.loadProductImage();
     },
     beforeUnmount() {
         window.removeEventListener('resize', this.resizeCanvas);
@@ -126,12 +127,15 @@ export default {
         loadBackgroundImage() {
             this.baseImage.src = this.imgSrc; // Load the image into the baseImage variable
             this.baseImage.onload = () => {
+                this.loadProductImage()
                 this.drawCanvas();
             };
         },
         drawCanvas() {
-            this.loadProductImage();
-            if (!this.productImage || !this.productImage.complete) return;
+            if (!this.productImage || !this.productImage.complete || this.productImage.naturalWidth === 0) {
+                console.warn('Product image not loaded or broken.');
+                return;
+            }
 
             const canvas = this.$refs.canvas;
             const ctx = canvas.getContext('2d');

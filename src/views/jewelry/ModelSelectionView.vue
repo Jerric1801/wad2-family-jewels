@@ -114,9 +114,19 @@ export default {
       yScale: 0.5, // Default y-scale
     };
   },
-  mounted() {
+  async mounted() {
     // Fetch initial preset images on component mount
     this.updatePresetImages();
+
+    if (user) {
+      try {
+        const images = await retrieveImagesFromDatabase(user.uid); 
+        this.modelImages = images
+        console.log(this.modelImages)
+      } catch (error) {
+        console.error("Error fetching images from Firebase:", error);
+      }
+    }
   },
   methods: {
     updateTransformCoordinates(coordinates) {
@@ -152,10 +162,11 @@ export default {
         if (user) {
           this.modelImages.forEach(async (image, index) => {
             try {
+              const imageBlob = await this.base64ToBlob(image)
               // Assuming your fetchModelImages returns an array of base64 image strings
-              const imageName = `${user.uid}_${Date.now()}_${index}.png`; // Unique name for each image
+              const imageName = `${user.uid}_${Date.now()}.png`; // Unique name for each image
               console.log(imageName)
-              await uploadPhoto(user.uid, image, imageName);
+              await uploadPhoto(user.uid, imageBlob, imageName);
               console.log(`Image ${imageName} uploaded successfully`);
             } catch (error) {
               console.error(`Error uploading image ${index}:`, error);
@@ -168,6 +179,31 @@ export default {
       } catch (error) {
         console.error('Error generating model images:', error);
       }
+    },
+    base64ToBlob(base64String) {
+      return new Promise((resolve) => {
+        const byteCharacters = atob(base64String.split(',')[1]);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray
+            = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, {
+          type:
+            'image/png'
+        });
+        resolve(blob);
+      });
     },
     imageToBase64(imageUrl) {
       return new Promise((resolve, reject) => {

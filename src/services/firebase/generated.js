@@ -4,7 +4,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL, getBlob } from "firebase/
 
 export const uploadPhoto = async (userId, photo, imageName) => {
     const storage = getStorage();
-    const storageRef = ref(storage, `${userId}/${imageName}`);
+    const storageRef = ref(storage, `user-generated/${userId}/${imageName}`);
 
     try {
         const snapshot = await uploadBytes(storageRef, photo);
@@ -21,7 +21,7 @@ export const uploadPhoto = async (userId, photo, imageName) => {
 };
 
 export const updatePhotoUrl = async (userId, imageURL, imageName) => {
-    const docRef = doc(db, "user-uploads", userId);
+    const docRef = doc(db, "user-generated", userId);
     try {
         await setDoc(docRef, { imageURL: { [imageName]: { url: imageURL, listed: false } } }, { merge: true });
     } catch (error) {
@@ -31,6 +31,7 @@ export const updatePhotoUrl = async (userId, imageURL, imageName) => {
 };
 
 
+
 export const retrieveImagesFromDatabase = async (userId, limit = 5) => {
     const docRef = doc(db, `user-generated/${userId}`);
     try {
@@ -38,16 +39,32 @@ export const retrieveImagesFromDatabase = async (userId, limit = 5) => {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
-            const images = Object.entries(data.imageURL)
-                .sort((a, b) => b[1].timestamp - a[1].timestamp) // Sort by timestamp (newest first)
+            const imageUrls = Object.entries(data.imageURL)
+                .sort((a, b) => b[1].timestamp - a[1].timestamp)
                 .slice(0, limit)
-                .map(([name, data]) => ({ name, url: data.url }));
-            return images;
+                .map(([name, data]) => data.url); // Extract only the URLs
+
+            return imageUrls;
         } else {
-            return []; // Return an empty array if no images are found
+            return [];
         }
     } catch (error) {
         console.error("Error retrieving document:", error);
+        throw error;
+    }
+};
+
+export const getBlobsFromUrls = async (urls) => {
+    const storage = getStorage();
+    try {
+        const blobs = await Promise.all(urls.map(async (url) => {
+            const imageRef = ref(storage, url);
+            const blob = await getBlob(imageRef);
+            return blob;
+        }));
+        return blobs;
+    } catch (error) {
+        console.error("Error fetching blobs:", error);
         throw error;
     }
 };
