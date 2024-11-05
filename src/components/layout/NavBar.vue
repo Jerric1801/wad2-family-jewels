@@ -10,7 +10,8 @@
     ]"
   >
     <div class="container mx-auto flex justify-between items-center">
-      <div class="flex items-center logo-container">
+      <!-- Logo Section -->
+      <div v-if="!isMobileMenuOpen" class="flex items-center logo-container">
         <img
           src="@/assets/images/logo/logo.png"
           alt="Family Jewels Logo"
@@ -18,31 +19,88 @@
           @click="$router.push('/')"
         />
         <span
-          class="text-xl font-bold animate-text cursor-pointer"
+          class="text-xl font-bold animate-text cursor-pointer hidden lg:block"
           @click="$router.push('/')"
-          v-if="windowWidth > 800"
-          >Family Jewels</span
         >
+          Family Jewels
+        </span>
       </div>
-      <ul class="flex items-center space-x-6 text-black">
+
+      <!-- Mobile Menu Button -->
+      <button
+        @click="isMobileMenuOpen = !isMobileMenuOpen"
+        class="lg:hidden text-black"
+      >
+        <!-- Hamburger button -->
+        <svg
+          v-if="!isMobileMenuOpen"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-menu"
+        >
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      </button>
+
+      <!-- Navigation Links -->
+      <ul
+        :class="[
+          'flex flex-col lg:flex-row items-center lg:space-x-6 text-black bg-white lg:bg-transparent',
+          { 'hidden lg:flex': !isMobileMenuOpen },
+        ]"
+        class="space-y-4 lg:space-y-0 mt-4 lg:mt-0 shadow-lg lg:shadow-none rounded-lg p-4 lg:p-0"
+      >
+        <li v-if="isMobileMenuOpen" class="text-right mt-2">
+          <button @click="isMobileMenuOpen = !isMobileMenuOpen">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-x"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </li>
         <li
           v-for="(item, index) in currentNavItems"
           :key="item.to"
-          class="nav-item"
+          class="nav-item w-full lg:w-auto"
         >
           <component
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium relative"
+            class="text-lg font-medium flex items-center justify-center relative w-full lg:w-auto py-2 px-4 rounded-lg transition-all duration-300"
             :class="{
-              'logout-btn': item.text === 'Logout',
-              'profile-btn': item.text === 'Profile',
-              'upload-btn': item.text === 'Upload',
-              'login-btn': item.text === 'Login',
-              'signup-btn': item.text === 'Signup',
+              'bg-indigo-600 text-white hover:bg-indigo-500':
+                item.text === 'Logout',
+              'bg-gray-200 hover:bg-gray-300 text-gray-700':
+                item.text === 'Profile',
+              'bg-blue-500 text-white hover:bg-blue-400':
+                item.text === 'Upload',
+              'bg-green-500 text-white hover:bg-green-400':
+                item.text === 'Login',
+              'bg-purple-500 text-white hover:bg-purple-400':
+                item.text === 'Signup',
             }"
-            :style="{ animationDelay: `${index * 0.2}s` }"
+            :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <span v-if="!item.isIcon">{{ item.text }}</span>
             <font-awesome-icon
@@ -80,6 +138,8 @@ export default {
 
     const isVisible = ref(true);
     const lastScrollY = ref(0);
+    const isMobileMenuOpen = ref(false); // To control mobile menu visibility
+
     const navItems = {
       guest: [
         { to: "/marketplace", text: "Shop", isLink: true },
@@ -135,14 +195,6 @@ export default {
       }
     };
 
-    const windowWidth = ref(window.innerWidth);
-
-    watchEffect(() => {
-      window.addEventListener("resize", () => {
-        windowWidth.value = window.innerWidth;
-      });
-    });
-
     onMounted(() => window.addEventListener("scroll", handleScroll));
     onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll));
 
@@ -151,13 +203,14 @@ export default {
       currentNavItems,
       handleLogout,
       handleClick,
-      windowWidth,
+      isMobileMenuOpen,
     };
   },
 };
 </script>
 
 <style scoped>
+/* Navbar styling for responsiveness */
 .router-link-active {
   font-weight: bold;
 }
@@ -221,6 +274,7 @@ export default {
   }
 }
 
+/* Button styles */
 .logout-btn,
 .profile-btn,
 .upload-btn,
