@@ -104,7 +104,20 @@ export default {
   },
   computed: {
     filteredOrders() {
-      // Calculate the date range based on the current date
+      // If "All" is selected, skip the date filtering
+      if (this.dateRange === "999") {
+        return this.pastOrders.filter((order) => {
+          // Filter by search query only
+          const query = this.searchQuery.toLowerCase();
+          return (
+            order.data.productName.toLowerCase().includes(query) ||
+            order.data.receipientName.toLowerCase().includes(query) ||
+            order.data.orderNumber.toLowerCase().includes(query)
+          );
+        });
+      }
+
+      // If a specific range is selected, calculate the date range based on the current date
       const today = new Date();
       const monthsBack = parseInt(this.dateRange, 10);
       const rangeStartDate = new Date(
@@ -122,22 +135,25 @@ export default {
           return false;
         }
 
-        // Filter by date range
-        if (this.dateRange !== "999" && orderDate < rangeStartDate)
-          return false;
-
-        // Filter by search query
+        // Filter by date range and search query
         const query = this.searchQuery.toLowerCase();
         return (
-          order.data.productName.toLowerCase().includes(query) ||
-          order.data.receipientName.toLowerCase().includes(query) ||
-          order.data.orderNumber.toLowerCase().includes(query)
+          orderDate >= rangeStartDate &&
+          (order.data.productName.toLowerCase().includes(query) ||
+            order.data.receipientName.toLowerCase().includes(query) ||
+            order.data.orderNumber.toLowerCase().includes(query))
         );
       });
     },
   },
   methods: {
     parseDate(dateString) {
+      // Ensure dateString is a string before proceeding
+      if (typeof dateString !== "string") {
+        console.warn(`Expected string for date but got: ${typeof dateString}`);
+        return new Date(NaN); // return invalid date if not a string
+      }
+
       // Split the date string into parts and create a Date object
       const [day, month, year] = dateString.split(" ");
       const monthIndex = [
@@ -157,7 +173,7 @@ export default {
 
       if (monthIndex === -1) {
         console.warn(`Invalid month format in date: ${dateString}`);
-        return new Date(NaN); // return an invalid date if month is invalid
+        return new Date(NaN); // return invalid date if month is invalid
       }
 
       return new Date(year, monthIndex, parseInt(day, 10));
