@@ -639,4 +639,12 @@ export default {
   color: black;
   text-align: center;
 }
+
+/* Style for active desktop link */
+.router-link-active {
+  color: #6454ce; /* Adjust to a darker color for contrast */
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.5rem 1rem; /* Increase padding for emphasis */
+}
 </style>
