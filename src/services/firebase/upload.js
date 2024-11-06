@@ -2,6 +2,7 @@ import { db } from "@/config/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+
 export const uploadPhoto = async (userId, photo, imageName) => {
     const storage = getStorage();
     const storageRef = ref(storage, `${userId}/${imageName}`);
@@ -10,8 +11,8 @@ export const uploadPhoto = async (userId, photo, imageName) => {
         const snapshot = await uploadBytes(storageRef, photo);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
-        // Update Firestore with the image URL
-        await updatePhotoUrl(userId, downloadURL, imageName);
+        // Update Firestore with the image URL and timestamp
+        await updatePhotoUrl(userId, downloadURL, imageName, Date.now()); // Pass timestamp
 
         console.log("File uploaded successfully:", downloadURL);
     } catch (error) {
@@ -20,16 +21,22 @@ export const uploadPhoto = async (userId, photo, imageName) => {
     }
 };
 
-export const updatePhotoUrl = async (userId, imageURL, imageName) => {
+export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => { // Add timestamp parameter
     const docRef = doc(db, "user-uploads", userId);
     try {
-        await setDoc(docRef, { imageURL: { [imageName]: { url: imageURL, listed: false } } }, { merge: true });
+        await setDoc(docRef, { 
+            imageURL: { 
+                [imageName]: { 
+                    url: imageURL, 
+                    timestamp: timestamp 
+                } 
+            } 
+        }, { merge: true });
     } catch (error) {
         console.error("Error updating document:", error);
         throw error;
     }
 };
-
 export const retrieveImagesFromDatabase = async (userId, limit = 5) => {
     const docRef = doc(db, `user-uploads/${userId}`);
     try {

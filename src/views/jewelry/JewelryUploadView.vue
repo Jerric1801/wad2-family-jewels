@@ -57,7 +57,6 @@
                                 Reselect Image
                             </button>
                         </div>
-
                         <div class="m-10" v-if="imageConfirmed">
                             <button @click="goToModelsPage"
                                 class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -154,6 +153,43 @@ export default {
             };
             input.click();
         },
+        imageToBase64(imageUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous"; // For CORS if needed
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.height = img.naturalHeight;
+                    canvas.width = img.naturalWidth;
+                    ctx.drawImage(img, 0, 0);
+                    const base64 = canvas.toDataURL("image/png");
+                    resolve(base64);
+                };
+                img.onerror = reject;
+                img.src = imageUrl;
+            });
+        },
+        async convertImageUrlToBase64(imageUrl) {
+            try {
+                const response = await fetch(imageUrl);
+                const blob = await response.blob();
+
+                return new Promise((resolve, reject) => {
+                    const reader = new
+                        FileReader();
+                    reader.onloadend = () => {
+                        resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+
+                });
+            } catch (error) {
+                console.error("Error converting image to base64:", error);
+                throw error;
+            }
+        },
         async selectPreviousImage(name) {
             this.imageSelected = true;
             this.imageConfirmed = false;
@@ -162,7 +198,7 @@ export default {
             try {
                 const blob = await getImageBlob(user.uid, name);
                 // No need to create a File object here
-                this.mainImg = URL.createObjectURL(blob);
+                this.mainImg = await this.convertImageUrlToBase64(URL.createObjectURL(blob));
 
             } catch (error) {
                 console.error("Error setting selected image:", error);
@@ -194,7 +230,9 @@ export default {
         async confirmImage() {
             this.removingBackground = true;
             try {
+                console.log(this.mainImg)
                 const file = this.dataURLtoFile(this.mainImg, "image.png");
+                console.log(file)
                 const result = await removeBackground(file);
                 this.mainImg = URL.createObjectURL(result);
                 this.imageConfirmed = true;
@@ -214,23 +252,6 @@ export default {
                 u8arr[n] = bstr.charCodeAt(n);
             }
             return new File([u8arr], filename, { type: mime });
-        },
-        imageToBase64(imageUrl) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous"; // For CORS if needed
-                img.onload = () => {
-                    const canvas = document.createElement("canvas");
-                    const ctx = canvas.getContext("2d");
-                    canvas.height = img.naturalHeight;
-                    canvas.width = img.naturalWidth;
-                    ctx.drawImage(img, 0, 0);
-                    const base64 = canvas.toDataURL("image/png");
-                    resolve(base64);
-                };
-                img.onerror = reject;
-                img.src = imageUrl;
-            });
         },
         async goToModelsPage() {
             const imageStore = useImageStore();

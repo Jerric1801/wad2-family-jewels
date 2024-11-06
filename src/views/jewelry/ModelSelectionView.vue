@@ -33,11 +33,11 @@
       </div>
       <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
         <div class="w-full h-[68%] overflow-hidden">
-          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages"
-            @updateTransformCoordinates="updateTransformCoordinates" />
+          <Editor :img-src="selectedPresetImagePath" ref="editor" :productSrc="productImg"
+            @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
-        <div class="w-[100%] h-[35%]">
-          <div class="w-[95%] h-full flex items-start bg-gray-200 rounded-md p-4">
+        <div class="w-[100%] h-[35%] relative overflow-x-scroll overflow-y-hidden">
+          <div class="absolute w-[150%] h-full flex items-start bg-gray-200 rounded-md p-4">
             <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
               <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
                 :class="{ 'border-2 border-blue-500 ': selectedImage === image }" @click="selectImage(image)" />
@@ -49,29 +49,44 @@
 
     <div v-if="selectedImage" class="fixed inset-0 flex items-center justify-center z-50">
       <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div>
-      <div class="bg-white p-6 rounded-lg z-10 max-w-lg w-full relative">
+      <div class="bg-white flex p-6 rounded-lg z-10 w-[70vw] h-[50vh] relative">
         <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-             
-
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>  
-
+          </svg>
         </button>
-        <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain">
-        <div class="flex flex-col gap-2">
-          <button @click="refineImage(selectedImage)"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Refine Image
-          </button>
-          <button @click="downloadImage(selectedImage)"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Download Image
-          </button>
-          <button @click="addToLibrary(selectedImage)"
-            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-            Add to Library
-          </button>
+        <div class="w-[50%]">
+          <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain mr-6"
+            :style="{ filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)` }">
+        </div>
+        <div class="flex flex-col gap-4 w-[50%]">
+          <button @click="resetFilters" class="text-blue-500 hover:text-blue-700">Reset to Default</button>
+          <div>
+            <label for="contrast" class="block text-sm font-medium text-gray-700">Contrast</label>
+            <input type="range" id="contrast" min="0" max="200" v-model="contrast" class="w-full">
+          </div>
+          <div>
+            <label for="brightness" class="block text-sm font-medium text-gray-700">Brightness</label>
+            <input type="range" id="brightness" min="0" max="200" v-model="brightness" class="w-full">
+          </div>
+          <div>
+            <label for="saturation" class="block text-sm font-medium text-gray-700">Saturation</label>
+            <input type="range" id="saturation" min="0" max="200" v-model="saturation" class="w-full">
+          </div>
+          <div>
+            <label for="blur" class="block text-sm font-medium text-gray-700">Blur</label>
+            <input type="range" id="blur" min="0" max="10" step="0.1" v-model="blur" class="w-full">
+          </div>
+          <div class="flex flex-col gap-2 mt-4">
+            <button @click="downloadImage(selectedImage)"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              Download Image
+            </button>
+            <button @click="addToLibrary(selectedImage)"
+              class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+              Add to Library
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -83,7 +98,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import Editor from "@/components/jewelry/Editor.vue";
 import { useImageStore } from '@/store/imageStore';
 import { fetchModelImages } from '@/services/pebblely/productImage';
-import { uploadPhoto, retrieveImagesFromDatabase } from "@/services/firebase/generated";
+import { uploadPhoto, retrieveImagesFromDatabase, getBlobFromUrl } from "@/services/firebase/generated";
 
 const user = JSON.parse(localStorage.getItem('user'))
 
@@ -103,15 +118,19 @@ export default {
     return {
       modelImages: [],
       selectedImage: null,
-      selectedJewelleryType: 'necklace', // Default jewellery type
+      selectedJewelleryType: 'necklace',
       presetImages: [
       ],
       selectedPresetImagePath: null,
       imageDescription: '',
-      xVal: 0, // Default x-coordinate
-      yVal: 0, // Default y-coordinate
-      xScale: 0.5, // Default x-scale
-      yScale: 0.5, // Default y-scale
+      xVal: 0,
+      yVal: 0,
+      xScale: 0.5,
+      yScale: 0.5,
+      contrast: 100,
+      brightness: 100,
+      saturation: 100,
+      blur: 0,
     };
   },
   async mounted() {
@@ -120,9 +139,8 @@ export default {
 
     if (user) {
       try {
-        const images = await retrieveImagesFromDatabase(user.uid); 
+        const images = await retrieveImagesFromDatabase(user.uid);
         this.modelImages = images
-        console.log(this.modelImages)
       } catch (error) {
         console.error("Error fetching images from Firebase:", error);
       }
@@ -148,7 +166,7 @@ export default {
           xScale: this.xScale,
           yScale: this.yScale
         });
-        this.modelImages = await fetchModelImages(
+        const newModelImage = await fetchModelImages(
           base64ProductImage,
           base64SelectedImage,
           this.xVal,
@@ -160,21 +178,24 @@ export default {
         );
 
         if (user) {
-          this.modelImages.forEach(async (image, index) => {
-            try {
-              const imageBlob = await this.base64ToBlob(image)
-              // Assuming your fetchModelImages returns an array of base64 image strings
-              const imageName = `${user.uid}_${Date.now()}.png`; // Unique name for each image
-              console.log(imageName)
-              await uploadPhoto(user.uid, imageBlob, imageName);
-              console.log(`Image ${imageName} uploaded successfully`);
-            } catch (error) {
-              console.error(`Error uploading image ${index}:`, error);
-            }
-          });
+          try {
+            const imageBlob = await this.base64ToBlob(
+              typeof newModelImage === 'string' ? newModelImage : String(newModelImage)
+            );
+            const imageName = `${user.uid}_${Date.now()}.png`;
+            console.log(imageName);
+            await uploadPhoto(user.uid, imageBlob, imageName);
+            console.log(`Image ${imageName} uploaded successfully`);
+          } catch (error) {
+            console.error(`Error uploading image:`, error);
+          }
         } else {
           console.error("User ID not found in localStorage.");
         }
+
+        this.modelImages.unshift(newModelImage);
+
+        this.$refs.editor.generationComplete();
 
       } catch (error) {
         console.error('Error generating model images:', error);
@@ -273,17 +294,24 @@ export default {
       // Construct the full path to the selected preset image
       this.selectedPresetImagePath = `/src/assets/images/models/${this.selectedJewelleryType}/${image}`;
     },
-    refineImage(image) {
-      // Logic to open image editor or refinement tool
-      console.log('Refine image:', image);
-    },
-    downloadImage(image) {
-      // Logic to download the image
-      console.log('Download image:', image);
+    downloadImage(url) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'image.jpg'); // or any other extension
+      document.body.appendChild(link);
+
+      link.click();
+      document.body.removeChild(link);
     },
     addToLibrary(image) {
       // Logic to add the image to the user's library
       console.log('Add to library:', image);
+    },
+    resetFilters() {
+      this.contrast = 100;
+      this.brightness = 100;
+      this.saturation = 100;
+      this.blur = 0;
     },
     closeModal() {
       this.selectedImage = null; // This will hide the modal

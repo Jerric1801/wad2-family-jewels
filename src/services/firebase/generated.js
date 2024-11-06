@@ -1,7 +1,6 @@
 import { db } from "@/config/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, getBlob } from "firebase/storage";
-
 export const uploadPhoto = async (userId, photo, imageName) => {
     const storage = getStorage();
     const storageRef = ref(storage, `user-generated/${userId}/${imageName}`);
@@ -10,8 +9,7 @@ export const uploadPhoto = async (userId, photo, imageName) => {
         const snapshot = await uploadBytes(storageRef, photo);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
-        // Update Firestore with the image URL
-        await updatePhotoUrl(userId, downloadURL, imageName);
+        await updatePhotoUrl(userId, downloadURL, imageName, Date.now()); 
 
         console.log("File uploaded successfully:", downloadURL);
     } catch (error) {
@@ -20,10 +18,17 @@ export const uploadPhoto = async (userId, photo, imageName) => {
     }
 };
 
-export const updatePhotoUrl = async (userId, imageURL, imageName) => {
+export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => { 
     const docRef = doc(db, "user-generated", userId);
     try {
-        await setDoc(docRef, { imageURL: { [imageName]: { url: imageURL, listed: false } } }, { merge: true });
+        await setDoc(docRef, { 
+            imageURL: { 
+                [imageName]: { 
+                    url: imageURL, 
+                    timestamp: timestamp  
+                }
+            } 
+        }, { merge: true });
     } catch (error) {
         console.error("Error updating document:", error);
         throw error;
@@ -32,12 +37,14 @@ export const updatePhotoUrl = async (userId, imageURL, imageName) => {
 
 
 
-export const retrieveImagesFromDatabase = async (userId, limit = 5) => {
+
+export const retrieveImagesFromDatabase = async (userId, limit = 4) => {
     const docRef = doc(db, `user-generated/${userId}`);
     try {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
+            console.log(docSnap.data())
             const data = docSnap.data();
             const imageUrls = Object.entries(data.imageURL)
                 .sort((a, b) => b[1].timestamp - a[1].timestamp)
@@ -54,17 +61,14 @@ export const retrieveImagesFromDatabase = async (userId, limit = 5) => {
     }
 };
 
-export const getBlobsFromUrls = async (urls) => {
+export const getBlobFromUrl = async (url) => {
     const storage = getStorage();
     try {
-        const blobs = await Promise.all(urls.map(async (url) => {
-            const imageRef = ref(storage, url);
-            const blob = await getBlob(imageRef);
-            return blob;
-        }));
-        return blobs;
+      const imageRef = ref(storage, url);
+      const blob = await getBlob(imageRef);
+      return blob;
     } catch (error) {
-        console.error("Error fetching blobs:", error);
-        throw error;
+      console.error("Error fetching blob:", error);
+      throw error;
     }
-};
+  };
