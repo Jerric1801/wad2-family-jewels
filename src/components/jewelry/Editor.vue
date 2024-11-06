@@ -1,12 +1,12 @@
 <template>
-    <div class="w-[100%] h-[100%] flex bg-white rounded-md relative">
+    <div class="w-[95%] h-[100%] flex bg-white rounded-md relative items-center justify-between">
         <div class="w-[15%] h-full flex flex-col items-center space-y-4 justify-end absolute left-0 top-0 z-10">
             <div class="w-[90%]">
                 <input type="range" min="1" :max="maxZoom" v-model="zoomLevel" orientation="vertical" />
             </div>
         </div>
-        <div class="w-[55%] ml-[10%] h-full flex justify-center items-center relative">
-            <canvas ref="canvas" class="max-w-full max-h-full rounded-md" @mousedown="startDrag" @mousemove="drag"
+        <div class="w-[55%] ml-[10%] h-[85%] flex justify-center items-center relative bg-gray-200 rounded-md p-3">
+            <canvas ref="canvas" class="max-w-full max-h-full rounded-md " @mousedown="startDrag" @mousemove="drag"
                 @mouseup="endDrag" @mouseleave="endDrag">
             </canvas>
         </div>

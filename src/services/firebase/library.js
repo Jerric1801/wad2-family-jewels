@@ -1,5 +1,6 @@
 import { db } from "@/config/firebase";
-import { getDocs, collection, doc, updateDoc } from "firebase/firestore"; // Make sure 'doc' is imported
+import { getDocs, collection, doc, updateDoc, addDoc, setDoc } from "firebase/firestore"; // Make sure 'doc' is imported
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export async function getLibraryItems(userId) {
   // Ensure the userId is passed and valid
@@ -28,12 +29,73 @@ export async function getLibraryItems(userId) {
 }
 
 export async function updateListing(userId, itemId, listed) {
-  // Update Firestore database with new 'listed' status
+
   try {
     const itemDocRef = doc(db, "jewellery-lib", userId, "items", itemId);
     await updateDoc(itemDocRef, { listed: listed });
-    return true; // Return true if successful
+    return true; 
   } catch (error) {
     console.error("Error updating listing status:", error);
   }
 }
+
+export async function addLibraryItem(userId, itemData) {
+  try {
+    const storage = getStorage();
+    const storageRef = ref(storage, `user-jewellery-lib/${userId}/`);
+
+    // Ensure the userId is passed and valid
+    if (!userId) {
+      console.error("UserID is undefined");
+      return null;
+    }
+
+    // Reference to the user's document inside 'jewellery-lib' collection
+    const userDocRef = doc(db, "jewellery-lib", userId);
+
+    // Get the 'items' sub-collection inside the user's document
+    const itemsCollectionRef = collection(userDocRef, "items");
+
+    const snapshot = await uploadBytes(storageRef, itemData.imageUrl);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    await updatePhotoUrl(userId, downloadURL, itemData.imageName, Date.now());
+
+
+    // Prepare the data to be added 
+    const newItemData = {
+      category: itemData.category || "",
+      description: itemData.description || "",
+      image: downloadURL,
+      listed: itemData.listed || false,
+      price: parseFloat(itemData.price) || 0,
+      title: itemData.title || "",
+    };
+
+    const docRef = await addDoc(itemsCollectionRef, newItemData);
+
+    console.log("Item added with ID:", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding item to library:", error);
+    return null;
+  }
+}
+
+
+export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => {
+  const docRef = doc(db, "user-generated", userId);
+  try {
+    await setDoc(docRef, {
+      imageURL: {
+        [imageName]: {
+          url: imageURL,
+          timestamp: timestamp
+        }
+      }
+    }, { merge: true });
+  } catch (error) {
+    console.error("Error updating document:", error);
+    throw error;
+  }
+};

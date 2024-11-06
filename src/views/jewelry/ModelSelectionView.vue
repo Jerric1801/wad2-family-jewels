@@ -36,7 +36,7 @@
           <Editor :img-src="selectedPresetImagePath" ref="editor" :productSrc="productImg"
             @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
-        <div class="w-[100%] h-[35%] relative overflow-x-scroll overflow-y-hidden">
+        <div class="w-[95%] h-[35%] relative overflow-x-scroll overflow-y-hidden">
           <div class="absolute w-[150%] h-full flex items-start bg-gray-200 rounded-md p-4">
             <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
               <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
@@ -60,7 +60,8 @@
             :style="{ filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)` }">
         </div>
         <div class="flex flex-col gap-4 w-[50%]">
-          <button @click="resetFilters" class="text-blue-500 hover:text-blue-700">Reset to Default</button>
+          <button @click="resetFilters"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Reset to Default</button>
           <div>
             <label for="contrast" class="block text-sm font-medium text-gray-700">Contrast</label>
             <input type="range" id="contrast" min="0" max="200" v-model="contrast" class="w-full">
@@ -99,6 +100,7 @@ import Editor from "@/components/jewelry/Editor.vue";
 import { useImageStore } from '@/store/imageStore';
 import { fetchModelImages } from '@/services/pebblely/productImage';
 import { uploadPhoto, retrieveImagesFromDatabase, getBlobFromUrl } from "@/services/firebase/generated";
+import { addLibraryItem } from "@/services/firebase/library";
 
 const user = JSON.parse(localStorage.getItem('user'))
 
@@ -194,7 +196,7 @@ export default {
         }
 
         const images = await retrieveImagesFromDatabase(user.uid);
-        this.modelImages = images; 
+        this.modelImages = images;
 
         this.$refs.editor.generationComplete();
 
@@ -298,18 +300,56 @@ export default {
       // Construct the full path to the selected preset image
       this.selectedPresetImagePath = `/src/assets/images/models/${this.selectedJewelleryType}/${image}`;
     },
-    downloadImage(url) {
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'image.jpg'); // or any other extension
-      document.body.appendChild(link);
+    downloadImage() {
+      const img = new Image();
+      img.src = this.selectedImage;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-      link.click();
-      document.body.removeChild(link);
+        ctx.filter = `contrast(${this.contrast}%) brightness(${this.brightness}%) saturate(${this.saturation}%) blur(${this.blur}px)`;
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob((blob) => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download
+            = 'edited_image.jpg';
+          link.click();
+        }, 'image/jpeg');
+      };
     },
-    addToLibrary(image) {
-      // Logic to add the image to the user's library
-      console.log('Add to library:', image);
+    async urlToBlob(imageUrl) {
+      try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        return blob;
+      } catch (error) {
+        console.error("Errorconverting URL to blob: ", error);
+        return null;
+      }
+    },
+    async addToLibrary(image) {
+      const userId = user.uid;
+      try {
+        const dataUrl = await this.urlToBlob(image); 
+
+        const itemData = {
+          imageUrl: dataUrl,
+          imageName: `${Date.now()}`,
+          imageName: `${userId}_${Date.now()}.jpg`
+        };
+        console.log(itemData)
+        const itemId = await addLibraryItem(userId, itemData);
+        console.log("Item added to library with ID:", itemId);
+        this.$router.push({
+                name: "library",
+            });
+      } catch (error) {
+        console.error("Error adding item:", error);
+      }
     },
     resetFilters() {
       this.contrast = 100;
@@ -318,7 +358,7 @@ export default {
       this.blur = 0;
     },
     closeModal() {
-      this.selectedImage = null; // This will hide the modal
+      this.selectedImage = null;
     }
   },
 };
