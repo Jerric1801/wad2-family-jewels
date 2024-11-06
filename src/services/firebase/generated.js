@@ -66,6 +66,7 @@ export const getBlobFromUrl = async (url) => {
     try {
       const imageRef = ref(storage, url);
       const blob = await getBlob(imageRef);
+      console.log(blob)
       return blob;
     } catch (error) {
       console.error("Error fetching blob:", error);

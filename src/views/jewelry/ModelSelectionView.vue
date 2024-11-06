@@ -193,7 +193,8 @@ export default {
           console.error("User ID not found in localStorage.");
         }
 
-        this.modelImages.unshift(newModelImage);
+        const images = await retrieveImagesFromDatabase(user.uid);
+        this.modelImages = images; 
 
         this.$refs.editor.generationComplete();
 
@@ -242,8 +243,11 @@ export default {
         img.src = imageUrl;
       });
     },
-    selectImage(image) {
-      this.selectedImage = image;
+    async selectImage(image) {
+      console.log(image)
+      const blob = await getBlobFromUrl(image)
+      console.log(blob)
+      this.selectedImage = URL.createObjectURL(blob);
     },
     goToPlacementPage() {
       this.$router.push({ name: 'jewelry-placement' });

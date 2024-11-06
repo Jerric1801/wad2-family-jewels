@@ -1,6 +1,6 @@
 <template>
     <DefaultLayout>
-        <div class="h-[100vh] flex flex-col justify-center items-center">
+        <div class="h-[120vh] flex flex-col justify-center items-center">
             <div class="container mx-auto px-4 pt-[150px] flex flex-col lg:flex-row">
                 <div class="lg:w-1/2 lg:pr-10 mb-6 lg:mb-0">
                     <h2
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-[30%] w-[90%]">
+            <div class="h-[30%] w-[85%]">
                 <h3 class="text-lg font-semibold mb-2">Previously Uploaded Images</h3>
                 <div class="h-[100%] w-[100%] bg-gray-100 p-4 mt-8 rounded-md overflow-hidden flex gap-4">
                     <div v-for="image in images" :key="image.name" class="w-[20%] max-w-[20%] h-[90%] p-2 relative">
