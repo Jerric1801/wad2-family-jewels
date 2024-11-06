@@ -33,11 +33,11 @@
       </div>
       <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
         <div class="w-full h-[68%] overflow-hidden">
-          <Editor :img-src="selectedPresetImagePath" :productSrc="productImg" @generate="generateModelImages"
-            @updateTransformCoordinates="updateTransformCoordinates" />
+          <Editor :img-src="selectedPresetImagePath" ref="editor" :productSrc="productImg"
+            @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
-        <div class="w-[100%] h-[35%]">
-          <div class="w-[100%] h-full flex items-start bg-gray-200 rounded-md p-4">
+        <div class="w-[95%] h-[35%] relative overflow-x-scroll overflow-y-hidden">
+          <div class="absolute w-[150%] h-full flex items-start bg-gray-200 rounded-md p-4">
             <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
               <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
                 :class="{ 'border-2 border-blue-500 ': selectedImage === image }" @click="selectImage(image)" />
@@ -49,29 +49,45 @@
 
     <div v-if="selectedImage" class="fixed inset-0 flex items-center justify-center z-50">
       <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div>
-      <div class="bg-white p-6 rounded-lg z-10 max-w-lg w-full relative">
+      <div class="bg-white flex p-6 rounded-lg z-10 w-[70vw] h-[50vh] relative">
         <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-             
-
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>  
-
+          </svg>
         </button>
-        <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain">
-        <div class="flex flex-col gap-2">
-          <button @click="refineImage(selectedImage)"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Refine Image
-          </button>
-          <button @click="downloadImage(selectedImage)"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Download Image
-          </button>
-          <button @click="addToLibrary(selectedImage)"
-            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-            Add to Library
-          </button>
+        <div class="w-[50%]">
+          <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain mr-6"
+            :style="{ filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)` }">
+        </div>
+        <div class="flex flex-col gap-4 w-[50%]">
+          <button @click="resetFilters"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Reset to Default</button>
+          <div>
+            <label for="contrast" class="block text-sm font-medium text-gray-700">Contrast</label>
+            <input type="range" id="contrast" min="0" max="200" v-model="contrast" class="w-full">
+          </div>
+          <div>
+            <label for="brightness" class="block text-sm font-medium text-gray-700">Brightness</label>
+            <input type="range" id="brightness" min="0" max="200" v-model="brightness" class="w-full">
+          </div>
+          <div>
+            <label for="saturation" class="block text-sm font-medium text-gray-700">Saturation</label>
+            <input type="range" id="saturation" min="0" max="200" v-model="saturation" class="w-full">
+          </div>
+          <div>
+            <label for="blur" class="block text-sm font-medium text-gray-700">Blur</label>
+            <input type="range" id="blur" min="0" max="10" step="0.1" v-model="blur" class="w-full">
+          </div>
+          <div class="flex flex-col gap-2 mt-4">
+            <button @click="downloadImage(selectedImage)"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              Download Image
+            </button>
+            <button @click="addToLibrary(selectedImage)"
+              class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+              Add to Library
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -83,6 +99,10 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import Editor from "@/components/jewelry/Editor.vue";
 import { useImageStore } from '@/store/imageStore';
 import { fetchModelImages } from '@/services/pebblely/productImage';
+import { uploadPhoto, retrieveImagesFromDatabase, getBlobFromUrl } from "@/services/firebase/generated";
+import { addLibraryItem } from "@/services/firebase/library";
+
+const user = JSON.parse(localStorage.getItem('user'))
 
 export default {
   name: "ModelSelectionView",
@@ -100,20 +120,33 @@ export default {
     return {
       modelImages: [],
       selectedImage: null,
-      selectedJewelleryType: 'necklace', // Default jewellery type
+      selectedJewelleryType: 'necklace',
       presetImages: [
       ],
       selectedPresetImagePath: null,
       imageDescription: '',
-      xVal: 0, // Default x-coordinate
-      yVal: 0, // Default y-coordinate
-      xScale: 0.5, // Default x-scale
-      yScale: 0.5, // Default y-scale
+      xVal: 0,
+      yVal: 0,
+      xScale: 0.5,
+      yScale: 0.5,
+      contrast: 100,
+      brightness: 100,
+      saturation: 100,
+      blur: 0,
     };
   },
-  mounted() {
+  async mounted() {
     // Fetch initial preset images on component mount
     this.updatePresetImages();
+
+    if (user) {
+      try {
+        const images = await retrieveImagesFromDatabase(user.uid);
+        this.modelImages = images
+      } catch (error) {
+        console.error("Error fetching images from Firebase:", error);
+      }
+    }
   },
   methods: {
     updateTransformCoordinates(coordinates) {
@@ -135,7 +168,7 @@ export default {
           xScale: this.xScale,
           yScale: this.yScale
         });
-        this.modelImages = await fetchModelImages(
+        const newModelImage = await fetchModelImages(
           base64ProductImage,
           base64SelectedImage,
           this.xVal,
@@ -145,9 +178,56 @@ export default {
           this.selectedJewelleryType,
           this.imageDescription
         );
+
+        if (user) {
+          try {
+            const imageBlob = await this.base64ToBlob(
+              typeof newModelImage === 'string' ? newModelImage : String(newModelImage)
+            );
+            const imageName = `${user.uid}_${Date.now()}.png`;
+            console.log(imageName);
+            await uploadPhoto(user.uid, imageBlob, imageName);
+            console.log(`Image ${imageName} uploaded successfully`);
+          } catch (error) {
+            console.error(`Error uploading image:`, error);
+          }
+        } else {
+          console.error("User ID not found in localStorage.");
+        }
+
+        const images = await retrieveImagesFromDatabase(user.uid);
+        this.modelImages = images;
+
+        this.$refs.editor.generationComplete();
+
       } catch (error) {
         console.error('Error generating model images:', error);
       }
+    },
+    base64ToBlob(base64String) {
+      return new Promise((resolve) => {
+        const byteCharacters = atob(base64String.split(',')[1]);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray
+            = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, {
+          type:
+            'image/png'
+        });
+        resolve(blob);
+      });
     },
     imageToBase64(imageUrl) {
       return new Promise((resolve, reject) => {
@@ -165,8 +245,11 @@ export default {
         img.src = imageUrl;
       });
     },
-    selectImage(image) {
-      this.selectedImage = image;
+    async selectImage(image) {
+      console.log(image)
+      const blob = await getBlobFromUrl(image)
+      console.log(blob)
+      this.selectedImage = URL.createObjectURL(blob);
     },
     goToPlacementPage() {
       this.$router.push({ name: 'jewelry-placement' });
@@ -217,20 +300,65 @@ export default {
       // Construct the full path to the selected preset image
       this.selectedPresetImagePath = `/src/assets/images/models/${this.selectedJewelleryType}/${image}`;
     },
-    refineImage(image) {
-      // Logic to open image editor or refinement tool
-      console.log('Refine image:', image);
+    downloadImage() {
+      const img = new Image();
+      img.src = this.selectedImage;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.filter = `contrast(${this.contrast}%) brightness(${this.brightness}%) saturate(${this.saturation}%) blur(${this.blur}px)`;
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob((blob) => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download
+            = 'edited_image.jpg';
+          link.click();
+        }, 'image/jpeg');
+      };
     },
-    downloadImage(image) {
-      // Logic to download the image
-      console.log('Download image:', image);
+    async urlToBlob(imageUrl) {
+      try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        return blob;
+      } catch (error) {
+        console.error("Errorconverting URL to blob: ", error);
+        return null;
+      }
     },
-    addToLibrary(image) {
-      // Logic to add the image to the user's library
-      console.log('Add to library:', image);
+    async addToLibrary(image) {
+      const userId = user.uid;
+      try {
+        const dataUrl = await this.urlToBlob(image); 
+
+        const itemData = {
+          imageUrl: dataUrl,
+          imageName: `${Date.now()}`,
+          imageName: `${userId}_${Date.now()}.jpg`
+        };
+        console.log(itemData)
+        const itemId = await addLibraryItem(userId, itemData);
+        console.log("Item added to library with ID:", itemId);
+        this.$router.push({
+                name: "library",
+            });
+      } catch (error) {
+        console.error("Error adding item:", error);
+      }
+    },
+    resetFilters() {
+      this.contrast = 100;
+      this.brightness = 100;
+      this.saturation = 100;
+      this.blur = 0;
     },
     closeModal() {
-      this.selectedImage = null; // This will hide the modal
+      this.selectedImage = null;
     }
   },
 };

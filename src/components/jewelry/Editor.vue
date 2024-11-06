@@ -1,12 +1,12 @@
 <template>
-    <div class="w-[100%] h-[100%] flex bg-white rounded-md relative">
+    <div class="w-[95%] h-[100%] flex bg-white rounded-md relative items-center justify-between">
         <div class="w-[15%] h-full flex flex-col items-center space-y-4 justify-end absolute left-0 top-0 z-10">
             <div class="w-[90%]">
                 <input type="range" min="1" :max="maxZoom" v-model="zoomLevel" orientation="vertical" />
             </div>
         </div>
-        <div class="w-[55%] ml-[10%] h-full flex justify-center items-center relative">
-            <canvas ref="canvas" class="max-w-full max-h-full rounded-md" @mousedown="startDrag" @mousemove="drag"
+        <div class="w-[55%] ml-[10%] h-[85%] flex justify-center items-center relative bg-gray-200 rounded-md p-3">
+            <canvas ref="canvas" class="max-w-full max-h-full rounded-md " @mousedown="startDrag" @mousemove="drag"
                 @mouseup="endDrag" @mouseleave="endDrag">
             </canvas>
         </div>
@@ -24,11 +24,24 @@
                 <div class="w-[50%] h-[50%] relative overflow-hidden bg-gray-200 flex items-center">
                     <img :src="productSrc" alt="Product Image" class="absolute object-cover">
                 </div>
-                <p>Select Another Product</p>
+                <a href='/upload'>
+                    <p>Select Another Product</p>
+                </a>
             </div>
             <div class="h-[10%] w-[90%] bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
-                transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="$emit('generate')">
-                <p class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
+                  transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="generateImage">
+                <p v-if="!generating" class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
+                <div v-else class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <span class="font-medium text-gray-700">Generating...</span>
+                </div>
             </div>
         </div>
     </div>
@@ -60,12 +73,15 @@ export default {
             productImage: null,
             initialProductWidth: null,
             initialProductHeight: null,
+            baseImage: new Image(),
+            generating: false,
         };
     },
     mounted() {
         this.resizeCanvas();
         window.addEventListener('resize', this.resizeCanvas);
-        this.loadProductImage();
+        this.loadBackgroundImage();
+        // this.loadProductImage();
     },
     beforeUnmount() {
         window.removeEventListener('resize', this.resizeCanvas);
@@ -123,51 +139,47 @@ export default {
         },
 
         loadBackgroundImage() {
-            const baseImage = new Image();
-            baseImage.src = this.imgSrc;
-            baseImage.onload = () => {
+            this.baseImage.src = this.imgSrc; // Load the image into the baseImage variable
+            this.baseImage.onload = () => {
+                this.loadProductImage()
                 this.drawCanvas();
             };
         },
-
         drawCanvas() {
-            if (!this.productImage || !this.productImage.complete) return;
+            if (!this.productImage || !this.productImage.complete || this.productImage.naturalWidth === 0) {
+                console.warn('Product image not loaded or broken.');
+                return;
+            }
 
             const canvas = this.$refs.canvas;
             const ctx = canvas.getContext('2d');
 
-            // Create an offscreen canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             const offscreenCanvas = document.createElement('canvas');
             const offscreenCtx = offscreenCanvas.getContext('2d');
             offscreenCanvas.width
                 = canvas.width;
             offscreenCanvas.height = canvas.height;
 
+            // Use the pre-loaded baseImage instead of creating a new Image each time
+            const scaleFactor = Math.max(canvas.width / this.baseImage.width, canvas.height / this.baseImage.height) * this.zoomLevel;
 
-            const baseImage = new Image();
-            baseImage.src = this.imgSrc;
+            const scaledWidth = this.baseImage.width * scaleFactor;
+            const scaledHeight = this.baseImage.height * scaleFactor;
 
-            baseImage.onload = () => {
-                const scaleFactor = Math.max(canvas.width / baseImage.width, canvas.height / baseImage.height) * this.zoomLevel;
+            const xOffset = (canvas.width - scaledWidth) / 2;
+            const yOffset = (canvas.height - scaledHeight) / 2;
 
-                const scaledWidth = baseImage.width * scaleFactor;
-                const scaledHeight = baseImage.height * scaleFactor;
+            offscreenCtx.globalAlpha = this.opacity;
+            offscreenCtx.drawImage(this.baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
 
-                const xOffset = (canvas.width - scaledWidth) / 2;
-                const yOffset = (canvas.height - scaledHeight) / 2;
+            offscreenCtx.globalAlpha = 1;
+            const productWidth = this.initialProductWidth / 2.5;
+            const productHeight = this.initialProductHeight / 2.5;
+            offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
 
-                // Draw on the offscreen canvas
-                offscreenCtx.globalAlpha = this.opacity;
-                offscreenCtx.drawImage(baseImage, xOffset, yOffset, scaledWidth, scaledHeight);
-
-                const productWidth = this.initialProductWidth / 2.5;
-                const productHeight = this.initialProductHeight / 2.5;
-                offscreenCtx.globalAlpha = 1;
-                offscreenCtx.drawImage(this.productImage, this.offsetX, this.offsetY, productWidth, productHeight);
-
-                // Draw the offscreen canvas onto the visible canvas
-                ctx.drawImage(offscreenCanvas, 0, 0);
-            };
+            ctx.drawImage(offscreenCanvas, 0, 0);
         },
 
         startDrag(event) {
@@ -195,6 +207,17 @@ export default {
         endDrag() {
             this.isDragging = false;
         },
-    },
+        generateImage() {
+            if (!this.productSrc || !this.imgSrc) {
+                alert("Please select an image."); 
+                return; 
+            }
+            this.generating = true;
+            this.$emit('generate')
+        },
+        generationComplete() {
+            this.generating = false; // Re-enable the button and hide the loader
+        },
+    }
 };
 </script>
