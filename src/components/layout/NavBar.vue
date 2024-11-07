@@ -20,7 +20,7 @@
           @click="$router.push('/')"
         />
         <span
-          class="text-xl font-bold animate-text cursor-pointer hidden lg:block"
+          class="text-xl font-bold animate-text cursor-pointer hidden lg:block text-black dark:text-custGrey"
           @click="$router.push('/')"
         >
           Family Jewels
@@ -32,23 +32,41 @@
         @click="isMobileMenuOpen = !isMobileMenuOpen"
         class="lg:hidden text-black"
       >
-        <svg
-          v-if="!isMobileMenuOpen"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-menu"
-        >
-          <line x1="4" x2="20" y1="12" y2="12" />
-          <line x1="4" x2="20" y1="6" y2="6" />
-          <line x1="4" x2="20" y1="18" y2="18" />
-        </svg>
+        <template v-if="!isDarkMode"
+          ><svg
+            v-if="!isMobileMenuOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-menu"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" /></svg
+        ></template>
+        <template v-else
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-menu"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" /></svg
+        ></template>
       </button>
 
       <!-- Desktop Navigation Links -->
@@ -62,7 +80,7 @@
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium flex items-center justify-center relative py-2 px-4 rounded-lg transition-all duration-300"
+            class="text-lg font-medium flex items-center justify-center relative py-2 px-4 rounded-lg transition-all duration-300 text-black dark:text-custGrey"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Desktop Icons -->
@@ -201,6 +219,50 @@
             </template>
           </component>
         </li>
+        <li @click="toggleDarkMode" class="cursor-pointer">
+          <template v-if="isDarkMode">
+            <!-- Sun-Moon Icon for Dark Mode -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#94a3b8"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun-moon pl-2"
+            >
+              <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.9 4.9 1.4 1.4" />
+              <path d="m17.7 17.7 1.4 1.4" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.3 17.7-1.4 1.4" />
+              <path d="m19.1 4.9-1.4 1.4" />
+            </svg>
+          </template>
+          <template v-else>
+            <!-- Moon Icon for Light Mode -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon pl-2"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </template>
+        </li>
       </ul>
 
       <!-- Mobile Navigation Links -->
@@ -208,29 +270,99 @@
         v-if="isMobileMenuOpen"
         class="lg:hidden flex flex-col items-center text-black bg-white shadow-lg rounded-lg p-4 space-y-4 mt-4"
       >
-        <!-- Button to close Mobile Menu -->
-        <div class="relative w-full flex justify-end">
+        <!-- Row for Dark Mode Toggle and Close Button -->
+        <div class="w-full flex justify-between items-center">
+          <!-- Dark Mode Button -->
+          <div @click="toggleDarkMode" class="cursor-pointer">
+            <template v-if="isDarkMode">
+              <!-- Sun-Moon Icon for Dark Mode -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-sun-moon"
+              >
+                <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.9 4.9 1.4 1.4" />
+                <path d="m17.7 17.7 1.4 1.4" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.3 17.7-1.4 1.4" />
+                <path d="m19.1 4.9-1.4 1.4" />
+              </svg>
+            </template>
+            <template v-else>
+              <!-- Moon Icon for Light Mode -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-moon"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              </svg>
+            </template>
+          </div>
+
+          <!-- Close Button -->
           <button
             @click="isMobileMenuOpen = !isMobileMenuOpen"
-            class="text-black"
+            class="text-black cursor-pointer"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-x"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
+            <template v-if="!isDarkMode">
+              <!-- Close Icon for Light Mode -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-x"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </template>
+            <template v-else>
+              <!-- Hamburger Icon for Dark Mode -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#94a3b8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-x"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </template>
           </button>
         </div>
+
+        <!-- Other items in the mobile menu -->
         <li class="profile-list-item">
           <div class="profile-content">
             <div class="profile-photo">
@@ -427,6 +559,9 @@ export default {
     const { isAuthenticated, user } = storeToRefs(authStore);
     const router = useRouter();
 
+    // Dark mode state
+    const isDarkMode = ref(false);
+
     const userId = ref(null);
     const userProfile = ref(null); // User Profile
     const isVisible = ref(true);
@@ -461,6 +596,21 @@ export default {
       ],
     };
 
+    const toggleDarkMode = () => {
+      isDarkMode.value = !isDarkMode.value;
+      document.documentElement.classList.toggle("dark", isDarkMode.value);
+      localStorage.setItem("theme", isDarkMode.value ? "dark" : "light");
+    };
+
+    const loadTheme = () => {
+      const savedTheme = localStorage.getItem("theme");
+      console.log("Loaded theme:", savedTheme); // Check if correct theme is loaded
+      if (savedTheme === "dark") {
+        isDarkMode.value = true;
+        document.documentElement.classList.add("dark");
+      }
+    };
+
     const currentNavItems = computed(() =>
       isAuthenticated.value ? navItems.loggedIn : navItems.guest
     );
@@ -469,8 +619,6 @@ export default {
       try {
         userId.value = user.value.uid;
         userProfile.value = await retrieveUserProfile(userId.value);
-        console.log("TT ", userProfile.value);
-        console.log(userProfile.value.fullName);
       } catch (error) {
         console.error("Failed to retrieve user profile:", error);
       }
@@ -500,6 +648,7 @@ export default {
     };
 
     onMounted(async () => {
+      loadTheme();
       await retrieveUserDetails(); // Call user profile retrieval on mount
       window.addEventListener("scroll", handleScroll);
     });
@@ -516,6 +665,8 @@ export default {
       retrieveUserProfile,
       userId,
       retrieveUserDetails,
+      isDarkMode,
+      toggleDarkMode,
     };
   },
 };
@@ -642,9 +793,27 @@ export default {
 
 /* Style for active desktop link */
 .router-link-active {
-  color: #6454ce; /* Adjust to a darker color for contrast */
+  color: #3700b3; /* Adjust to a darker color for contrast */
   font-weight: bold;
   border-radius: 8px;
   padding: 0.5rem 1rem; /* Increase padding for emphasis */
+}
+
+.dark .router-link-active {
+  color: #d9d5d5; /* Dark mode color */
+}
+
+.navbar {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.dark .navbar {
+  background-color: #1e293b;
+}
+
+.button {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
 }
 </style>
