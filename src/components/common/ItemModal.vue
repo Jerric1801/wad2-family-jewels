@@ -1,16 +1,24 @@
 <template>
   <div v-show="modalVisible">
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    >
       <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative">
         <!-- Close button (top-right) -->
-        <button @click="closeModal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+        <button
+          @click="closeModal"
+          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+        >
           ✕
         </button>
 
         <div class="flex flex-col md:flex-row">
           <!-- Image Section -->
-          <img :src="item.data.image" :alt="item.data.title"
-            class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4" />
+          <img
+            :src="item.data.image"
+            :alt="item.data.title"
+            class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"
+          />
 
           <!-- Details Section -->
           <div class="w-full md:w-1/2">
@@ -28,11 +36,21 @@
         <!-- Button group at the bottom -->
         <div class="flex justify-end space-x-4 mt-6">
           <!-- Stripe Payment Gateway Integration -->
-          <stripe-checkout ref="checkoutRef" mode="payment" :pk="publishableKey" :line-items="lineItems"
-            :success-url="successURL" :cancel-url="cancelURL" @loading="(v) => (loading = v)"/>
+          <stripe-checkout
+            ref="checkoutRef"
+            mode="payment"
+            :pk="publishableKey"
+            :line-items="lineItems"
+            :success-url="successURL"
+            :cancel-url="cancelURL"
+            @loading="(v) => (loading = v)"
+          />
 
           <button class="btn-purchase" @click="handlePurchase">Purchase</button>
-          <button class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn" @click="closeModal">
+          <button
+            class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn"
+            @click="closeModal"
+          >
             Close
           </button>
         </div>
@@ -56,8 +74,8 @@ export default {
       this.item.data.title === "Diamond Ring (Certified)"
         ? "price_1QE8N4BeTAkFeX2nVXiAdWD0"
         : this.item.data.title === "Pearl Earrings"
-          ? "price_1QE8UiBeTAkFeX2nSsWRTC8x"
-          : null;
+        ? "price_1QE8UiBeTAkFeX2nSsWRTC8x"
+        : null;
     return {
       modalVisible: true,
       loading: false,
@@ -67,7 +85,9 @@ export default {
           quantity: 1,
         },
       ],
-      successURL: `http://localhost:5173/success?item=${encodeURIComponent(JSON.stringify(this.item))}&userId=${this.userId}`,
+      successURL: `http://localhost:5173/success?item=${encodeURIComponent(
+        JSON.stringify(this.item)
+      )}&userId=${this.userId}`,
       cancelURL: "http://localhost:5173/error",
     };
   },

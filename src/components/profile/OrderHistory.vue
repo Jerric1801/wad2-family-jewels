@@ -62,9 +62,6 @@
             <p class="text-gray-600 text-sm sm:text-base mb-1">
               <strong>Total Price:</strong> ${{ order.data.total }}
             </p>
-            <p class="text-gray-600 text-sm sm:text-base mb-1">
-              <strong>Deliver to:</strong> {{ order.data.receipientName }}
-            </p>
           </div>
 
           <!-- Order ID and Actions -->

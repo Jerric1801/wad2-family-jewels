@@ -4,7 +4,7 @@
       class="container mx-auto px-3 pt-[100px] md:pt-[150px] pb-[20vh] flex flex-col md:flex-row"
     >
       <!-- Filter Section -->
-      <div class="w-full md:w-1/4 md:pr-8 md:pl-4 mb-4 md:mb-0">
+      <div class="w-full md:w-1/4 md:pr-8 md:pl-4 mb-4 md:mb-0 pt-[20px]">
         <div class="sticky top-0">
           <div class="p-4">
             <h3 class="text-lg font-semibold mb-4">Filter</h3>
