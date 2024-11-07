@@ -1,11 +1,9 @@
 <template>
   <DefaultLayout>
-    <div
-      class="container mx-auto px-4 pt-20 md:pt-32 flex flex-col items-center"
-    >
+    <div class="container mx-auto px-4 flex flex-col items-center pt-[150px]">
       <!-- Page Title -->
       <h2
-        class="pt-3 text-3xl font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
       >
         Your Jewelry Library
       </h2>
