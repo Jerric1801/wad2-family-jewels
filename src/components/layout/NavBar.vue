@@ -224,15 +224,15 @@
             <!-- Sun-Moon Icon for Dark Mode -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
+              width="30"
+              height="30"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#94a3b8"
+              stroke="#0da5e9"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-sun-moon pl-2"
+              class="lucide lucide-sun-moon"
             >
               <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4" />
               <path d="M12 2v2" />
@@ -249,17 +249,19 @@
             <!-- Moon Icon for Light Mode -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
+              width="30"
+              height="30"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
+              stroke="#0da5e9"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-moon pl-2"
+              class="lucide lucide-moon-star"
             >
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9" />
+              <path d="M20 3v4" />
+              <path d="M22 5h-4" />
             </svg>
           </template>
         </li>
@@ -282,7 +284,7 @@
                 height="30"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#94a3b8"
+                stroke="#0da5e9"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -307,13 +309,15 @@
                 height="30"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="currentColor"
+                stroke="#0da5e9"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-moon"
+                class="lucide lucide-moon-star"
               >
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9" />
+                <path d="M20 3v4" />
+                <path d="M22 5h-4" />
               </svg>
             </template>
           </div>

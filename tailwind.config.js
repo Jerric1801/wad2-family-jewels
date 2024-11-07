@@ -13,14 +13,14 @@ export default {
       colors: {
         black: "#0A0522",
         grey: "#E0E2E5",
-        white: "#F7F9FD",
+        white: "#fdfdfd",
         pink: "#FFB8DA",
         purple: "#8063BC",
         blue: "#7C7CD7",
         custWhite: "#fbfbfb",
         custGrey: "#94a3b8",
 
-        background: "#F7F9FD", // White background color
+        background: "#fdfdfd", // White background color
         muted: "#E0E2E5",
       },
 
