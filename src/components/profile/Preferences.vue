@@ -1,15 +1,19 @@
 <template>
-  <div class="border-t border-gray-200 pt-6">
-    <h3 class="text-2xl font-semibold mb-4 text-indigo-600">
+  <div class="border-t border-gray-200 pt-6 px-4">
+    <h3
+      class="text-xl md:text-2xl font-semibold mb-4 text-indigo-600 text-center"
+    >
       Preferences - Join our Email Subscription!
     </h3>
-    <p class="mb-4 text-gray-600 mt-4 text-lg">
+    <p class="mb-4 text-gray-600 text-base md:text-lg mt-4 text-center">
       By joining our email list, you will be the first to know about exciting
       new designs, special events, store openings, and much more.
     </p>
-    <div class="flex space-x-4">
+    <div
+      class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center"
+    >
       <button
-        class="btn-subscribe flex items-center space-x-2"
+        class="btn-subscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out"
         @click="subscribeToEmails"
       >
         <span class="svg-container">
@@ -29,7 +33,7 @@
         <span>Subscribe</span>
       </button>
       <button
-        class="btn-unsubscribe flex items-center space-x-2"
+        class="btn-unsubscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out"
         @click="unsubscribeFromEmails"
       >
         <span class="svg-container">

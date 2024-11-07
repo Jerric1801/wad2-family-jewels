@@ -1,5 +1,21 @@
 import { db } from "@/config/firebase";
-import { getDocs, collection, doc } from "firebase/firestore"; // Ensure 'collection' and 'doc' are imported
+import {
+  doc,
+  collection,
+  getDocs,
+  addDoc,
+} from "firebase/firestore";
+
+export const retrieveUserProfile = async (userId) => {
+  const docRef = doc(db, "user-profile", userId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return null;
+  }
+};
 
 export async function getAllListedItems() {
   // Reference to the 'jewellery-lib' collection
@@ -38,4 +54,19 @@ export async function getAllListedItems() {
   }
 
   return itemsData.length ? itemsData : null;
+}
+
+export async function addOrder(userId, orderData) {
+  try {
+    // Reference to the user's orders collection
+    const userDocRef = doc(db, "user-orders", userId);
+    const ordersCollectionRef = collection(userDocRef, "orders");
+
+    // Add a new document to the orders subcollection
+    const docRef = await addDoc(ordersCollectionRef, orderData);
+    return docRef.id; // Return the ID of the new document
+  } catch (error) {
+    console.error("Error adding order:", error);
+    throw error;
+  }
 }

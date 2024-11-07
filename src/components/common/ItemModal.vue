@@ -29,7 +29,7 @@
         <div class="flex justify-end space-x-4 mt-6">
           <!-- Stripe Payment Gateway Integration -->
           <stripe-checkout ref="checkoutRef" mode="payment" :pk="publishableKey" :line-items="lineItems"
-            :success-url="successURL" :cancel-url="cancelURL" @loading="(v) => (loading = v)" />
+            :success-url="successURL" :cancel-url="cancelURL" @loading="(v) => (loading = v)"/>
 
           <button class="btn-purchase" @click="handlePurchase">Purchase</button>
           <button class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn" @click="closeModal">
@@ -67,7 +67,7 @@ export default {
           quantity: 1,
         },
       ],
-      successURL: "http://localhost:5173/success",
+      successURL: `http://localhost:5173/success?item=${encodeURIComponent(JSON.stringify(this.item))}&userId=${this.userId}`,
       cancelURL: "http://localhost:5173/error",
     };
   },
@@ -78,9 +78,9 @@ export default {
     },
   },
   methods: {
-    handlePurchase() {
+    async handlePurchase() {
       if (this.$refs.checkoutRef) {
-        this.$refs.checkoutRef.redirectToCheckout();
+        await this.$refs.checkoutRef.redirectToCheckout();
       } else {
         console.error("Stripe Checkout Error: checkoutRef is not defined.");
       }

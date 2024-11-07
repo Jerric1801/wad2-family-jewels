@@ -18,3 +18,64 @@
         </div>
     </div>
 </template>
+
+<script>
+import { useAuthStore } from "@/store/auth"; // Import the auth store
+import { addOrder } from "../services/firebase/marketplace";
+
+export default {
+    async mounted() {
+        const authStore = useAuthStore(); // Access the auth store
+        const userId = authStore.user.uid; // Get the user ID from the store
+
+        // Parse item from the URL query parameters
+        const item = JSON.parse(decodeURIComponent(this.$route.query.item));
+
+        // Ensure data is available before calling addNewOrder
+        if (item && userId) {
+            await this.addNewOrder(item, userId);
+        } else {
+            console.error("Missing item or userId");
+        }
+    },
+    methods: {
+        async addNewOrder(item, userId) {
+            console.log("Adding new order on success page");
+
+            // Generate the segments for the order number
+            const firstSegment = Math.floor(Math.random() * 900) + 100;
+            const secondSegment = Math.floor(1000000 + Math.random() * 9000000);
+            const thirdSegment = Math.floor(1000000 + Math.random() * 9000000);
+
+            // Format the order number
+            const orderNo = `${firstSegment}-${secondSegment}-${thirdSegment}`;
+            
+            // Format the date
+            const date = new Date();
+            const newDate = date.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // console.log(JSON.parse(localStorage.getItem("user")));
+
+            const orderData = {
+                date: newDate,
+                imageUrl: item.data.image,
+                orderNumber: orderNo,
+                productName: item.data.title,
+                recipientName: JSON.parse(localStorage.getItem("user")).displayName,
+                total: item.data.price,
+            };
+
+            try {
+                const orderId = await addOrder(userId, orderData);
+                console.log("Order successfully added with ID:", orderId);
+            } catch (error) {
+                console.error("Error adding order:", error);
+            }
+        },
+    },
+};
+</script>
