@@ -246,7 +246,11 @@
 
 <script>
 import { useAuthStore } from "@/store/auth";
-import { getLibraryItems, updateListing } from "@/services/firebase/library";
+import {
+  getLibraryItems,
+  updateListing,
+  updateListDetails,
+} from "@/services/firebase/library";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import tempImg from "@/assets/images/home/product_2.jpg";
 import { ref, computed, onMounted, watch } from "vue";
@@ -281,6 +285,7 @@ export default {
     const listDescription = ref("");
     const selectedCategory = ref("");
     const imageToListItemIndex = ref(null);
+    const currentItemSelectedId = ref(null);
     const itemCategories = ref(["Necklaces", "Earrings", "Rings", "Bracelets"]);
 
     const modalMode = ref("list");
@@ -302,6 +307,7 @@ export default {
       listPrice.value = item.data.price || 0;
       listDescription.value = item.data.description || "";
       selectedCategory.value = item.data.category || "";
+      currentItemSelectedId.value = item.id || "";
     };
 
     const closeListModal = () => {
@@ -312,14 +318,35 @@ export default {
     };
 
     const saveItemDetails = () => {
-      const item = libraryItems.value[imageToListItemIndex.value];
-      item.data.title = listTitle.value;
-      item.data.price = listPrice.value;
-      item.data.description = listDescription.value;
-      item.data.category = listCategory.value;
+      const newDetails = {
+        title: listTitle.value,
+        price: listPrice.value,
+        description: listDescription.value,
+        category: selectedCategory.value,
+      };
+
+      updateItemListingDetails(newDetails);
 
       // Close the modal
       closeListModal();
+    };
+
+    const updateItemListingDetails = async (newDetails) => {
+      if (loading.value) return;
+      loading.value = true;
+
+      try {
+        const result = await updateListDetails(
+          userId.value,
+          currentItemSelectedId.value,
+          newDetails
+        );
+        if (result) window.location.reload(); // Reload page upon success to show changes
+      } catch (error) {
+        console.error("Error during update list details:", error);
+      } finally {
+        loading.value = false; // Re-enable button after completion
+      }
     };
 
     const updateDbListing = async (item) => {
@@ -375,10 +402,12 @@ export default {
       closeListModal,
       saveItemDetails,
       listedImages,
+      currentItemSelectedId,
       unlistedImages,
       modalMode,
       faPencil,
       updateDbListing,
+      updateListDetails,
       updateToggle,
       faTimesCircle,
       faCheckCircle,

@@ -1,5 +1,12 @@
 import { db } from "@/config/firebase";
-import { getDocs, collection, doc, updateDoc, addDoc, setDoc } from "firebase/firestore"; // Make sure 'doc' is imported
+import {
+  getDocs,
+  collection,
+  doc,
+  updateDoc,
+  addDoc,
+  setDoc,
+} from "firebase/firestore"; // Make sure 'doc' is imported
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export async function getLibraryItems(userId) {
@@ -28,12 +35,23 @@ export async function getLibraryItems(userId) {
   return itemsData.length ? itemsData : null;
 }
 
-export async function updateListing(userId, itemId, listed) {
+export async function updateListDetails(userId, itemId, listDetails) {
+  try {
+    console.log(itemId);
+    const itemDocRef = doc(db, "jewellery-lib", userId, "items", itemId);
+    await updateDoc(itemDocRef, listDetails);
+    return true;
+  } catch (error) {
+    console.error("Error updating listing status:", error);
+    console.log(listDetails);
+  }
+}
 
+export async function updateListing(userId, itemId, listed) {
   try {
     const itemDocRef = doc(db, "jewellery-lib", userId, "items", itemId);
     await updateDoc(itemDocRef, { listed: listed });
-    return true; 
+    return true;
   } catch (error) {
     console.error("Error updating listing status:", error);
   }
@@ -61,8 +79,7 @@ export async function addLibraryItem(userId, itemData) {
 
     await updatePhotoUrl(userId, downloadURL, itemData.imageName, Date.now());
 
-
-    // Prepare the data to be added 
+    // Prepare the data to be added
     const newItemData = {
       category: itemData.category || "",
       description: itemData.description || "",
@@ -82,18 +99,26 @@ export async function addLibraryItem(userId, itemData) {
   }
 }
 
-
-export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => {
+export const updatePhotoUrl = async (
+  userId,
+  imageURL,
+  imageName,
+  timestamp
+) => {
   const docRef = doc(db, "jewellery-lib", userId);
   try {
-    await setDoc(docRef, {
-      imageURL: {
-        [imageName]: {
-          url: imageURL,
-          timestamp: timestamp
-        }
-      }
-    }, { merge: true });
+    await setDoc(
+      docRef,
+      {
+        imageURL: {
+          [imageName]: {
+            url: imageURL,
+            timestamp: timestamp,
+          },
+        },
+      },
+      { merge: true }
+    );
   } catch (error) {
     console.error("Error updating document:", error);
     throw error;
