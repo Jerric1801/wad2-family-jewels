@@ -25,7 +25,7 @@
         <div class="h-[70%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200">
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
             <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
-              <img :src="`/src/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
+              <img :src="`/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
                 class="w-full h-full object-cover" @click="selectPresetImage(image)">
             </div>
           </div>

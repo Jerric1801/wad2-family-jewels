@@ -1,8 +1,12 @@
 [
-    {
-      "origin": ["http://localhost:5173"], 
-      "method": ["GET", "PUT", "POST", "DELETE"], 
-      "maxAgeSeconds": 3600,
-      "responseHeader": ["*"] 
-    }
-  ]
+  {
+    "origin": [
+      "http://localhost:5173", 
+      "https://familyjewels4u.shop/",
+      "www.familyjewels4u.shop/"
+    ],
+    "method": ["GET", "PUT", "POST", "DELETE"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["*"]
+  }
+]
