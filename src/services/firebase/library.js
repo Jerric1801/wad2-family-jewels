@@ -84,7 +84,7 @@ export async function addLibraryItem(userId, itemData) {
 
 
 export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => {
-  const docRef = doc(db, "user-generated", userId);
+  const docRef = doc(db, "jewellery-lib", userId);
   try {
     await setDoc(docRef, {
       imageURL: {

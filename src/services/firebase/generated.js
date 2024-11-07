@@ -37,7 +37,6 @@ export const updatePhotoUrl = async (userId, imageURL, imageName, timestamp) => 
 
 
 
-
 export const retrieveImagesFromDatabase = async (userId, limit = 4) => {
     const docRef = doc(db, `user-generated/${userId}`);
     try {
