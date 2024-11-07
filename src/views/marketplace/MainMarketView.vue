@@ -4,11 +4,12 @@
       class="container mx-auto px-3 pt-[100px] md:pt-[150px] pb-[20vh] flex flex-col md:flex-row"
     >
       <!-- Filter Section -->
-      <div class="w-full md:w-1/4 md:pr-8 md:pl-4">
+      <div class="w-full md:w-1/4 md:pr-8 md:pl-4 mb-4 md:mb-0">
         <div class="sticky top-0">
           <div class="p-4">
             <h3 class="text-lg font-semibold mb-4">Filter</h3>
             <div class="mb-4">
+              <!-- Search Input -->
               <input
                 type="text"
                 class="form-input w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400"
@@ -17,6 +18,7 @@
               />
             </div>
             <div class="mb-4">
+              <!-- Category Select Dropdown -->
               <select
                 class="form-select w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400"
                 v-model="selectedCategory"
@@ -45,10 +47,9 @@
           </span>
         </h1>
 
-        <!-- Product Grid -->
+        <!-- Product Grid with Responsive Classes -->
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-          :class="{ 'grid-cols-2': windowWidth < 1000 }"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
         >
           <div
             v-for="(item, index) in filteredMarketplaceItems"
@@ -59,17 +60,21 @@
             <img
               :src="item.data.image"
               :alt="item.data.title"
-              class="w-full h-48 object-cover"
+              class="w-full h-48 md:h-40 lg:h-48 object-cover"
             />
             <div class="p-4">
-              <h2 class="text-xl font-semibold mb-2">{{ item.data.title }}</h2>
-              <p class="text-gray-600 mb-2">{{ item.data.description }}</p>
+              <h2 class="text-xl md:text-lg font-semibold mb-2">
+                {{ item.data.title }}
+              </h2>
+              <p class="text-gray-600 text-sm mb-2">
+                {{ item.data.description }}
+              </p>
               <p class="text-lg font-bold text-blue-600">
                 ${{ item.data.price }}
               </p>
               <button
                 @click="showItemModal(item)"
-                class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full"
               >
                 View Details
               </button>
