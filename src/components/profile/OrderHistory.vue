@@ -1,7 +1,7 @@
 <template>
   <div class="border-t border-gray-200 pt-6">
     <h3
-      class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-indigo-600 text-center sm:text-left"
+      class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-indigo-600 text-center sm:text-left dark:text-custDarkerWhite pt-3"
     >
       Order History
     </h3>
@@ -11,12 +11,12 @@
       class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0"
     >
       <div class="flex flex-col sm:flex-row items-center">
-        <p class="text-gray-700 text-center sm:text-left">
+        <p class="text-gray-700 text-center sm:text-left dark:text-custGrey mr-3">
           {{ filteredOrders.length }} orders placed in
         </p>
         <select
           v-model="dateRange"
-          class="border rounded px-3 py-2 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-auto"
+          class="border rounded px-3 py-2 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-auto dark:bg-cardItemBg dark:text-custGrey"
         >
           <option value="999">All</option>
           <option value="3">Past three months</option>
@@ -28,7 +28,7 @@
         type="text"
         v-model="searchQuery"
         placeholder="Search all orders"
-        class="border rounded px-3 py-2 w-full sm:w-1/3"
+        class="border rounded px-3 py-2 w-full sm:w-1/3 dark:bg-cardItemBg dark:text-custGrey"
       />
     </div>
 
@@ -37,12 +37,12 @@
       <div
         v-for="(order, index) in filteredOrders"
         :key="index"
-        class="border rounded-lg shadow-md p-4 sm:p-6 bg-white hover:shadow-lg transition-shadow duration-300"
+        class="border rounded-lg shadow-md p-4 sm:p-6 bg-white hover:shadow-lg transition-shadow duration-300 dark:bg-cardItemBg"
       >
         <div class="flex flex-col sm:flex-row justify-between mb-4 items-start">
           <!-- Order Image -->
           <div
-            class="w-full sm:w-24 h-24 rounded overflow-hidden mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 shadow-md"
+            class="w-full sm:w-24 h-24 rounded overflow-hidden mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 shadow-md mt-3"
           >
             <img
               :src="order.data.imageUrl"
@@ -52,32 +52,42 @@
           </div>
 
           <!-- Order Details -->
-          <div class="flex-1">
-            <p class="text-gray-600 text-sm sm:text-base mb-1">
-              <strong>Item Name:</strong> {{ order.data.productName }}
+          <div class="flex-1 mt-3">
+            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
+              <strong class="dark:text-custWhite dark:font-normal text-md"
+                >Item Name:</strong
+              >
+              <div class="ml-7 dark:text-custGrey">{{ order.data.productName }}</div>
+              
             </p>
-            <p class="text-gray-600 text-sm sm:text-base mb-1">
-              <strong>Order Placed:</strong> {{ order.data.date }}
+            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
+              <strong class="dark:text-custWhite dark:font-normal text-md"
+                >Order Placed:</strong
+              >
+              <div class="ml-3 dark:text-custGrey">{{ order.data.date }}</div>
             </p>
-            <p class="text-gray-600 text-sm sm:text-base mb-1">
-              <strong>Total Price:</strong> ${{ order.data.total }}
+            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
+              <strong class="dark:text-custWhite dark:font-normal text-md"
+                >Total Price:</strong
+              >
+              <div class="ml-8 dark:text-custGrey">${{ order.data.total }}</div>
             </p>
           </div>
 
           <!-- Order ID and Actions -->
           <div
-            class="text-right flex flex-col items-start sm:items-end space-y-2 mt-4 sm:mt-0"
+            class="text-right flex flex-col items-start sm:items-end space-y-2 mt-4 sm:mt-1"
           >
-            <p class="text-gray-600 font-semibold text-sm sm:text-base">
+            <p class="text-gray-600 font-semibold text-sm sm:text-base dark:text-custDarkerWhite">
               # {{ order.data.orderNumber }}
             </p>
             <button
-              class="text-indigo-600 text-sm sm:text-base hover:underline"
+              class="text-indigo-600 text-sm sm:text-base hover:underline dark:text-custDarkerWhite"
             >
               View Order Details
             </button>
             <button
-              class="text-indigo-600 text-sm sm:text-base hover:underline"
+              class="text-indigo-600 text-sm sm:text-base hover:underline dark:text-custDarkerWhite"
             >
               Download Receipt
             </button>
