@@ -56,7 +56,7 @@
           <div
             v-for="(item, index) in filteredMarketplaceItems"
             :key="item.id"
-            class="rounded-lg overflow-hidden animate-fade-in-up shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300 dark:bg-cardItemBg"
+            class="rounded-lg overflow-hidden animate-fade-in-up shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300 dark:bg-cardItemBg flex flex-col h-full"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <img
@@ -64,7 +64,7 @@
               :alt="item.data.title"
               class="w-full h-48 md:h-40 lg:h-48 object-cover"
             />
-            <div class="p-4">
+            <div class="p-4 flex-grow">
               <h2 class="text-xl md:text-lg mb-2 dark:text-custWhite">
                 {{ item.data.title }}
               </h2>
@@ -74,13 +74,13 @@
               <p class="text-md text-blue-600 dark:text-custWhite">
                 ${{ item.data.price }}
               </p>
-              <button
-                @click="showItemModal(item)"
-                class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-gray-700"
-              >
-                View Details
-              </button>
             </div>
+            <button
+              @click="showItemModal(item)"
+              class="mt-auto bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey border-t"
+            >
+              View Details
+            </button>
           </div>
         </div>
       </div>
