@@ -18,6 +18,7 @@ export default {
         purple: "#8063BC",
         blue: "#7C7CD7",
         custWhite: "#fbfbfb",
+        custDarkerWhite: "#d9d5d5",
         custGrey: "#94a3b8",
         darkModeBg: "#0f172a",
         cardItemBg: "#1e293b",

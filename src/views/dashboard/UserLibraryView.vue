@@ -5,14 +5,14 @@
     >
       <!-- Page Title -->
       <h2
-        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custWhite"
+        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
       >
         Your Jewelry Library
       </h2>
 
       <!-- Display Listed Items -->
       <div v-if="listedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6 dark:text-custWhite">
+        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
           Listed Items
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -84,7 +84,7 @@
 
       <!-- Display Unlisted Items -->
       <div v-if="unlistedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6 dark:text-custWhite">
+        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
           Unlisted Items
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

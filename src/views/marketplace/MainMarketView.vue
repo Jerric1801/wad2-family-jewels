@@ -1,18 +1,20 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-3 pt-[100px] md:pt-[150px] pb-[20vh] flex flex-col md:flex-row"
+      class="container mx-auto px-3 pt-[100px] md:pt-[150px] pb-[20vh] flex flex-col md:flex-row dark:bg-darkModeBg"
     >
       <!-- Filter Section -->
       <div class="w-full md:w-1/4 md:pr-8 md:pl-4 mb-4 md:mb-0 pt-[20px]">
         <div class="sticky top-0">
           <div class="p-4">
-            <h3 class="text-lg font-semibold mb-4">Filter</h3>
+            <h3 class="text-lg font-semibold mb-4 dark:text-custDarkerWhite">
+              Filter
+            </h3>
             <div class="mb-4">
               <!-- Search Input -->
               <input
                 type="text"
-                class="form-input w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400"
+                class="form-input w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Search..."
                 v-model="searchTerm"
               />
@@ -20,7 +22,7 @@
             <div class="mb-4">
               <!-- Category Select Dropdown -->
               <select
-                class="form-select w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400"
+                class="form-select w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
                 v-model="selectedCategory"
               >
                 <option value="">Select Category</option>
@@ -41,7 +43,7 @@
       <div class="w-full md:w-3/4">
         <h1 class="font-bold text-xxxl mb-8 text-center w-auto">
           <span
-            class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+            class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
           >
             Marketplace
           </span>
@@ -54,7 +56,7 @@
           <div
             v-for="(item, index) in filteredMarketplaceItems"
             :key="item.id"
-            class="rounded-lg overflow-hidden animate-fade-in-up shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300"
+            class="rounded-lg overflow-hidden animate-fade-in-up shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300 dark:bg-cardItemBg"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <img
@@ -63,18 +65,18 @@
               class="w-full h-48 md:h-40 lg:h-48 object-cover"
             />
             <div class="p-4">
-              <h2 class="text-xl md:text-lg font-semibold mb-2">
+              <h2 class="text-xl md:text-lg mb-2 dark:text-custWhite">
                 {{ item.data.title }}
               </h2>
-              <p class="text-gray-600 text-sm mb-2">
+              <p class="text-gray-600 text-sm mb-2 dark:text-custGrey">
                 {{ item.data.description }}
               </p>
-              <p class="text-lg font-bold text-blue-600">
+              <p class="text-md text-blue-600 dark:text-custWhite">
                 ${{ item.data.price }}
               </p>
               <button
                 @click="showItemModal(item)"
-                class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full"
+                class="mt-4 bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-gray-700"
               >
                 View Details
               </button>
