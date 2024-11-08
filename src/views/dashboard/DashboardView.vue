@@ -2,7 +2,7 @@
   <DefaultLayout>
     <div class="container mx-auto px-4 pt-[150px]">
       <h2
-        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
       >
         Dashboard
       </h2>
@@ -10,60 +10,98 @@
       <!-- KPI Section -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- KPI Card: Total Sales -->
-        <div class="p-4 bg-white rounded-lg shadow-md">
-          <h2 class="text-sm font-semibold text-gray-500 mb-1">Total Sales</h2>
-          <p class="text-2xl font-bold text-gray-900">$50,000</p>
+        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2
+            class="text-md font-semibold text-gray-500 mb-1 dark:text-custGrey"
+          >
+            Total Sales
+          </h2>
+          <p class="text-2xl font-bold text-gray-900 dark:text-custDarkerWhite">
+            $50,000
+          </p>
         </div>
         <!-- KPI Card: Total Revenue -->
-        <div class="p-4 bg-white rounded-lg shadow-md">
-          <h2 class="text-sm font-semibold text-gray-500 mb-1">
+        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2
+            class="text-md font-semibold text-gray-500 mb-1 dark:text-custGrey"
+          >
             Total Revenue
           </h2>
-          <p class="text-2xl font-bold text-gray-900">$120,000</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-custDarkerWhite">
+            $120,000
+          </p>
         </div>
         <!-- KPI Card: Profit Margin -->
-        <div class="p-4 bg-white rounded-lg shadow-md">
-          <h2 class="text-sm font-semibold text-gray-500 mb-1">
+        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2
+            class="text-sm font-semibold text-gray-500 mb-1 dark:text-custGrey"
+          >
             Profit Margin
           </h2>
-          <p class="text-2xl font-bold text-gray-900">35%</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-custDarkerWhite">
+            35%
+          </p>
         </div>
         <!-- KPI Card: Units Sold -->
-        <div class="p-4 bg-white rounded-lg shadow-md">
-          <h2 class="text-sm font-semibold text-gray-500 mb-1">Units Sold</h2>
-          <p class="text-2xl font-bold text-gray-900">625</p>
+        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2
+            class="text-sm font-semibold text-gray-500 mb-1 dark:text-custGrey"
+          >
+            Units Sold
+          </h2>
+          <p class="text-2xl font-bold text-gray-900 dark:text-custDarkerWhite">
+            625
+          </p>
         </div>
       </div>
 
       <!-- Charts Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Sales Trends Chart -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h2 class="text-xl font-semibold mb-4">Sales Trends</h2>
+        <div class="p-6 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2
+            class="text-xl font-semibold mb-4 text-gray-800 dark:text-custDarkerWhite"
+          >
+            Sales Trends
+          </h2>
           <canvas id="salesTrendsChart"></canvas>
         </div>
 
         <!-- Revenue Breakdown Chart -->
-        <div class="p-6 bg-white rounded-lg shadow-md" style="height: 450px">
-          <h2 class="text-xl font-semibold mb-4">Revenue Breakdown</h2>
+        <div
+          class="p-6 bg-white rounded-lg shadow-md dark:bg-cardItemBg"
+          style="height: 450px"
+        >
+          <h2 class="text-xl font-semibold mb-4 dark:text-custDarkerWhite">
+            Revenue Breakdown
+          </h2>
           <canvas id="revenueBreakdownChart" style="margin: auto"></canvas>
         </div>
 
         <!-- Profit Margin Chart -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h2 class="text-xl font-semibold mb-4">Profit Margin</h2>
+        <div class="p-6 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2 class="text-xl font-semibold mb-4 dark:text-custDarkerWhite">
+            Profit Margin
+          </h2>
           <canvas id="profitMarginChart"></canvas>
         </div>
 
         <!-- Customer Demographics Breakdown -->
-        <div class="p-6 bg-white rounded-lg shadow-md" style="height: 450px">
-          <h2 class="text-xl font-semibold mb-4">Customer Demographics</h2>
+        <div
+          class="p-6 bg-white rounded-lg shadow-md dark:bg-cardItemBg"
+          style="height: 450px"
+        >
+          <h2 class="text-xl font-semibold mb-4 dark:text-custDarkerWhite">
+            Customer Demographics
+          </h2>
           <canvas id="customerDemographicsChart" style="margin: auto"></canvas>
         </div>
 
         <!-- Top Selling Products -->
-        <div class="p-6 bg-white rounded-lg shadow-md">
-          <h2 class="text-xl font-semibold mb-4">Top Selling Products</h2>
+        <div class="p-6 bg-white rounded-lg shadow-md dark:bg-cardItemBg">
+          <h2 class="text-xl font-semibold mb-4 dark:text-custDarkerWhite">
+            Top Selling Products
+          </h2>
           <canvas id="topSellingProductsChart"></canvas>
         </div>
       </div>
@@ -115,14 +153,69 @@ export default {
       Legend
     );
 
-    this.renderSalesTrendsChart();
-    this.renderRevenueBreakdownChart();
-    this.renderProfitMarginChart();
-    this.renderCustomerDemographicsChart();
-    this.renderTopSellingProductsChart();
+    // Initialize and render charts initially
+    this.updateCharts();
+
+    // Listen for changes in dark mode preference
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        this.isDarkMode = e.matches;
+      });
+
+    // Listen for system theme preference change
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        this.isDarkMode = e.matches;
+      });
+
+    // Listen for changes in localStorage, if theme is set there
+    window.addEventListener("storage", () => {
+      this.isDarkMode = localStorage.getItem("theme") !== "light";
+    });
+  },
+  data() {
+    return {
+      // Initialize `isDarkMode` based on localStorage or system preference
+      isDarkMode:
+        localStorage.getItem("theme") !== "light"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : false,
+    };
+  },
+  watch: {
+    isDarkMode() {
+      this.updateCharts();
+      console.log(this.isDarkMode);
+    },
   },
   methods: {
+    getChartColors() {
+      return {
+        textColor: this.isDarkMode ? "#d9d5d5" : "#333333", // White in dark mode, dark in light mode
+        gridColor: this.isDarkMode ? "#94a3b8" : "#e0e0e0", // Grey in dark mode, lighter grey in light mode
+      };
+    },
+    updateCharts() {
+      // Destroy existing charts if they exist
+      if (this.salesTrendsChart) this.salesTrendsChart.destroy();
+      if (this.revenueBreakdownChart) this.revenueBreakdownChart.destroy();
+      if (this.profitMarginChart) this.profitMarginChart.destroy();
+      if (this.customerDemographicsChart)
+        this.customerDemographicsChart.destroy();
+      if (this.topSellingProductsChart) this.topSellingProductsChart.destroy();
+
+      // Re-render each chart with updated colors
+      this.renderSalesTrendsChart();
+      this.renderRevenueBreakdownChart();
+      this.renderProfitMarginChart();
+      this.renderCustomerDemographicsChart();
+      this.renderTopSellingProductsChart();
+    },
     renderSalesTrendsChart() {
+      const { textColor, gridColor } = this.getChartColors();
+
       const ctx = document.getElementById("salesTrendsChart").getContext("2d");
       new Chart(ctx, {
         type: "line",
@@ -145,14 +238,25 @@ export default {
             legend: {
               display: true,
               position: "bottom",
+              labels: { color: textColor }, // Set legend text color
             },
             tooltip: { enabled: true },
           },
-          scales: { y: { beginAtZero: true } },
+          scales: {
+            x: {
+              ticks: { color: textColor }, // Set X-axis labels color
+              grid: { color: gridColor }, // Set X-axis grid color
+            },
+            y: {
+              ticks: { color: textColor }, // Set Y-axis labels color
+              grid: { color: gridColor }, // Set Y-axis grid color
+            },
+          },
         },
       });
     },
     renderRevenueBreakdownChart() {
+      const textColor = "#d9d5d5"; // Set all text to white
       const ctx = document
         .getElementById("revenueBreakdownChart")
         .getContext("2d");
@@ -186,8 +290,10 @@ export default {
             legend: {
               display: true,
               position: "right",
+              labels: { color: textColor }, // Set legend text color
             },
             datalabels: {
+              color: textColor, // Set data labels color
               display: true,
               formatter: (value, context) =>
                 `${(
@@ -203,6 +309,8 @@ export default {
       });
     },
     renderProfitMarginChart() {
+      const textColor = "#d9d5d5"; // Set all text to white
+      const gridColor = "#94a3b8"; // Set grid color to grey
       const ctx = document.getElementById("profitMarginChart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
@@ -221,16 +329,22 @@ export default {
         options: {
           responsive: true,
           plugins: {
-            legend: { display: true, position: "bottom" },
+            legend: {
+              display: true,
+              position: "bottom",
+              labels: { color: textColor },
+            },
             tooltip: { enabled: true },
           },
           scales: {
-            y: { beginAtZero: true },
+            x: { ticks: { color: textColor }, grid: { color: gridColor } },
+            y: { ticks: { color: textColor }, grid: { color: gridColor } },
           },
         },
       });
     },
     renderCustomerDemographicsChart() {
+      const textColor = "#d9d5d5"; // Set all text to white
       const ctx = document
         .getElementById("customerDemographicsChart")
         .getContext("2d");
@@ -261,8 +375,13 @@ export default {
         options: {
           responsive: true,
           plugins: {
-            legend: { display: true, position: "right" },
+            legend: {
+              display: true,
+              position: "right",
+              labels: { color: textColor },
+            },
             datalabels: {
+              color: textColor,
               display: true,
               formatter: (value, context) =>
                 `${(
@@ -278,6 +397,8 @@ export default {
       });
     },
     renderTopSellingProductsChart() {
+      const textColor = "#d9d5d5"; // Set all text to white
+      const gridColor = "#94a3b8"; // Set grid color to grey
       const ctx = document
         .getElementById("topSellingProductsChart")
         .getContext("2d");
@@ -298,11 +419,16 @@ export default {
         options: {
           responsive: true,
           plugins: {
-            legend: { display: true, position: "bottom" },
+            legend: {
+              display: true,
+              position: "bottom",
+              labels: { color: textColor },
+            },
             tooltip: { enabled: true },
           },
           scales: {
-            y: { beginAtZero: true },
+            x: { ticks: { color: textColor }, grid: { color: gridColor } },
+            y: { ticks: { color: textColor }, grid: { color: gridColor } },
           },
         },
       });
