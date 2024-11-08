@@ -4,7 +4,7 @@
     <NavBar />
 
     <!-- Main Content Section (Slot for page-specific content) -->
-    <main class="content">
+    <main class="content dark:bg-darkModeBg">
       <slot></slot>
     </main>
 

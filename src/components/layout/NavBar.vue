@@ -30,7 +30,10 @@
       <!-- Mobile Menu Button -->
       <button
         @click="isMobileMenuOpen = !isMobileMenuOpen"
-        class="lg:hidden text-black"
+        :class="[
+          'lg:hidden',
+          isMobileMenuOpen && isDarkMode ? 'hidden' : 'text-black',
+        ]"
       >
         <template v-if="!isDarkMode"
           ><svg
@@ -270,7 +273,7 @@
       <!-- Mobile Navigation Links -->
       <ul
         v-if="isMobileMenuOpen"
-        class="lg:hidden flex flex-col items-center text-black bg-white shadow-lg rounded-lg p-4 space-y-4 mt-4"
+        class="lg:hidden flex flex-col items-center text-black bg-white shadow-lg rounded-lg p-4 space-y-4 mt-4 dark:bg-transparent border dark:border-custWhite"
       >
         <!-- Row for Dark Mode Toggle and Close Button -->
         <div class="w-full flex justify-between items-center">
@@ -369,10 +372,12 @@
         <!-- Other items in the mobile menu -->
         <li class="profile-list-item">
           <div class="profile-content">
-            <div class="profile-photo">
+            <div class="profile-photo dark:border-custDarkerWhite">
               <img :src="userProfile?.imageUrl" alt="Profile photo" />
             </div>
-            <span class="profile-name">{{ userProfile?.fullName }}</span>
+            <span class="profile-name dark:text-custDarkerWhite">{{
+              userProfile?.fullName
+            }}</span>
           </div>
         </li>
 
@@ -388,7 +393,7 @@
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium flex items-center justify-start w-full py-2 px-4 rounded-lg transition-all duration-300"
+            class="text-lg font-medium flex items-center justify-start w-full py-2 px-4 rounded-lg transition-all duration-300 dark:text-custGrey"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <span
