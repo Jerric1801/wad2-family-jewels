@@ -57,10 +57,12 @@ export async function updateListing(userId, itemId, listed) {
   }
 }
 
+
 export async function addLibraryItem(userId, itemData) {
   try {
     const storage = getStorage();
-    const storageRef = ref(storage, `user-jewellery-lib/${userId}/`);
+    // Create a structured storage path
+    const storageRef = ref(storage, `users/${userId}/images/${itemData.imageName}`); 
 
     // Ensure the userId is passed and valid
     if (!userId) {
@@ -74,53 +76,28 @@ export async function addLibraryItem(userId, itemData) {
     // Get the 'items' sub-collection inside the user's document
     const itemsCollectionRef = collection(userDocRef, "items");
 
+    // Upload the image
     const snapshot = await uploadBytes(storageRef, itemData.imageUrl);
     const downloadURL = await getDownloadURL(snapshot.ref);
 
-    await updatePhotoUrl(userId, downloadURL, itemData.imageName, Date.now());
-
-    // Prepare the data to be added
+    // Prepare the data to be added, including the image URL
     const newItemData = {
       category: itemData.category || "",
       description: itemData.description || "",
-      image: downloadURL,
+      image: downloadURL, // Store the URL directly with the item
+      imageName: itemData.imageName, // Store the image name for future reference
       listed: itemData.listed || false,
       price: parseFloat(itemData.price) || 0,
       title: itemData.title || "",
     };
 
+    // Add the item to Firestore
     const docRef = await addDoc(itemsCollectionRef, newItemData);
 
     console.log("Item added with ID:", docRef.id);
-    return docRef.id;
+    return docRef.id; 
   } catch (error) {
     console.error("Error adding item to library:", error);
     return null;
   }
 }
-
-export const updatePhotoUrl = async (
-  userId,
-  imageURL,
-  imageName,
-  timestamp
-) => {
-  const docRef = doc(db, "jewellery-lib", userId);
-  try {
-    await setDoc(
-      docRef,
-      {
-        imageURL: {
-          [imageName]: {
-            url: imageURL,
-            timestamp: timestamp,
-          },
-        },
-      },
-      { merge: true }
-    );
-  } catch (error) {
-    console.error("Error updating document:", error);
-    throw error;
-  }
-};
