@@ -1,28 +1,28 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-3 pt-[100px] md:pt-[150px] pb-[20vh] flex flex-col md:flex-row dark:bg-darkModeBg"
+      class="container mx-auto px-2 pt-[80px] md:pt-[120px] pb-[15vh] flex flex-col md:flex-row dark:bg-darkModeBg"
     >
       <!-- Filter Section -->
-      <div class="w-full md:w-1/4 md:pr-8 md:pl-4 mb-4 md:mb-0 pt-[20px]">
+      <div class="w-full md:w-1/4 md:pr-6 mb-3 md:mb-0 pt-[15px]">
         <div class="sticky top-0">
-          <div class="p-4">
-            <h3 class="text-lg font-semibold mb-4 dark:text-custDarkerWhite">
+          <div class="p-3">
+            <h3 class="text-sm font-semibold mb-3 dark:text-custDarkerWhite">
               Filter
             </h3>
-            <div class="mb-4">
+            <div class="mb-3">
               <!-- Search Input -->
               <input
                 type="text"
-                class="form-input w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
+                class="form-input w-full border-gray-300 border rounded-md p-1.5 text-sm focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Search..."
                 v-model="searchTerm"
               />
             </div>
-            <div class="mb-4">
+            <div class="mb-3">
               <!-- Category Select Dropdown -->
               <select
-                class="form-select w-full border-gray-300 border rounded-lg p-2 focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
+                class="form-select w-full border-gray-300 border rounded-md p-1.5 text-sm focus:ring focus:border-blue-400 dark:bg-cardItemBg dark:text-custGrey"
                 v-model="selectedCategory"
               >
                 <option value="">Select Category</option>
@@ -41,7 +41,7 @@
 
       <!-- Marketplace Section -->
       <div class="w-full md:w-3/4">
-        <h1 class="font-bold text-xxxl mb-8 text-center w-auto">
+        <h1 class="font-bold text-2xl mb-6 text-center w-auto">
           <span
             class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
           >
@@ -51,7 +51,7 @@
 
         <!-- Product Grid with Responsive Classes -->
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"
         >
           <div
             v-for="(item, index) in filteredMarketplaceItems"
@@ -62,22 +62,22 @@
             <img
               :src="item.data.image"
               :alt="item.data.title"
-              class="w-full h-48 md:h-40 lg:h-48 object-cover"
+              class="w-full h-36 md:h-32 lg:h-36 object-cover"
             />
-            <div class="p-4 flex-grow">
-              <h2 class="text-xl md:text-lg mb-2 dark:text-custWhite">
+            <div class="p-3 flex-grow">
+              <h2 class="text-lg md:text-base mb-1 dark:text-custWhite">
                 {{ item.data.title }}
               </h2>
-              <p class="text-gray-600 text-sm mb-2 dark:text-custGrey">
+              <p class="text-gray-600 text-xs mb-1 dark:text-custGrey pt-2">
                 {{ item.data.description }}
               </p>
-              <p class="text-md text-blue-600 dark:text-custWhite">
+              <p class="text-sm text-blue-600 dark:text-custWhite pt-2">
                 ${{ item.data.price }}
               </p>
             </div>
             <button
               @click="showItemModal(item)"
-              class="mt-auto bg-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors w-full dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey border-t"
+              class="mt-auto bg-blue text-white px-3 py-1 text-sm rounded hover:bg-blue-600 transition-colors w-full dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey border-t"
             >
               View Details
             </button>

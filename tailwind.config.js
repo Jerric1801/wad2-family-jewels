@@ -28,6 +28,10 @@ export default {
         lightModeBtnPurple: "#737ad2",
         lightModeBtnPink: "#c04fc1",
         lightModeBtnBlue: "#454eb7",
+        lightModeBtnGreen: "#009200",
+        lightModeBtnRed: "#9c271e",
+        lightModeBtnPurple: "#5046e4",
+        lightModeBtnBlack: "#0f172a",
         darkModeSelectedNav: "#d9d5d5",
         darkModeNavBg: "#1e293b",
         tailwindBlue: "#38bdf9",
@@ -43,13 +47,13 @@ export default {
       },
 
       // Custom Font Sizes
-      fontSize: {
-        xxs: "0.625rem", // 10px
-        xs: "0.875rem", // 14px
-        l: "1.25rem", // 20px
-        xxl: "1.75rem", // 28px
-        xxxl: "2.25rem", // 36px
-      },
+      // fontSize: {
+      //   xxs: "0.625rem", // 10px
+      //   xs: "0.875rem", // 14px
+      //   l: "1.25rem", // 20px
+      //   xxl: "1.75rem", // 28px
+      //   xxxl: "2.25rem", // 36px
+      // },
 
       // Custom Border Radius
       borderRadius: {

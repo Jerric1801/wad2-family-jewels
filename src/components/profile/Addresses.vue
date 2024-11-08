@@ -7,16 +7,16 @@
     </h3>
 
     <!-- Adresses -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       <!-- Add New Address Card-->
       <div
-        class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-custDarkGrey"
+        class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-custDarkGrey"
         @click="addAddress"
       >
         <div class="text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-12 h-12 mx-auto mb-2 text-gray-400"
+            class="w-8 h-8 mx-auto mb-1 text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -28,7 +28,9 @@
               d="M12 4v16m8-8H4"
             />
           </svg>
-          <span class="font-medium dark:text-custWhite">Add Address</span>
+          <span class="text-sm font-medium dark:text-custWhite"
+            >Add Address</span
+          >
         </div>
       </div>
 
@@ -41,20 +43,20 @@
         <div class="flex justify-between items-start">
           <div>
             <p
-              class="font-semibold text-xl dark:text-custDarkerWhite mb-4 mt-2"
+              class="font-semibold text-lg dark:text-custDarkerWhite mb-4 mt-2"
             >
               {{ address.data.fullName }}
             </p>
-            <p class="text-gray-600 dark:text-custGrey">
+            <p class="text-gray-600 dark:text-custGrey text-sm">
               {{ address.data.address }}
             </p>
-            <p class="text-gray-600 dark:text-custGrey">
+            <p class="text-gray-600 dark:text-custGrey text-sm">
               {{ address.data.unitNumber }}
             </p>
-            <p class="text-gray-600 dark:text-custGrey">
+            <p class="text-gray-600 dark:text-custGrey text-sm">
               {{ address.data.country }}
             </p>
-            <p class="text-gray-600 dark:text-custGrey">
+            <p class="text-gray-600 dark:text-custGrey text-sm">
               {{ address.data.phoneNumber }}
             </p>
           </div>
@@ -157,207 +159,107 @@
       </div>
 
       <!-- Popup Modal for Adding New Address -->
-      <!-- Modal Content -->
       <transition name="modal-fade">
         <div
           v-if="showAddModal"
           class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
         >
           <div
-            class="bg-custWhite p-8 rounded-xl shadow-xl max-w-2xl w-full transition-transform transform scale-100 dark:bg-darkModeBg"
+            class="bg-custWhite p-4 rounded-lg shadow-lg max-w-md w-full transition-transform transform scale-100 dark:bg-darkModeBg"
           >
             <h3
-              class="text-2xl font-semibold text-center mb-6 dark:text-custWhite"
+              class="text-xl font-semibold text-center mb-4 dark:text-custWhite"
             >
               Add New Address
             </h3>
             <form @submit.prevent="saveItemDetails">
               <!-- Full Name Field -->
-              <div class="mb-6">
+              <div class="mb-4">
                 <label
                   for="fullName"
-                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+                  class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
                   >Full Name:</label
                 >
                 <input
                   type="text"
                   v-model="this.newAddress.fullName"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
                   required
                 />
               </div>
               <!-- Address Field -->
-              <div class="mb-6">
+              <div class="mb-4">
                 <label
                   for="address"
-                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+                  class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
                   >Address:</label
                 >
                 <textarea
                   v-model="this.newAddress.address"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none dark:bg-cardItemBg dark:text-custGrey"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full h-24 resize-none dark:bg-cardItemBg dark:text-custGrey"
                   required
                 ></textarea>
               </div>
               <!-- Unit Number Field -->
-              <div class="mb-6">
+              <div class="mb-4">
                 <label
                   for="unitNumber"
-                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+                  class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
                   >Unit Number:</label
                 >
                 <input
                   type="text"
                   v-model="this.newAddress.unitNumber"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
                 />
               </div>
               <!-- Country Field -->
-              <div class="mb-6">
+              <div class="mb-4">
                 <label
                   for="country"
-                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+                  class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
                   >Country:</label
                 >
                 <input
                   type="text"
                   v-model="this.newAddress.country"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
                   required
                 />
               </div>
               <!-- Phone Number Field -->
-              <div class="mb-6">
+              <div class="mb-4">
                 <label
                   for="phoneNumber"
-                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+                  class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
                   >Phone:</label
                 >
                 <input
                   type="text"
                   v-model="this.newAddress.phoneNumber"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
                   required
                 />
               </div>
               <!-- Action Buttons -->
-              <div class="flex justify-end space-x-4 mt-6">
+              <div class="flex justify-end space-x-2 mt-4">
                 <button
-                  @click="
-                    {
-                      showAddModal = !showAddModal;
-                    }
-                  "
-                  variant="primary"
-                  size="md"
-                  class="cancel-btn dark:bg-darkModeBtnGrey"
+                  @click="showAddModal = !showAddModal"
+                  class="px-3 py-1 text-xs font-medium rounded-md bg-gray-300 text-gray-700 hover:bg-red-800 dark:bg-darkModeBtnGrey dark:text-custWhite transition"
                 >
-                  <div class="dark:text-custWhite">Cancel</div>
+                  Cancel
                 </button>
                 <button
                   @click="saveNewAddress"
-                  variant="primary"
-                  size="md"
-                  class="update-btn dark:bg-darkModeBtnGrey"
+                  class="px-3 py-1 text-xs font-medium rounded-md bg-green-500 text-white hover:bg-green-800 dark:bg-darkModeBtnGrey dark:text-custWhite transition"
                 >
-                  <div class="dark:text-custWhite">Add Address</div>
+                  Add Address
                 </button>
               </div>
             </form>
           </div>
         </div>
       </transition>
-      <!-- <div
-        v-if="showAddModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
-      >
-        <div
-          class="bg-white rounded-lg p-6 w-full max-w-md dark:bg-darkModeBg"
-          style="height: 80%; overflow-y-auto"
-        >
-          <h2
-            class="text-xl font-semibold mb-4 text-indigo-600 dark:text-custDarkerWhite"
-          >
-            Add New Address
-          </h2>
-          <form @submit.prevent="saveNewAddress" class="space-y-3">
-            <div>
-              <label
-                class="block text-gray-700 font-medium mb-1 dark:text-custGrey"
-                >Full Name</label
-              >
-              <input
-                type="text"
-                v-model="newAddress.fullName"
-                class="border border-gray-300 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-                required
-              />
-            </div>
-            <div>
-              <label
-                class="block text-gray-700 font-medium mb-1 dark:text-custGrey"
-                >Address</label
-              >
-              <input
-                type="text"
-                v-model="newAddress.address"
-                class="border border-gray-300 p-2 rounded-lg w-full"
-                required
-              />
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label
-                  class="block text-gray-700 font-medium mb-1 dark:text-custGrey"
-                  >Unit Number</label
-                >
-                <input
-                  type="text"
-                  v-model="newAddress.unitNumber"
-                  class="border border-gray-300 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-                />
-              </div>
-              <div>
-                <label
-                  class="block text-gray-700 font-medium mb-1 dark:text-custGrey"
-                  >Country</label
-                >
-                <input
-                  type="text"
-                  v-model="newAddress.country"
-                  class="border border-gray-300 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                class="block text-gray-700 font-medium mb-1 dark:text-custGrey"
-                >Phone Number</label
-              >
-              <input
-                type="text"
-                v-model="newAddress.phoneNumber"
-                class="border border-gray-300 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-              />
-            </div>
-            <div class="flex justify-end mt-4 space-x-2">
-              <button
-                type="button"
-                @click="showAddModal = false"
-                class="px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-300 ease-in-out"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 ease-in-out"
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      </div> -->
     </div>
   </div>
 
@@ -368,102 +270,94 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div
-        class="bg-custWhite p-8 rounded-xl shadow-xl max-w-2xl w-full transition-transform transform scale-100 dark:bg-darkModeBg"
+        class="bg-custWhite p-4 rounded-lg shadow-lg max-w-md w-full transition-transform transform scale-100 dark:bg-darkModeBg"
       >
-        <h3 class="text-2xl font-semibold text-center mb-6 dark:text-custWhite">
+        <h3 class="text-xl font-semibold text-center mb-4 dark:text-custWhite">
           Edit Address Details
         </h3>
         <form @submit.prevent="saveItemDetails">
           <!-- Full Name Field -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label
               for="fullName"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >Full Name:</label
             >
             <input
               type="text"
               v-model="this.editAddress.fullName"
-              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
               required
             />
           </div>
           <!-- Address Field -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label
               for="address"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >Address:</label
             >
             <input
               type="text"
               v-model="this.editAddress.address"
-              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
               required
             />
           </div>
           <!-- Unit Number Field -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label
               for="unitNumber"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >Unit Number:</label
             >
             <input
               type="text"
               v-model="this.editAddress.unitNumber"
-              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
             />
           </div>
           <!-- Country Field -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label
               for="country"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >Country:</label
             >
             <input
               type="text"
               v-model="this.editAddress.country"
-              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
               required
             />
           </div>
           <!-- Phone Number Field -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label
               for="phoneNumber"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >Phone:</label
             >
             <input
               type="text"
               v-model="this.editAddress.phoneNumber"
-              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-2 text-sm rounded-md w-full dark:bg-cardItemBg dark:text-custGrey"
               required
             />
           </div>
           <!-- Action Buttons -->
-          <div class="flex justify-end space-x-4 mt-6">
+          <div class="flex justify-end space-x-2 mt-4">
             <button
-              @click="
-                {
-                  showEditModal = !showEditModal;
-                }
-              "
-              variant="primary"
-              size="md"
-              class="cancel-btn dark:bg-darkModeBtnGrey"
+              @click="showEditModal = !showEditModal"
+              class="px-3 py-1 text-xs font-medium rounded-md bg-gray-300 text-gray-700 hover:bg-red-800 dark:bg-darkModeBtnGrey dark:text-custWhite transition"
             >
-              <div class="dark:text-custWhite">Cancel</div>
+              Cancel
             </button>
             <button
               @click="submitUpdatedAddress"
-              variant="primary"
-              size="md"
-              class="update-btn dark:bg-darkModeBtnGrey"
+              class="px-3 py-1 text-xs font-medium rounded-md bg-green-500 text-white hover:bg-green-800 dark:bg-darkModeBtnGrey dark:text-custWhite transition"
             >
-              <div class="dark:text-custWhite">Update Address</div>
+              Update Address
             </button>
           </div>
         </form>
@@ -596,16 +490,20 @@ export default {
 
 <style scoped>
 button {
-  @apply px-2 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+  @apply px-1 py-1 text-sm font-medium rounded-md transition duration-300 ease-in-out;
 }
+
 button:hover {
   color: grey;
 }
+
 .cancel-btn {
-  @apply bg-gray-300 text-gray-700 hover:bg-red-800 rounded-lg shadow-md transition;
+  @apply bg-gray-300 text-gray-700 hover:bg-red-800 rounded-md shadow-md transition;
+  padding: 0.25rem 0.5rem;
 }
 
 .update-btn {
-  @apply bg-green-500 text-white hover:bg-green-800 rounded-lg shadow-md transition;
+  @apply bg-green-500 text-white hover:bg-green-800 rounded-md shadow-md transition;
+  padding: 0.25rem 0.5rem;
 }
 </style>

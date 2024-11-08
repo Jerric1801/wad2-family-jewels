@@ -1,11 +1,11 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center w-full dark:bg-darkModeBg"
+      class="container mx-auto px-3 py-6 pt-[120px] flex flex-col items-center dark:bg-darkModeBg"
     >
       <!-- Title -->
       <h1
-        class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in dark:text-custDarkerWhite"
+        class="text-3xl font-semibold mb-6 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in dark:text-custDarkerWhite"
       >
         User Profile
       </h1>
@@ -26,7 +26,7 @@
         <!-- Profile Image -->
         <div class="flex flex-col items-center mb-8 relative">
           <div
-            class="w-32 h-32 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer relative group overflow-hidden"
+            class="w-24 h-24 bg-indigo-200 rounded-full flex items-center justify-center cursor-pointer relative group overflow-hidden"
             @click="triggerFileInput"
           >
             <img
@@ -75,29 +75,29 @@
           class="flex justify-center mb-4 border-gray-200 dark:border-gray-700 overflow-hidden w-full"
         >
           <ul
-            class="flex flex-wrap justify-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-full"
+            class="flex flex-wrap justify-center text-xs font-medium text-center text-gray-500 dark:text-gray-400 w-full"
           >
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
                   activeTab === 'personalInfo'
-                    ? 'text-black border-black dark:text-custGrey dark:text-darkModeSelectedNav dark:border-custWhite'
+                    ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'personalInfo'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-venetian-mask w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
+                  class="w-5 h-5 pr-1"
                 >
                   <path
                     d="M2 12a5 5 0 0 0 5 5 8 8 0 0 1 5 2 8 8 0 0 1 5-2 5 5 0 0 0 5-5V7h-5a8 8 0 0 0-5 2 8 8 0 0 0-5-2H2Z"
@@ -105,7 +105,7 @@
                   <path d="M6 11c1.5 0 3 .5 3 2-2 0-3 0-3-2Z" />
                   <path d="M18 11c-1.5 0-3 .5-3 2 2 0 3 0 3-2Z" />
                 </svg>
-                <span class="text-xs md:text-base">Personal Info</span>
+                <span>Personal Info</span>
               </a>
             </li>
 
@@ -113,24 +113,24 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
                   activeTab === 'signInInformation'
-                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'signInInformation'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-file-user w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
+                  class="w-5 h-5 pr-1"
                 >
                   <path d="M14 2v4a2 2 0 0 0 2 2h4" />
                   <path d="M15 18a3 3 0 1 0-6 0" />
@@ -139,91 +139,95 @@
                   />
                   <circle cx="12" cy="13" r="2" />
                 </svg>
-                <span class="text-xs md:text-base">Sign-in Info</span>
+                <span>Sign-in Info</span>
               </a>
             </li>
+
+            <!-- Preferences Tab -->
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
                   activeTab === 'preferences'
-                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'preferences'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-settings-2 w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
+                  class="w-5 h-5 pr-1"
                 >
                   <path d="M20 7h-9" />
                   <path d="M14 17H5" />
                   <circle cx="17" cy="17" r="3" />
                   <circle cx="7" cy="7" r="3" />
                 </svg>
-                <span class="text-xs md:text-base">Preferences</span>
+                <span>Preferences</span>
               </a>
             </li>
 
+            <!-- Order History Tab -->
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
                   activeTab === 'orderHistory'
-                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'orderHistory'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-history w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
+                  class="w-5 h-5 pr-1"
                 >
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                   <path d="M3 3v5h5" />
                   <path d="M12 7v5l4 2" />
                 </svg>
-                <span class="text-xs md:text-base">Order History</span>
+                <span>Order History</span>
               </a>
             </li>
 
+            <!-- Addresses Tab -->
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
                   activeTab === 'addresses'
-                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'addresses'"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-map-pin-house w-6 h-6 md:w-8 md:h-8 pr-0 md:pr-2"
+                  class="w-5 h-5 pr-1"
                 >
                   <path
                     d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z"
@@ -234,7 +238,7 @@
                   <path d="M18 22v-3" />
                   <circle cx="10" cy="10" r="3" />
                 </svg>
-                <span class="text-xs md:text-base">Addresses</span>
+                <span>Addresses</span>
               </a>
             </li>
           </ul>
@@ -282,18 +286,18 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
     >
       <div
-        class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up dark:bg-cardItemBg dark:text-custGrey"
+        class="bg-white rounded-lg p-6 w-full max-w-sm animate-fade-in-up dark:bg-cardItemBg dark:text-custGrey"
       >
         <h2
-          class="text-2xl font-semibold mb-4 text-indigo-600 dark:text-custDarkerWhite"
+          class="text-xl font-semibold mb-3 text-indigo-600 dark:text-custDarkerWhite"
         >
           Edit {{ currentField }}
         </h2>
         <form @submit.prevent="saveChanges">
-          <div class="mb-4">
+          <div class="mb-3">
             <label
               :for="currentField"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >{{ currentField }}</label
             >
             <input
@@ -301,27 +305,27 @@
               type="text"
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-400 p-2 rounded-lg w-full text-sm dark:bg-cardItemBg dark:text-custGrey"
             />
             <textarea
               v-else
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-              style="height: 150px; width: 100%"
+              class="border border-gray-400 p-2 rounded-lg w-full text-sm dark:bg-cardItemBg dark:text-custGrey"
+              style="height: 100px; width: 100%"
             ></textarea>
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end space-x-2">
             <button
               type="button"
               @click="showEditModal = false"
-              class="px-4 py-2 mr-2 rounded-lg bg-gray-400 hover:bg-gray-700 hover:text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
+              class="px-3 py-1 rounded-lg bg-gray-400 hover:bg-gray-600 text-sm text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-green-800"
+              class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-green-800"
             >
               Save
             </button>
@@ -517,7 +521,7 @@ export default {
 }
 
 button {
-  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+  @apply px-3 py-1 text-sm font-medium rounded-md transition duration-300 ease-in-out;
 }
 
 .btn-subscribe {

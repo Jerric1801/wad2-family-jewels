@@ -24,26 +24,28 @@ export default {
     },
   },
   computed: {
-    variantClass() {
-      switch (this.variant) {
-        case "primary":
-          return "bg-gradient-to-r from-purple-500 to-blue-500 text-white";
-        case "secondary":
-          return "bg-gray-500 text-white";
-        case "danger":
-          return "bg-red-500 text-white";
-        default:
-          return "bg-gray-300 text-black";
-      }
-    },
+    // variantClass() {
+    //   switch (this.variant) {
+    //     case "primary":
+    //       return "bg-lightModeBtnPurple text-white";
+    //     case "secondary":
+    //       return "bg-lightModeBtnPink text-white";
+    //     case "danger":
+    //       return "bg-red-500 text-white";
+    //     default:
+    //       return "bg-gray-300 text-black";
+    //   }
+    // },
     sizeClass() {
       switch (this.size) {
         case "sm":
-          return "text-sm px-3 py-1";
+          return "text-xs px-2 py-1"; // Smaller font and padding for "sm"
+        case "md":
+          return "text-sm px-4 py-2"; // Adjusted to be slightly smaller for "md"
         case "lg":
-          return "text-lg px-8 py-4";
+          return "text-lg px-6 py-3"; // Slightly smaller for "lg"
         default:
-          return "text-md";
+          return "text-sm px-4 py-2"; // Default to "md" size if undefined
       }
     },
   },

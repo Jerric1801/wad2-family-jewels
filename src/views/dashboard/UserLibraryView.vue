@@ -1,43 +1,43 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 flex flex-col items-center pt-[150px] dark:bg-darkModeBg"
+      class="container mx-auto px-3 flex flex-col items-center pt-[120px] dark:bg-darkModeBg"
     >
       <!-- Page Title -->
       <h2
-        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
+        class="text-2xl text-center font-bold mb-3 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
       >
         Your Jewelry Library
       </h2>
 
       <!-- Display Listed Items -->
-      <div v-if="listedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
+      <div v-if="listedImages.length > 0" class="w-full mb-10">
+        <h3 class="text-lg font-semibold mb-5 dark:text-custDarkerWhite">
           Listed Items
         </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="(item, index) in listedImages"
             :key="item.id"
-            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg"
+            class="relative p-3 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg flex flex-col min-h-[400px]"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Image -->
             <img
               :src="item.data.image || tempImg"
               alt="Item Image"
-              class="w-full h-48 object-cover rounded mb-4"
+              class="w-full h-40 object-cover rounded mb-3"
             />
 
             <!-- Item Details -->
-            <div>
-              <h4 class="text-lg dark:text-custWhite mb-2">
+            <div class="flex-1 mb-4">
+              <h4 class="text-md dark:text-custWhite mb-1">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600 dark:text-custGrey mb-2">
+              <p class="text-sm text-gray-600 dark:text-custGrey mb-2">
                 {{ item.data.description || "No Description" }}
               </p>
-              <p class="text-md dark:text-custWhite">
+              <p class="text-md dark:text-custWhite mb-4">
                 {{
                   item.data.price ? "$" + item.data.price : "Price Unavailable"
                 }}
@@ -45,36 +45,34 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center space-x-4 mt-4">
-              <!-- List/Delist Button -->
+            <div class="flex items-center space-x-3 mt-auto">
               <ButtonComponent
                 @click="updateDbListing(item)"
                 :class="
                   item.data.listed
-                    ? 'bg-lightModeBtnPink dark:bg-darkModeBtnGrey dark:text-custWhite'
-                    : 'bg-lightModeBtnBlue dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    ? 'bg-lightModeBtnRed dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    : 'bg-lightModeBtnGreen dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
-                class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
+                class="flex items-center space-x-1 text-white px-2 py-1 rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
                   :icon="item.data.listed ? faTimesCircle : faCheckCircle"
-                  class="ml-2"
+                  class="ml-1"
                 />
               </ButtonComponent>
 
-              <!-- Edit Listing Button -->
               <ButtonComponent
                 @click="openListModal(item)"
                 variant="primary"
-                size="md"
-                class="dark:bg-darkModeBtnGrey dark:text-custWhite bg-lightModeBtnPurple"
+                size="sm"
+                class="bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white px-3 py-1 rounded-lg transition-colors"
               >
-                Edit Listing
+                Edit
                 <FontAwesomeIcon
                   :icon="faPencil"
-                  class="ml-2 dark:bg-darkModeBtnGrey dark:text-custWhite"
+                  class="ml-1 dark:bg-darkModeBtnGrey dark:text-custWhite"
                 />
               </ButtonComponent>
             </div>
@@ -83,30 +81,30 @@
       </div>
 
       <!-- Display Unlisted Items -->
-      <div v-if="unlistedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
+      <div v-if="unlistedImages.length > 0" class="w-full mb-10">
+        <h3 class="text-lg font-semibold mb-5 dark:text-custDarkerWhite">
           Unlisted Items
         </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="(item, index) in unlistedImages"
             :key="item.id"
-            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg"
+            class="relative p-3 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg flex flex-col min-h-[400px]"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Image -->
             <img
               :src="item.data.image || tempImg"
               alt="Item Image"
-              class="w-full h-48 object-cover rounded mb-4"
+              class="w-full h-40 object-cover rounded mb-3"
             />
 
             <!-- Item Details -->
-            <div>
-              <h4 class="text-lg mb-2 dark:text-custWhite">
+            <div class="flex-1 mb-3">
+              <h4 class="text-md dark:text-custWhite mb-1">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600 mb-2 dark:text-custGrey">
+              <p class="text-sm text-gray-600 dark:text-custGrey mb-1">
                 {{ item.data.description || "No Description" }}
               </p>
               <p class="text-md dark:text-custWhite">
@@ -117,31 +115,34 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center space-x-4 mt-4">
+            <div class="flex items-center space-x-3 mt-auto">
               <ButtonComponent
                 @click="updateDbListing(item)"
                 :class="
                   item.data.listed
-                    ? 'bg-lightModeBtnPink dark:bg-darkModeBtnGrey dark:text-custWhite'
-                    : 'bg-lightModeBtnBlue dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    ? 'bg-lightModeBtnRed dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    : 'bg-lightModeBtnGreen dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
-                class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
+                class="flex items-center space-x-1 text-white px-2 py-1 rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
                   :icon="item.data.listed ? faTimesCircle : faCheckCircle"
-                  class="ml-2"
+                  class="ml-1"
                 />
               </ButtonComponent>
 
               <ButtonComponent
                 @click="openListModal(item)"
-                variant="primary"
                 size="md"
-                class="dark:bg-darkModeBtnGrey dark:text-custWhite bg-lightModeBtnPurple"
+                class="bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white px-3 py-1 rounded-lg transition-colors"
               >
-                Edit Listing <FontAwesomeIcon :icon="faPencil" class="ml-2" />
+                Edit
+                <FontAwesomeIcon
+                  :icon="faPencil"
+                  class="ml-1 text-white dark:text-custWhite"
+                />
               </ButtonComponent>
             </div>
           </div>
@@ -239,7 +240,7 @@
                   @click="closeListModal"
                   variant="primary"
                   size="md"
-                  class="cancel-btn dark:bg-darkModeBtnGrey"
+                  class="cancel-btn dark:bg-darkModeBtnGrey hover:text-custWhite"
                   ><div class="dark:text-custWhite">
                     Cancel
                   </div></ButtonComponent
@@ -320,12 +321,12 @@ export default {
     const openListModal = (item) => {
       showListModal.value = true;
 
-      // Set the data from the clicked item
-      listTitle.value = item.data.title || "";
+      // Set the data from the clicked item to form variables
+      listTitle.value = item.data.title || "Item Name";
       listPrice.value = item.data.price || 0;
-      listDescription.value = item.data.description || "";
+      listDescription.value = item.data.description || "No Description";
       selectedCategory.value = item.data.category || "";
-      currentItemSelectedId.value = item.id || "";
+      currentItemSelectedId.value = item.id || ""; // Store item ID to know which item to update
     };
 
     const closeListModal = () => {
@@ -461,6 +462,8 @@ export default {
   border-radius: 0.5rem; /* rounded-lg */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s;
+  padding: 0.5rem 1rem; /* Smaller padding */
+  font-size: 0.875rem; /* Smaller font size */
 }
 .edit-btn:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
@@ -468,9 +471,13 @@ export default {
 
 .cancel-btn {
   @apply bg-gray-300 text-gray-700 hover:bg-red-800 rounded-lg shadow-md transition;
+  padding: 0.5rem 1rem; /* Smaller padding */
+  font-size: 0.875rem; /* Smaller font size */
 }
 
 .update-btn {
   @apply bg-green-500 text-white hover:bg-green-800 rounded-lg shadow-md transition;
+  padding: 0.5rem 1rem; /* Smaller padding */
+  font-size: 0.875rem; /* Smaller font size */
 }
 </style>

@@ -1,22 +1,22 @@
 <template>
-  <div class="border-t border-gray-200 pt-6">
+  <div class="border-t border-gray-200 pt-4 px-3">
     <h3
-      class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 text-indigo-600 text-center sm:text-left dark:text-custDarkerWhite pt-3"
+      class="text-lg sm:text-xl font-semibold mb-2 text-indigo-600 text-center dark:text-custDarkerWhite"
     >
       Order History
     </h3>
 
     <!-- Filter and Search Section -->
     <div
-      class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0"
+      class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-3 sm:space-y-0"
     >
       <div class="flex flex-col sm:flex-row items-center">
-        <p class="text-gray-700 text-center sm:text-left dark:text-custGrey mr-3">
+        <p class="text-gray-700 text-xs sm:text-sm dark:text-custGrey mr-2">
           {{ filteredOrders.length }} orders placed in
         </p>
         <select
           v-model="dateRange"
-          class="border rounded px-3 py-2 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-auto dark:bg-cardItemBg dark:text-custGrey"
+          class="border rounded px-2 py-1 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey"
         >
           <option value="999">All</option>
           <option value="3">Past three months</option>
@@ -28,21 +28,21 @@
         type="text"
         v-model="searchQuery"
         placeholder="Search all orders"
-        class="border rounded px-3 py-2 w-full sm:w-1/3 dark:bg-cardItemBg dark:text-custGrey"
+        class="border rounded px-2 py-1 w-full sm:w-1/3 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey"
       />
     </div>
 
     <!-- Order Cards -->
-    <div class="space-y-6">
+    <div class="space-y-4">
       <div
         v-for="(order, index) in filteredOrders"
         :key="index"
-        class="border rounded-lg shadow-md p-4 sm:p-6 bg-white hover:shadow-lg transition-shadow duration-300 dark:bg-cardItemBg"
+        class="border rounded-lg shadow-sm p-3 sm:p-4 bg-white hover:shadow-md transition-shadow dark:bg-cardItemBg"
       >
-        <div class="flex flex-col sm:flex-row justify-between mb-4 items-start">
+        <div class="flex flex-col sm:flex-row justify-between items-start">
           <!-- Order Image -->
           <div
-            class="w-full sm:w-24 h-24 rounded overflow-hidden mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 shadow-md mt-3"
+            class="w-20 h-20 rounded overflow-hidden shadow-md mr-4 flex-shrink-0"
           >
             <img
               :src="order.data.imageUrl"
@@ -52,42 +52,32 @@
           </div>
 
           <!-- Order Details -->
-          <div class="flex-1 mt-3">
-            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
-              <strong class="dark:text-custWhite dark:font-normal text-md"
-                >Item Name:</strong
-              >
-              <div class="ml-7 dark:text-custGrey">{{ order.data.productName }}</div>
-              
+          <div class="flex-1 text-xs sm:text-sm mt-2 sm:mt-0">
+            <p class="text-gray-600 mb-1 dark:text-custWhite">
+              <strong>Item Name:</strong> {{ order.data.productName }}
             </p>
-            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
-              <strong class="dark:text-custWhite dark:font-normal text-md"
-                >Order Placed:</strong
-              >
-              <div class="ml-3 dark:text-custGrey">{{ order.data.date }}</div>
+            <p class="text-gray-600 mb-1 dark:text-custWhite">
+              <strong>Order Placed:</strong> {{ order.data.date }}
             </p>
-            <p class="text-gray-600 flex text-sm sm:text-base mb-1">
-              <strong class="dark:text-custWhite dark:font-normal text-md"
-                >Total Price:</strong
-              >
-              <div class="ml-8 dark:text-custGrey">${{ order.data.total }}</div>
+            <p class="text-gray-600 mb-1 dark:text-custWhite">
+              <strong>Total Price:</strong> ${{ order.data.total }}
             </p>
           </div>
 
           <!-- Order ID and Actions -->
           <div
-            class="text-right flex flex-col items-start sm:items-end space-y-2 mt-4 sm:mt-1"
+            class="text-right text-xs sm:text-sm mt-3 sm:mt-0 flex flex-col items-end"
           >
-            <p class="text-gray-600 font-semibold text-sm sm:text-base dark:text-custDarkerWhite">
+            <p class="text-gray-600 font-semibold dark:text-custDarkerWhite">
               # {{ order.data.orderNumber }}
             </p>
             <button
-              class="text-indigo-600 text-sm sm:text-base hover:underline dark:text-custDarkerWhite"
+              class="text-indigo-600 hover:underline dark:text-tailwindBlue mt-1"
             >
               View Order Details
             </button>
             <button
-              class="text-indigo-600 text-sm sm:text-base hover:underline dark:text-custDarkerWhite"
+              class="text-indigo-600 hover:underline dark:text-tailwindBlue mt-1"
             >
               Download Receipt
             </button>

@@ -12,16 +12,16 @@
             class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4" />
 
           <div class="w-full md:w-1/2">
-            <h2 class="text-2xl mb-2 dark:text-custWhite">
+            <h2 class="text-lg mb-1 dark:text-custWhite">
               {{ item.data.title }}
             </h2>
-            <p class="text-gray-600 mb-4 dark:text-custGrey">
+            <p class="text-gray-600 text-sm mb-2 dark:text-custGrey">
               {{ item.data.description }}
             </p>
-            <p class="text-lg text-blue-600 mb-4 dark:text-custWhite">
+            <p class="text-md text-blue-600 mb-3 dark:text-custWhite">
               ${{ item.data.price }}
             </p>
-            <p class="text-lg text-gray-500 mb-4 dark:text-custGrey">
+            <p class="text-sm text-gray-500 mb-3 dark:text-custGrey">
               Category: {{ item.data.category }}
             </p>
           </div>
