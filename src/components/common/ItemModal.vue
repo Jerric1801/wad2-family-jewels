@@ -9,7 +9,7 @@
         <!-- Close button (top-right) -->
         <button
           @click="closeModal"
-          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 dark:text-custWhite dark:hover:text-custGrey"
+          class="absolute top-3 right-3 text-gray-600 hover:text-gray-800 dark:text-custWhite dark:hover:text-custGrey text-sm"
         >
           ✕
         </button>
@@ -19,28 +19,28 @@
           <img
             :src="item.data.image"
             :alt="item.data.title"
-            class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"
+            class="w-full md:w-1/2 h-48 object-cover rounded-md mb-3 md:mb-0 md:mr-3"
           />
 
           <!-- Details Section -->
           <div class="w-full md:w-1/2">
-            <h2 class="text-2xl mb-2 dark:text-custWhite">
+            <h2 class="text-lg mb-1 dark:text-custWhite">
               {{ item.data.title }}
             </h2>
-            <p class="text-gray-600 mb-4 dark:text-custGrey">
+            <p class="text-gray-600 text-sm mb-2 dark:text-custGrey">
               {{ item.data.description }}
             </p>
-            <p class="text-lg text-blue-600 mb-4 dark:text-custWhite">
+            <p class="text-md text-blue-600 mb-3 dark:text-custWhite">
               ${{ item.data.price }}
             </p>
-            <p class="text-lg text-gray-500 mb-4 dark:text-custGrey">
+            <p class="text-sm text-gray-500 mb-3 dark:text-custGrey">
               Category: {{ item.data.category }}
             </p>
           </div>
         </div>
 
         <!-- Button group at the bottom -->
-        <div class="flex justify-end space-x-4 mt-6">
+        <div class="flex justify-end space-x-2 mt-4">
           <!-- Stripe Payment Gateway Integration -->
           <stripe-checkout
             ref="checkoutRef"
@@ -53,13 +53,13 @@
           />
 
           <button
-            class="btn-purchase dark:bg-darkModeBtnGrey"
+            class="btn-purchase text-xs dark:bg-darkModeBtnGrey"
             @click="handlePurchase"
           >
             Purchase
           </button>
           <button
-            class="bg-gray-300 px-6 py-2 btn-cancel dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
+            class="btn-cancel bg-grey-800 px-3 py-1 text-xs dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-700"
             @click="closeModal"
           >
             Close
