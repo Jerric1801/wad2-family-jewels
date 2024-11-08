@@ -100,24 +100,26 @@
           </div>
         </div>
       </div>
-      <div class="h-[30%] w-[85%]">
-        <h3 class="text-xxl font-semibold mb-2 pt-6 dark:text-custDarkerWhite">
-          Previously Uploaded Images
-        </h3>
+    </div>
+    <div class="h-auto w-full md:h-[30%] md:w-[85%] px-4">
+      <h3
+        class="text-lg md:text-xxl font-semibold mb-2 pt-6 dark:text-custDarkerWhite"
+      >
+        Previously Uploaded Images
+      </h3>
+      <div
+        class="h-auto w-full bg-gray-100 p-4 mt-8 rounded-md overflow-x-auto flex gap-4 flex-wrap md:flex-nowrap dark:bg-cardItemBg rounded-lg"
+      >
         <div
-          class="h-[100%] w-[100%] bg-gray-100 p-4 mt-8 rounded-md overflow-hidden flex gap-4 dark:bg-cardItemBg rounded-lg"
+          v-for="image in images"
+          :key="image.name"
+          class="w-[45%] sm:w-[30%] md:w-[20%] h-[90%] p-2 relative dark:border-custGrey dark:border-2 rounded-md"
         >
-          <div
-            v-for="image in images"
-            :key="image.name"
-            class="w-[20%] max-w-[20%] h-[90%] p-2 relative dark:border-custGrey dark:border-2 rounded-md"
-          >
-            <img
-              :src="image.url"
-              @click="selectPreviousImage(image.name)"
-              class="h-[100%] object-cover cursor-pointer rounded-lg absolute"
-            />
-          </div>
+          <img
+            :src="image.url"
+            @click="selectPreviousImage(image.name)"
+            class="w-full h-[100%] object-cover cursor-pointer rounded-lg"
+          />
         </div>
       </div>
     </div>
