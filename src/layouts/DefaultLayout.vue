@@ -1,5 +1,5 @@
 <template>
-  <div class="font-poppins layout">
+  <div class="font-poppins layout dark:bg-darkModeBg">
     <!-- Reference the NavBar component -->
     <NavBar />
 

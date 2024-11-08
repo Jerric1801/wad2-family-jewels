@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer p-4 bg-gray-200 text-center dark:bg-darkModeBg">
+  <footer class="footer p-4 bg-gray-200 text-center dark:bg-darkModeNavBg">
     <div
       class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
     >
