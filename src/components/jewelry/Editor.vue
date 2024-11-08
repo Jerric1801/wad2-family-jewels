@@ -1,51 +1,51 @@
 <template>
-    <div class="w-[95%] h-[100%] flex bg-white rounded-md relative items-center justify-between">
-        <div class="w-[15%] h-full flex flex-col items-center space-y-4 justify-end absolute left-0 top-0 z-10">
-            <div class="w-[90%]">
-                <input type="range" min="1" :max="maxZoom" v-model="zoomLevel" orientation="vertical" />
-            </div>
+    <div class="w-[95%] h-[100%] flex flex-col md:flex-row dark:bg-darkModeBg bg-white rounded-md relative items-center justify-between">
+      <div class="md:w-[15%] w-[90%] md:h-full h-[40%] flex flex-col items-center space-y-4 justify-end absolute left-0 top-0 z-10">
+        <div class="w-[90%]">
+          <input type="range" min="1" :max="maxZoom" v-model="zoomLevel" orientation="vertical" />
         </div>
-        <div class="w-[55%] ml-[10%] h-[85%] flex justify-center items-center relative bg-gray-200 rounded-md p-3">
-            <canvas ref="canvas" class="max-w-full max-h-full rounded-md " @mousedown="startDrag" @mousemove="drag"
-                @mouseup="endDrag" @mouseleave="endDrag">
-            </canvas>
+      </div>
+      <div class="md:w-[55%] w-full md:ml-[10%] md:h-[85%] h-[40%] flex justify-center items-center relative dark:bg-cardItemBg bg-gray-200 rounded-md p-3">
+        <canvas ref="canvas" class="w-full h-full max-w-full max-h-full rounded-md " @mousedown="startDrag" @mousemove="drag"
+          @mouseup="endDrag" @mouseleave="endDrag">
+        </canvas>
+      </div>
+      <div class="md:w-[30%] w-full md:h-full h-[60%] flex flex-col items-center gap-5 pt-[5%]">
+        <div class="h-[20%] md:w-[90%] w-full dark:bg-cardItemBg bg-gray-200 flex flex-col justify-start items-center rounded-md">
+          <p class="mt-2 dark:text-white"><b>Toolbar</b></p>
+          <p class="mt-2 dark:text-white">Opacity</p>
+          <div class="w-full flex flex-col justify-center items-center">
+            <input type="range" min="0" max="1" step="0.1" v-model="opacity" />
+          </div>
         </div>
-        <div class="w-[30%] h-full flex flex-col items-center gap-5 pt-[5%]">
-            <div class="h-[20%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
-                <p class="mt-2"><b>Toolbar</b></p>
-                <p class="mt-2">Opacity</p>
-                <div class="w-full flex flex-col justify-center items-center">
-                    <input type="range" min="0" max="1" step="0.1" v-model="opacity" />
-                </div>
-            </div>
-            <div class="h-[55%] w-[90%] bg-gray-200 flex flex-col justify-start items-center rounded-md">
-                <p class="mt-2"><b>Selected Product</b></p>
-                <p class="mt-2">Product Name</p>
-                <div class="w-[50%] h-[50%] relative overflow-hidden bg-gray-200 flex items-center">
-                    <img :src="productSrc" alt="Product Image" class="absolute object-cover">
-                </div>
-                <a href='/upload'>
-                    <p>Select Another Product</p>
-                </a>
-            </div>
-            <div class="h-[10%] w-[90%] bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
-                  transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105" @click="generateImage">
-                <p v-if="!generating" class="font-medium text-gray-700 hover:text-gray-800">Generate</p>
-                <div v-else class="flex items-center justify-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                        </circle>
-                        <path class="opacity-75" fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                        </path>
-                    </svg>
-                    <span class="font-medium text-gray-700">Generating...</span>
-                </div>
-            </div>
+        <div class="h-[55%] md:w-[90%] w-full dark:bg-cardItemBg bg-gray-200 flex flex-col justify-start items-center rounded-md">
+          <p class="mt-2 dark:text-white"><b>Selected Product</b></p>
+          <p class="mt-2 dark:text-white">Product Name</p>
+          <div class="w-[50%] h-[50%] relative overflow-hidden dark:bg-cardItemBg bg-gray-200 flex items-center">
+            <img :src="productSrc" alt="Product Image" class="absolute object-cover">
+          </div>
+          <a href='/upload'>
+            <p class="dark:text-white">Select Another Product</p>
+          </a>
         </div>
+        <div class="h-[10%] md:w-[90%] w-full dark:bg-cardItemBg bg-gray-200 rounded-md flex flex-col justify-center items-center cursor-pointer 
+              transition-all duration-300 ease-in-out hover:bg-gray-300 hover:scale-105 dark:hover:bg-darkModeBtnGrey" @click="generateImage">
+          <p v-if="!generating" class="font-medium text-gray-700 hover:text-gray-800 dark:text-white dark:hover:text-gray-300">Generate</p>
+          <div v-else class="flex items-center justify-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700 dark:text-white" xmlns="http://www.w3.org/2000/svg"
+              fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+              </circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            <span class="font-medium text-gray-700 dark:text-white">Generating...</span>
+          </div>
+        </div>
+      </div>
     </div>
-</template>
+  </template>
 
 <script>
 export default {

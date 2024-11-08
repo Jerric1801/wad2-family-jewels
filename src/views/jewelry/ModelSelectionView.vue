@@ -1,19 +1,19 @@
 <template>
   <DefaultLayout>
-    <div class="bg-white h-[130vh] w-[100vw] flex flex-row justify-center relative p-[20px]">
-      <div class="w-[27.5%] mt-[20vh] flex flex-col justify-center h-[100vh]">
+    <div class="dark:bg-darkModeBg bg-white md:h-[130vh] h-[300vh] w-[100vw] flex md:flex-row flex-col justify-center relative p-[20px]">
+      <div class="md:w-[27.5%] w-full mt-[20vh] flex flex-col justify-center md:h-[100vh] h-[40%] gap-3">
         <div class="h-[30%] w-full flex flex-col justify-center items-start">
-          <div class="w-[90%]">
+          <div class="md:w-[90%] w-[95%]">
             <div class="mb-4">
               <div class="mb-4">
-                <h3>Image Description</h3>
+                <h3 class="dark:text-white">Image Description</h3>
                 <textarea id="image-description" v-model="imageDescription" rows="4"
-                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-darkModeBtnGrey dark:text-white"
                   placeholder="Describe your image"></textarea>
               </div>
-              <h3>Jewellery Type</h3>
+              <h3 class="dark:text-white">Jewellery Type</h3>
               <select v-model="selectedJewelleryType" @change="updatePresetImages"
-                class="w-full mt-1 px-3 py-2 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                class="w-full mt-1 px-3 py-2 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-darkModeBtnGrey dark:text-white">
                 <option value="necklace">Necklace</option>
                 <option value="earrings">Earrings</option>
                 <option value="rings">Rings</option>
@@ -22,22 +22,22 @@
             </div>
           </div>
         </div>
-        <div class="h-[70%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 bg-gray-200">
+        <div class="md:h-[70%] h-[60%] w-[95%] flex flex-col items-center rounded-md overflow-y-auto p-5 dark:bg-cardItemBg dark:text-white">
           <div class="grid grid-cols-2 grid-rows-6 gap-2 mt-4">
-            <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md">
+            <div v-for="(image, index) in presetImages" :key="index" class="border rounded-md dark:border-white">
               <img :src="`/assets/images/models/${selectedJewelleryType}/${image}`" alt=""
                 class="w-full h-full object-cover" @click="selectPresetImage(image)">
             </div>
           </div>
         </div>
       </div>
-      <div class="w-[72.5%] mt-[20vh] flex flex-col h-[100vh] justify-between">
-        <div class="w-full h-[68%] overflow-hidden">
+      <div class="md:w-[72.5%] w-full md:mt-[20vh] mt-[5vh] flex flex-col md:h-[100vh] h-[65%] justify-between">
+        <div class="w-full md:h-[68%] h-[75%] overflow-hidden">
           <Editor :img-src="selectedPresetImagePath" ref="editor" :productSrc="productImg"
             @generate="generateModelImages" @updateTransformCoordinates="updateTransformCoordinates" />
         </div>
         <div class="w-[95%] h-[35%] relative overflow-x-scroll overflow-y-hidden">
-          <div class="absolute w-[150%] h-full flex items-start bg-gray-200 rounded-md p-4">
+          <div class="absolute w-[150%] h-full flex items-start bg-gray-200 rounded-md p-4 dark:bg-cardItemBg">
             <div v-for="(image, index) in modelImages" :key="index" class="mb-3 p-2 relative h-[100%]">
               <img :src="image" alt="Model" class="w-full rounded-md cursor-pointer h-[100%]"
                 :class="{ 'border-2 border-blue-500 ': selectedImage === image }" @click="selectImage(image)" />
@@ -49,42 +49,42 @@
 
     <div v-if="selectedImage" class="fixed inset-0 flex items-center justify-center z-50">
       <div class="absolute inset-0 bg-black opacity-50" @click="closeModal"></div>
-      <div class="bg-white flex p-6 rounded-lg z-10 w-[70vw] h-[50vh] relative">
-        <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
+      <div class="bg-white p-6 rounded-lg z-10 relative max-w-full w-full h-[90vh] md:w-[70vw] md:h-[70vh] flex flex-col md:flex-row align-center justify-center dark:bg-darkModeBg"> 
+        <button @click="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 dark:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <div class="w-[50%]">
-          <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md mb-4 max-h-96 object-contain mr-6"
+        <div class="w-full md:w-1/2 mb-6 md:mb-0 md:mr-6 flex align-center justify-center h-[35%] md:h-full"> 
+          <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md max-h-96 object-contain"
             :style="{ filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)` }">
         </div>
-        <div class="flex flex-col gap-4 w-[50%]">
+        <div class="w-full md:w-1/2 flex flex-col gap-4 align-center justify-center h-[60%] md:h-full">
           <button @click="resetFilters"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Reset to Default</button>
+            class="bg-blue hover:bg-green-700 text-white font-bold py-2 px-4 rounded dark:bg-lightModeBtnBlue">Reset to Default</button>
           <div>
-            <label for="contrast" class="block text-sm font-medium text-gray-700">Contrast</label>
+            <label for="contrast" class="block text-sm font-medium text-gray-700 dark:text-white">Contrast</label>
             <input type="range" id="contrast" min="0" max="200" v-model="contrast" class="w-full">
           </div>
           <div>
-            <label for="brightness" class="block text-sm font-medium text-gray-700">Brightness</label>
+            <label for="brightness" class="block text-sm font-medium text-gray-700 dark:text-white">Brightness</label>
             <input type="range" id="brightness" min="0" max="200" v-model="brightness" class="w-full">
           </div>
           <div>
-            <label for="saturation" class="block text-sm font-medium text-gray-700">Saturation</label>
+            <label for="saturation" class="block text-sm font-medium text-gray-700 dark:text-white">Saturation</label>
             <input type="range" id="saturation" min="0" max="200" v-model="saturation" class="w-full">
           </div>
           <div>
-            <label for="blur" class="block text-sm font-medium text-gray-700">Blur</label>
+            <label for="blur" class="block text-sm font-medium text-gray-700 dark:text-white">Blur</label>
             <input type="range" id="blur" min="0" max="10" step="0.1" v-model="blur" class="w-full">
           </div>
           <div class="flex flex-col gap-2 mt-4">
             <button @click="downloadImage(selectedImage)"
-              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              class="bg-blue text-white font-bold py-2 px-4 rounded dark:bg-lightModeBtnBlue">
               Download Image
             </button>
             <button @click="addToLibrary(selectedImage)"
-              class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+              class="bg-purple text-white font-bold py-2 px-4 rounded dark:bg-lightModeBtnPurple">
               Add to Library
             </button>
           </div>
@@ -298,7 +298,7 @@ export default {
     },
     selectPresetImage(image) {
       // Construct the full path to the selected preset image
-      this.selectedPresetImagePath = `/src/assets/images/models/${this.selectedJewelleryType}/${image}`;
+      this.selectedPresetImagePath = `/assets/images/models/${this.selectedJewelleryType}/${image}`;
     },
     downloadImage() {
       const img = new Image();
