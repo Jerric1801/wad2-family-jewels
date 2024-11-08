@@ -1,8 +1,8 @@
 <template>
   <DefaultLayout>
-    <div class="h-[120vh] flex flex-col justify-center items-center">
+    <div class="mt-[150px] flex flex-col justify-center items-center">
       <div
-        class="container mx-auto px-4 pt-[150px] flex flex-col lg:flex-row dark:bg-cardItemBg rounded-lg"
+        class="container mx-auto px-4 pt-[80px] flex flex-col lg:flex-row dark:bg-cardItemBg rounded-lg"
       >
         <div class="lg:w-1/2 lg:pr-10 mb-6 lg:mb-0">
           <h2
@@ -101,25 +101,29 @@
         </div>
       </div>
     </div>
-    <div class="h-auto w-full md:h-[30%] md:w-[85%] px-4">
-      <h3
-        class="text-lg md:text-xxl font-semibold mb-2 pt-6 dark:text-custDarkerWhite"
-      >
-        Previously Uploaded Images
-      </h3>
-      <div
-        class="h-auto w-full bg-gray-100 p-4 mt-8 rounded-md overflow-x-auto flex gap-4 flex-wrap md:flex-nowrap dark:bg-cardItemBg rounded-lg"
-      >
-        <div
-          v-for="image in images"
-          :key="image.name"
-          class="w-[45%] sm:w-[30%] md:w-[20%] h-[90%] p-2 relative dark:border-custGrey dark:border-2 rounded-md"
+    <div class="flex justify-center items-center w-full h-auto py-12">
+      <!-- Outer flex container for centering -->
+      <div class="w-full md:w-[85%] px-4 max-w-[1000px]">
+        <h3
+          class="text-lg md:text-xxl font-semibold mb-2 pt-2 dark:text-custDarkerWhite text-center"
         >
-          <img
-            :src="image.url"
-            @click="selectPreviousImage(image.name)"
-            class="w-full h-[100%] object-cover cursor-pointer rounded-lg"
-          />
+          <!-- Add text-center to center the heading -->
+          Previously Uploaded Images
+        </h3>
+        <div
+          class="h-auto w-full bg-gray-100 p-4 mt-8 rounded-md overflow-x-auto flex gap-4 flex-wrap md:flex-nowrap dark:bg-cardItemBg rounded-lg justify-center"
+        >
+          <div
+            v-for="image in images"
+            :key="image.name"
+            class="w-[45%] sm:w-[30%] md:w-[20%] h-[90%] p-2 relative dark:border-custGrey dark:border-2 rounded-md"
+          >
+            <img
+              :src="image.url"
+              @click="selectPreviousImage(image.name)"
+              class="w-full h-[100%] object-cover cursor-pointer rounded-lg"
+            />
+          </div>
         </div>
       </div>
     </div>
