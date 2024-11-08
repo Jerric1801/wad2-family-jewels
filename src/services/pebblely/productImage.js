@@ -20,6 +20,9 @@ export async function fetchModelImages(base64ProductImage, base64SelectedImage, 
 
   return new Promise(async (resolve, reject) => {
     try {
+
+      const apiKey = await config.apiKey();
+
       const response = await axios.post(`${config.apiUrl}/create-background/v2/`, {
         images: [base64ProductImage],
         style_image: base64SelectedImage,
@@ -36,7 +39,7 @@ export async function fetchModelImages(base64ProductImage, base64SelectedImage, 
         {
           headers: {
             "Content-Type": "application/json",
-            "X-Pebblely-Access-Token": config.apiKey
+            "X-Pebblely-Access-Token": apiKey
           }
         });
 

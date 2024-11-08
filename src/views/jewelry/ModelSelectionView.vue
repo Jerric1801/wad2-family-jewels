@@ -55,11 +55,11 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <div class="w-full md:w-1/2 mb-6 md:mb-0 md:mr-6 flex align-center justify-center h-[35%] md:h-full"> 
+        <div class="w-full md:w-1/2 mb-6 md:mb-0 md:mr-6 flex items-center justify-center h-[35%] md:h-full"> 
           <img :src="selectedImage" alt="Larger Image" class="w-full rounded-md max-h-96 object-contain"
             :style="{ filter: `contrast(${contrast}%) brightness(${brightness}%) saturate(${saturation}%) blur(${blur}px)` }">
         </div>
-        <div class="w-full md:w-1/2 flex flex-col gap-4 align-center justify-center h-[60%] md:h-full">
+        <div class="w-full md:w-1/2 flex flex-col gap-4 justify-center h-[60%] md:h-full">
           <button @click="resetFilters"
             class="bg-blue hover:bg-green-700 text-white font-bold py-2 px-4 rounded dark:bg-lightModeBtnBlue">Reset to Default</button>
           <div>
