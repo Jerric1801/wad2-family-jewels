@@ -87,7 +87,7 @@
     </div>
 
     <!-- Item Modal -->
-    <ItemModal v-if="showModal" :item="selectedItem" @close="closeItemModal" />
+    <ItemModal v-if="showModal" :item="selectedItem" @modal-closed="closeItemModal"/>
   </DefaultLayout>
 </template>
 
@@ -131,6 +131,7 @@ export default {
   methods: {
     showItemModal(item) {
       this.selectedItem = item;
+      console.log(item)
       this.showModal = true;
     },
     closeItemModal() {

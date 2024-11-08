@@ -21,7 +21,7 @@
 
 <script>
 import { useAuthStore } from "@/store/auth"; // Import the auth store
-import { addOrder } from "../services/firebase/marketplace";
+import { addOrder } from "../../services/firebase/marketplace";
 
 export default {
     async mounted() {

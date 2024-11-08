@@ -1,1 +1,1 @@
-export const stripeConfig = { stripeKey: import.meta.env.VITE_FIREBASE_STRIPE_API_KEY }
+export const stripeConfig = { stripeKey: import.meta.env.VITE_STRIPE_API_KEY }

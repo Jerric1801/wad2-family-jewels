@@ -1,28 +1,16 @@
 <template>
   <div v-show="modalVisible">
-    <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-    >
-      <div
-        class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative dark:bg-cardItemBg"
-      >
-        <!-- Close button (top-right) -->
-        <button
-          @click="closeModal"
-          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 dark:text-custWhite dark:hover:text-custGrey"
-        >
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative dark:bg-cardItemBg">
+        <button @click="closeModal"
+          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 dark:text-custWhite dark:hover:text-custGrey">
           ✕
         </button>
 
         <div class="flex flex-col md:flex-row">
-          <!-- Image Section -->
-          <img
-            :src="item.data.image"
-            :alt="item.data.title"
-            class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"
-          />
+          <img :src="item.data.image" :alt="item.data.title"
+            class="w-full md:w-1/2 h-72 object-cover rounded-lg mb-4 md:mb-0 md:mr-4" />
 
-          <!-- Details Section -->
           <div class="w-full md:w-1/2">
             <h2 class="text-2xl mb-2 dark:text-custWhite">
               {{ item.data.title }}
@@ -39,29 +27,11 @@
           </div>
         </div>
 
-        <!-- Button group at the bottom -->
         <div class="flex justify-end space-x-4 mt-6">
-          <!-- Stripe Payment Gateway Integration -->
-          <stripe-checkout
-            ref="checkoutRef"
-            mode="payment"
-            :pk="publishableKey"
-            :line-items="lineItems"
-            :success-url="successURL"
-            :cancel-url="cancelURL"
-            @loading="(v) => (loading = v)"
-          />
-
-          <button
-            class="btn-purchase dark:bg-darkModeBtnGrey"
-            @click="handlePurchase"
-          >
-            Purchase
-          </button>
+          <div class="btn-purchase dark:bg-darkModeBtnGrey" id="paypal-button-container"></div>
           <button
             class="bg-gray-300 px-6 py-2 btn-cancel dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
-            @click="closeModal"
-          >
+            @click="closeModal">
             Close
           </button>
         </div>
@@ -71,113 +41,60 @@
 </template>
 
 <script>
-// Stripe Payment Gateway Integration
-import { StripeCheckout } from "@vue-stripe/vue-stripe";
+import { stripeConfig } from "@/config/stripe";
 
 export default {
-  components: {
-    StripeCheckout,
-  },
-  data() {
-    this.publishableKey =
-      "pk_test_51QE82aBeTAkFeX2nkPsDrWL0A2JzTWdN5S2dFUUCtQZllqShAPORmMLL1AFtlQUx26tBNT7iD5rTBzweEfkYJhXL002g3UDqs4";
-    const priceId =
-      this.item.data.title === "Diamond Ring (Certified)"
-        ? "price_1QE8N4BeTAkFeX2nVXiAdWD0"
-        : this.item.data.title === "Pearl Earrings"
-        ? "price_1QE8UiBeTAkFeX2nSsWRTC8x"
-        : null;
-    return {
-      modalVisible: true,
-      loading: false,
-      lineItems: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      successURL: `http://localhost:5173/success?item=${encodeURIComponent(
-        JSON.stringify(this.item)
-      )}&userId=${this.userId}`,
-      cancelURL: "http://localhost:5173/error",
-    };
-  },
   props: {
     item: {
       type: Object,
       required: true,
     },
   },
+  data() {
+    return {
+      publishableKey: stripeConfig.stripeKey,
+      modalVisible: true,
+    };
+  },
   methods: {
-    async handlePurchase() {
-      if (this.$refs.checkoutRef) {
-        await this.$refs.checkoutRef.redirectToCheckout();
-      } else {
-        console.error("Stripe Checkout Error: checkoutRef is not defined.");
-      }
-    },
     closeModal() {
+      this.$emit('modal-closed');
       this.modalVisible = false;
     },
+    initializePayPal() {
+      if (window.paypal) {
+        paypal.Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: this.item.data.price.toString(), // Dynamic price from item data
+                },
+                description: this.item.data.title,
+              }],
+            });
+          },
+          onApprove: (data, actions) => {
+            return actions.order.capture().then(details => {
+              this.$router.push({
+                name: "success",
+              });
+            });
+          },
+          onError: (err) => {
+            this.$router.push({
+                name: "error",
+              });
+            alert("An error occurred during the transaction.");
+          }
+        }).render('#paypal-button-container');
+      } else {
+        console.error('PayPal SDK not loaded');
+      }
+    }
+  },
+  mounted() {
+    this.initializePayPal();
   },
 };
 </script>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.close-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.btn-cancel {
-  padding: 0.5rem 1rem;
-  background-color: white;
-  color: gray;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-cancel:hover {
-  background-color: #f0f0f0;
-}
-
-.btn-purchase {
-  padding: 0.5rem 1rem;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-purchase:hover {
-  background-color: #357ab9;
-}
-</style>

@@ -32,8 +32,8 @@ import PrivacyPolicyView from "../views/legal/PrivacyPolicyView.vue";
 import MainMarketView from "../views/marketplace/MainMarketView.vue";
 
 // Success and Error Views
-import Success from "../views/Success.vue";
-import ErrorPage from "../views/ErrorPage.vue";
+import Success from "../views/payment/Success.vue";
+import ErrorPage from "../views/payment/ErrorPage.vue";
 
 // Help & Error Views
 import FAQView from "../views/help/FAQView.vue";
