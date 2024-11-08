@@ -8,6 +8,7 @@ import {
   addDoc,
   deleteDoc,
   writeBatch,
+  updateDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -70,6 +71,22 @@ export async function removeUserAddress(userId, addressId) {
     console.log(`Address ${addressId} deleted successfully.`);
   } catch (error) {
     console.error("Error removing address:", error);
+    throw error;
+  }
+}
+
+export async function updateUserAddress(userId, addressId, updatedAddress) {
+  // Reference to the specific address document within the addresses subcollection
+  const addressRef = doc(db, "user-address", userId, "addresses", addressId);
+
+  try {
+    // Use setDoc with merge: true to update the address document without overwriting the entire document
+    await setDoc(addressRef, updatedAddress, { merge: true });
+
+    console.log("Address updated successfully.");
+    return true;
+  } catch (error) {
+    console.error("Error updating user address:", error);
     throw error;
   }
 }

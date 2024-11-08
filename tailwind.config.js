@@ -20,6 +20,7 @@ export default {
         custWhite: "#fbfbfb",
         custDarkerWhite: "#d9d5d5",
         custGrey: "#94a3b8",
+        custDarkGrey: "#1d2e54",
         darkModeBg: "#0f172a",
         cardItemBg: "#1e293b",
         darkModeBtnGrey: "#293443",
