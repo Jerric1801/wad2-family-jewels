@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer p-4 bg-gray-200 text-center">
+  <footer class="footer p-4 bg-gray-200 text-center dark:bg-darkModeNavBg">
     <div
       class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
     >
@@ -9,27 +9,47 @@
           alt="Family Jewels Logo"
           class="w-16 h-16 mb-2"
         />
-        <h3 class="text-lg font-semibold">Family Jewels</h3>
-        <p class="text-sm italic">Sparkle Without the Struggle</p>
+        <h3 class="text-lg font-semibold dark:text-custDarkerWhite">
+          Family Jewels
+        </h3>
+        <p class="text-sm italic dark:text-custDarkerWhite">
+          Sparkle Without the Struggle
+        </p>
       </div>
 
       <div
         class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4"
       >
-        <a href="/" class="text-gray-600 hover:text-gray-800">Home</a>
-        <a href="/marketplace" class="text-gray-600 hover:text-gray-800"
+        <a href="/" class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
+          >Home</a
+        >
+        <a
+          href="/marketplace"
+          class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
           >Marketplace</a
         >
-        <a href="/pricing" class="text-gray-600 hover:text-gray-800">Pricing</a>
-        <a href="/terms" class="text-gray-600 hover:text-gray-800">Terms</a>
-        <a href="/privacy" class="text-gray-600 hover:text-gray-800">Privacy</a>
+        <a
+          href="/pricing"
+          class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
+          >Pricing</a
+        >
+        <a
+          href="/terms"
+          class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
+          >Terms</a
+        >
+        <a
+          href="/privacy"
+          class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
+          >Privacy</a
+        >
       </div>
     </div>
 
     <div
       class="container mx-auto mt-4 pt-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center"
     >
-      <p class="text-sm text-gray-500">
+      <p class="text-sm text-gray-500 dark:text-custGrey">
         &copy; 2024 Family Jewels. All rights reserved.
       </p>
       <div class="flex space-x-4 mt-2 md:mt-0">
@@ -38,10 +58,11 @@
           target="_blank"
           class="text-gray-600 hover:text-gray-800"
         >
+          <!-- Display the image if light mode is enabled -->
           <img
             src="../../assets/images/logo/github.png"
             alt="Family Jewels Logo"
-            class="w-7 h-7 mb-2 mr-2"
+            class="w-7 h-7 mb-2 mr-2 dark:hidden"
           />
         </a>
       </div>

@@ -1,19 +1,21 @@
 <template>
   <div class="border-t border-gray-200 pt-6 px-4">
     <h3
-      class="text-xl md:text-2xl font-semibold mb-4 text-indigo-600 text-center"
+      class="pt-6 text-xl md:text-2xl font-semibold mb-4 text-indigo-600 text-center dark:text-custDarkerWhite"
     >
       Preferences - Join our Email Subscription!
     </h3>
-    <p class="mb-4 text-gray-600 text-base md:text-lg mt-4 text-center">
+    <p
+      class="mb-4 text-gray-600 text-base md:text-lg mt-4 text-center dark:text-custGrey"
+    >
       By joining our email list, you will be the first to know about exciting
       new designs, special events, store openings, and much more.
     </p>
     <div
-      class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center"
+      class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center pt-4"
     >
       <button
-        class="btn-subscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out"
+        class="btn-subscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out dark:bg-darkModeBtnGrey"
         @click="subscribeToEmails"
       >
         <span class="svg-container">
@@ -30,10 +32,10 @@
             <path d="m16 19 2 2 4-4" />
           </svg>
         </span>
-        <span>Subscribe</span>
+        <span class="dark:text-custWhite">Subscribe</span>
       </button>
       <button
-        class="btn-unsubscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out"
+        class="btn-unsubscribe flex items-center justify-center space-x-2 p-2 md:px-6 md:py-2 text-sm md:text-lg font-semibold rounded-lg transition duration-300 ease-in-out dark:bg-darkModeBtnGrey"
         @click="unsubscribeFromEmails"
       >
         <span class="svg-container">
@@ -51,7 +53,7 @@
             <path d="m22 17-5 5" />
           </svg>
         </span>
-        <span>Unsubscribe</span>
+        <span class="dark:text-custWhite">Unsubscribe</span>
       </button>
     </div>
   </div>
@@ -87,7 +89,6 @@ button {
     #5e1a91,
     #007bbf
   ); /* Darker Purple to Blue */
-  box-shadow: 0px 6px 10px;
   transform: scale(1.05);
   color: white;
 }
@@ -99,7 +100,6 @@ button {
 
 .btn-unsubscribe:hover {
   background: linear-gradient(to right, #79016d, #300054);
-  box-shadow: 0px 6px 10px;
   transform: scale(1.05);
   color: white;
 }

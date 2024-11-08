@@ -1,21 +1,25 @@
 <template>
   <DefaultLayout>
-    <div class="container mx-auto px-4 flex flex-col items-center pt-[150px]">
+    <div
+      class="container mx-auto px-4 flex flex-col items-center pt-[150px] dark:bg-darkModeBg"
+    >
       <!-- Page Title -->
       <h2
-        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        class="text-3xl text-center font-bold mb-4 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
       >
         Your Jewelry Library
       </h2>
 
       <!-- Display Listed Items -->
       <div v-if="listedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6">Listed Items</h3>
+        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
+          Listed Items
+        </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(item, index) in listedImages"
             :key="item.id"
-            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Image -->
@@ -27,13 +31,13 @@
 
             <!-- Item Details -->
             <div>
-              <h4 class="text-lg font-bold mb-2">
+              <h4 class="text-lg dark:text-custWhite mb-2">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600 mb-2">
+              <p class="text-gray-600 dark:text-custGrey mb-2">
                 {{ item.data.description || "No Description" }}
               </p>
-              <p class="text-lg font-semibold">
+              <p class="text-md dark:text-custWhite">
                 {{
                   item.data.price ? "$" + item.data.price : "Price Unavailable"
                 }}
@@ -47,8 +51,8 @@
                 @click="updateDbListing(item)"
                 :class="
                   item.data.listed
-                    ? 'bg-red-500 hover:bg-red-600'
-                    : 'bg-green-500 hover:bg-green-600'
+                    ? 'bg-lightModeBtnPink dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    : 'bg-lightModeBtnBlue dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
                 class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
@@ -65,9 +69,13 @@
                 @click="openListModal(item)"
                 variant="primary"
                 size="md"
-                class="edit-btn"
+                class="dark:bg-darkModeBtnGrey dark:text-custWhite bg-lightModeBtnPurple"
               >
-                Edit Listing <FontAwesomeIcon :icon="faPencil" class="ml-2" />
+                Edit Listing
+                <FontAwesomeIcon
+                  :icon="faPencil"
+                  class="ml-2 dark:bg-darkModeBtnGrey dark:text-custWhite"
+                />
               </ButtonComponent>
             </div>
           </div>
@@ -76,12 +84,14 @@
 
       <!-- Display Unlisted Items -->
       <div v-if="unlistedImages.length > 0" class="w-full mb-12">
-        <h3 class="text-xl font-semibold mb-6">Unlisted Items</h3>
+        <h3 class="text-xl font-semibold mb-6 dark:text-custDarkerWhite">
+          Unlisted Items
+        </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(item, index) in unlistedImages"
             :key="item.id"
-            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            class="relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-cardItemBg"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Image -->
@@ -93,13 +103,13 @@
 
             <!-- Item Details -->
             <div>
-              <h4 class="text-lg font-bold mb-2">
+              <h4 class="text-lg mb-2 dark:text-custWhite">
                 {{ item.data.title || "Item Name" }}
               </h4>
-              <p class="text-gray-600 mb-2">
+              <p class="text-gray-600 mb-2 dark:text-custGrey">
                 {{ item.data.description || "No Description" }}
               </p>
-              <p class="text-lg font-semibold">
+              <p class="text-md dark:text-custWhite">
                 {{
                   item.data.price ? "$" + item.data.price : "Price Unavailable"
                 }}
@@ -112,8 +122,8 @@
                 @click="updateDbListing(item)"
                 :class="
                   item.data.listed
-                    ? 'bg-red-500 hover:bg-red-600'
-                    : 'bg-green-500 hover:bg-green-600'
+                    ? 'bg-lightModeBtnPink dark:bg-darkModeBtnGrey dark:text-custWhite'
+                    : 'bg-lightModeBtnBlue dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
                 class="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors"
@@ -129,7 +139,7 @@
                 @click="openListModal(item)"
                 variant="primary"
                 size="md"
-                class="edit-btn"
+                class="dark:bg-darkModeBtnGrey dark:text-custWhite bg-lightModeBtnPurple"
               >
                 Edit Listing <FontAwesomeIcon :icon="faPencil" class="ml-2" />
               </ButtonComponent>
@@ -141,7 +151,7 @@
       <!-- No Items Message -->
       <div
         v-if="listedImages.length === 0 && unlistedImages.length === 0"
-        class="text-gray-500 mt-8 text-center"
+        class="text-gray-500 mt-8 text-center dark:text-custWhite"
       >
         You have no saved library items yet.
       </div>
@@ -153,33 +163,39 @@
           class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
         >
           <div
-            class="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full transition-transform transform scale-100"
+            class="bg-custWhite p-8 rounded-xl shadow-xl max-w-2xl w-full transition-transform transform scale-100 dark:bg-darkModeBg"
           >
-            <h3 class="text-2xl font-semibold text-center mb-6">
+            <h3
+              class="text-2xl font-semibold text-center mb-6 dark:text-custWhite"
+            >
               Edit Listing Details
             </h3>
             <form @submit.prevent="saveItemDetails">
               <!-- Title Field -->
               <div class="mb-6">
-                <label for="title" class="block text-gray-700 font-medium mb-2"
+                <label
+                  for="title"
+                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
                   >Title:</label
                 >
                 <input
                   type="text"
                   v-model="listTitle"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
                   required
                 />
               </div>
               <!-- Price Field -->
               <div class="mb-6">
-                <label for="price" class="block text-gray-700 font-medium mb-2"
+                <label
+                  for="price"
+                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
                   >Price:</label
                 >
                 <input
                   type="number"
                   v-model="listPrice"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
                   required
                 />
               </div>
@@ -187,12 +203,12 @@
               <div class="mb-6">
                 <label
                   for="description"
-                  class="block text-gray-700 font-medium mb-2"
+                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
                   >Description:</label
                 >
                 <textarea
                   v-model="listDescription"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full h-32 resize-none dark:bg-cardItemBg dark:text-custGrey"
                   required
                 ></textarea>
               </div>
@@ -200,12 +216,12 @@
               <div class="mb-6">
                 <label
                   for="category"
-                  class="block text-gray-700 font-medium mb-2"
+                  class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
                   >Category:</label
                 >
                 <select
                   v-model="selectedCategory"
-                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full"
+                  class="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 p-3 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
                 >
                   <option disabled value="">Select a category</option>
                   <option
@@ -223,15 +239,19 @@
                   @click="closeListModal"
                   variant="primary"
                   size="md"
-                  class="cancel-btn"
-                  >Cancel</ButtonComponent
+                  class="cancel-btn dark:bg-darkModeBtnGrey"
+                  ><div class="dark:text-custWhite">
+                    Cancel
+                  </div></ButtonComponent
                 >
                 <ButtonComponent
                   @click="saveItemDetails"
                   variant="primary"
                   size="md"
-                  class="update-btn"
-                  >Update Listing</ButtonComponent
+                  class="update-btn dark:bg-darkModeBtnGrey"
+                  ><div class="dark:text-custWhite">
+                    Update Listing
+                  </div></ButtonComponent
                 >
               </div>
             </form>
@@ -447,10 +467,10 @@ export default {
 }
 
 .cancel-btn {
-  @apply bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg shadow-md transition;
+  @apply bg-gray-300 text-gray-700 hover:bg-red-800 rounded-lg shadow-md transition;
 }
 
 .update-btn {
-  @apply bg-green-500 text-white hover:bg-green-600 rounded-lg shadow-md transition;
+  @apply bg-green-500 text-white hover:bg-green-800 rounded-lg shadow-md transition;
 }
 </style>

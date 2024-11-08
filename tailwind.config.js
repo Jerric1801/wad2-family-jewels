@@ -18,7 +18,18 @@ export default {
         purple: "#8063BC",
         blue: "#7C7CD7",
         custWhite: "#fbfbfb",
+        custDarkerWhite: "#d9d5d5",
         custGrey: "#94a3b8",
+        custDarkGrey: "#1d2e54",
+        darkModeBg: "#0f172a",
+        cardItemBg: "#1e293b",
+        darkModeBtnGrey: "#293443",
+        darkModeBtnGrey2: "#1c2539",
+        lightModeBtnPurple: "#737ad2",
+        lightModeBtnPink: "#c04fc1",
+        lightModeBtnBlue: "#454eb7",
+        darkModeSelectedNav: "#d9d5d5",
+        darkModeNavBg: "#1e293b",
 
         background: "#fdfdfd", // White background color
         muted: "#E0E2E5",

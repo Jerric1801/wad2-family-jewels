@@ -3,11 +3,13 @@
     <div
       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     >
-      <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative">
+      <div
+        class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative dark:bg-cardItemBg"
+      >
         <!-- Close button (top-right) -->
         <button
           @click="closeModal"
-          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 dark:text-custWhite dark:hover:text-custGrey"
         >
           ✕
         </button>
@@ -22,12 +24,16 @@
 
           <!-- Details Section -->
           <div class="w-full md:w-1/2">
-            <h2 class="text-3xl font-bold mb-2">{{ item.data.title }}</h2>
-            <p class="text-gray-600 mb-4">{{ item.data.description }}</p>
-            <p class="text-2xl font-bold text-blue-600 mb-4">
+            <h2 class="text-2xl mb-2 dark:text-custWhite">
+              {{ item.data.title }}
+            </h2>
+            <p class="text-gray-600 mb-4 dark:text-custGrey">
+              {{ item.data.description }}
+            </p>
+            <p class="text-lg text-blue-600 mb-4 dark:text-custWhite">
               ${{ item.data.price }}
             </p>
-            <p class="text-sm text-gray-500 mb-4">
+            <p class="text-lg text-gray-500 mb-4 dark:text-custGrey">
               Category: {{ item.data.category }}
             </p>
           </div>
@@ -46,9 +52,14 @@
             @loading="(v) => (loading = v)"
           />
 
-          <button class="btn-purchase" @click="handlePurchase">Purchase</button>
           <button
-            class="bg-gray-300 text-gray-700 px-6 py-2 cancel-btn"
+            class="btn-purchase dark:bg-darkModeBtnGrey"
+            @click="handlePurchase"
+          >
+            Purchase
+          </button>
+          <button
+            class="bg-gray-300 px-6 py-2 btn-cancel dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
             @click="closeModal"
           >
             Close
@@ -145,7 +156,6 @@ export default {
 
 .btn-cancel {
   padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
   background-color: white;
   color: gray;
   border-radius: 4px;
