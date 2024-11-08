@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 dark:bg-darkModeBg"
     >
       <div class="max-w-md w-full space-y-8">
         <div>
@@ -10,10 +10,14 @@
             src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
-          <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+          <h2
+            class="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-custDarkerWhite"
+          >
             Reset your password
           </h2>
-          <p class="mt-2 text-center text-base text-gray-600">
+          <p
+            class="mt-2 text-center text-base text-gray-600 dark:text-custGrey"
+          >
             Enter your email address and we'll send you a link to reset your
             password.
           </p>
@@ -28,7 +32,7 @@
                 type="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Email address"
               />
             </div>
@@ -37,7 +41,7 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
             >
               <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                 <!-- Heroicon name: solid/mail -->
@@ -63,7 +67,7 @@
         <div class="text-center">
           <router-link
             to="/login"
-            class="font-medium text-indigo-600 hover:text-indigo-500"
+            class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-tailwindBlue"
           >
             Back to login
           </router-link>
