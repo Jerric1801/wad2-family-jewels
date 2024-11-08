@@ -16,11 +16,11 @@
           v-if="!isMobileMenuOpen"
           src="@/assets/images/logo/logo.png"
           alt="Family Jewels Logo"
-          class="h-20 w-auto mr-2 animate-logo cursor-pointer"
+          class="h-12 w-auto mr-2 animate-logo cursor-pointer"
           @click="$router.push('/')"
         />
         <span
-          class="text-xl font-bold animate-text cursor-pointer hidden lg:block text-black dark:text-custGrey"
+          class="text-xs font-bold animate-text cursor-pointer hidden lg:block text-black dark:text-custGrey"
           @click="$router.push('/')"
         >
           Family Jewels
@@ -83,15 +83,15 @@
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium flex items-center justify-center relative py-2 px-4 rounded-lg transition-all duration-300 text-black dark:text-custGrey"
+            class="text-sm font-medium flex items-center justify-center relative py-1 px-3 rounded-lg transition-all duration-300 text-black dark:text-custGrey"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <!-- Desktop Icons -->
             <template v-if="item.text === 'Dashboard'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="27"
-                height="27"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -109,8 +109,8 @@
             <template v-else-if="item.text === 'Library'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -131,8 +131,8 @@
             <template v-else-if="item.text === 'Marketplace'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -157,8 +157,8 @@
             <template v-else-if="item.text === 'Upload'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -180,8 +180,8 @@
             <template v-else-if="item.text === 'Profile'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="35"
-                height="35"
+                width="28"
+                height="28"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -200,8 +200,8 @@
             <template v-else-if="item.text === 'Logout'">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="35"
-                height="35"
+                width="28"
+                height="28"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -227,8 +227,8 @@
             <!-- Sun-Moon Icon for Dark Mode -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#0da5e9"
@@ -252,8 +252,8 @@
             <!-- Moon Icon for Light Mode -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#0da5e9"
