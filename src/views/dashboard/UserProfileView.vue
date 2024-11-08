@@ -1,11 +1,11 @@
 <template>
   <DefaultLayout>
     <div
-      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center w-full"
+      class="container mx-auto px-4 py-8 pt-[150px] h-full flex flex-col items-center w-full dark:bg-darkModeBg"
     >
       <!-- Title -->
       <h1
-        class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in"
+        class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in dark:text-custDarkerWhite"
       >
         User Profile
       </h1>
@@ -21,7 +21,7 @@
       <!-- User Profile Details -->
       <div
         v-else-if="isAuthenticated && userData"
-        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-full animate-fade-in-up"
+        class="bg-white shadow-lg rounded-lg p-8 w-full max-w-full animate-fade-in-up dark:bg-darkModeBg"
       >
         <!-- Profile Image -->
         <div class="flex flex-col items-center mb-8 relative">
@@ -82,8 +82,8 @@
                 :class="[
                   'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'personalInfo'
-                    ? 'text-black border-black'
-                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                    ? 'text-black border-black dark:text-custGrey dark:text-darkModeSelectedNav dark:border-custWhite'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'personalInfo'"
               >
@@ -109,14 +109,14 @@
               </a>
             </li>
 
-            <!-- Repeat similar structure for other tabs with responsive classes -->
+            <!-- Tab for SignInInfo-->
             <li class="me-2">
               <a
                 :class="[
                   'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'signInInformation'
-                    ? 'text-black border-black'
-                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'signInInformation'"
               >
@@ -147,8 +147,8 @@
                 :class="[
                   'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'preferences'
-                    ? 'text-black border-black'
-                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'preferences'"
               >
@@ -178,8 +178,8 @@
                 :class="[
                   'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'orderHistory'
-                    ? 'text-black border-black'
-                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'orderHistory'"
               >
@@ -208,8 +208,8 @@
                 :class="[
                   'flex flex-col items-center text-base md:text-xl justify-center px-3 py-2 md:px-4 md:py-4 border-b-2 rounded-t-lg group whitespace-nowrap',
                   activeTab === 'addresses'
-                    ? 'text-black border-black'
-                    : 'text-gray-700 hover:text-black hover:border-gray-400',
+                    ? 'text-black border-black dark:text-darkModeSelectedNav dark:border-custWhite'
+                    : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
                 ]"
                 @click="activeTab = 'addresses'"
               >
@@ -281,15 +281,19 @@
       v-if="showEditModal"
       class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
     >
-      <div class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up">
-        <h2 class="text-2xl font-semibold mb-4 text-indigo-600">
+      <div
+        class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up dark:bg-cardItemBg dark:text-custGrey"
+      >
+        <h2
+          class="text-2xl font-semibold mb-4 text-indigo-600 dark:text-custDarkerWhite"
+        >
           Edit {{ currentField }}
         </h2>
         <form @submit.prevent="saveChanges">
           <div class="mb-4">
             <label
               :for="currentField"
-              class="block text-gray-700 font-medium mb-2"
+              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
               >{{ currentField }}</label
             >
             <input
@@ -297,13 +301,13 @@
               type="text"
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full"
+              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
             />
             <textarea
               v-else
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full"
+              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
               style="height: 150px; width: 100%"
             ></textarea>
           </div>
@@ -311,13 +315,13 @@
             <button
               type="button"
               @click="showEditModal = false"
-              class="px-4 py-2 mr-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+              class="px-4 py-2 mr-2 rounded-lg bg-gray-400 hover:bg-gray-700 hover:text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white"
+              class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-green-800"
             >
               Save
             </button>
@@ -514,11 +518,6 @@ export default {
 
 button {
   @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
-}
-button:hover {
-  background: linear-gradient(to right, #5e1a91, #007bbf);
-  color: white;
-  box-shadow: 0px 6px 10px;
 }
 
 .btn-subscribe {

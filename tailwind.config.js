@@ -27,6 +27,7 @@ export default {
         lightModeBtnPurple: "#737ad2",
         lightModeBtnPink: "#c04fc1",
         lightModeBtnBlue: "#454eb7",
+        darkModeSelectedNav: "#d9d5d5",
 
         background: "#fdfdfd", // White background color
         muted: "#E0E2E5",
