@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh]"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh] dark:bg-darkModeBg"
     >
       <div class="max-w-md w-full space-y-8 animate-pulse-fast">
         <div>
@@ -14,17 +14,19 @@
             class="mt-6 text-center text-4xl font-extrabold text-gray-900 animate-fields"
           >
             <span
-              class="bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+              class="bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
               style="animation: animateText 1.5s ease-in forwards"
             >
               Create your account
             </span>
           </h2>
-          <p class="mt-2 text-center text-base text-gray-600 animate-fields">
+          <p
+            class="mt-2 text-center text-base text-gray-600 animate-fields dark:text-custGrey"
+          >
             Or
             <router-link
               to="/login"
-              class="font-medium text-blue hover:text-indigo-500"
+              class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
             >
               sign in to your existing account
             </router-link>
@@ -44,7 +46,7 @@
                 name="name"
                 type="text"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Full name"
               />
             </div>
@@ -57,7 +59,7 @@
                 type="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Email address"
               />
             </div>
@@ -71,7 +73,7 @@
                 autocomplete="new-password"
                 required
                 minlength="6"
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Password (minimum 6 characters)"
               />
             </div>
@@ -87,7 +89,7 @@
                 autocomplete="new-password"
                 required
                 minlength="6"
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Confirm Password"
               />
             </div>
@@ -100,22 +102,22 @@
                 name="terms-and-privacy"
                 type="checkbox"
                 required
-                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:border-gray-600 dark:text-indigo-400 dark:focus:ring-indigo-400 dark:bg-cardItemBg"
               />
               <label
                 for="terms-and-privacy"
-                class="ml-2 block text-sm text-gray-900"
+                class="ml-2 block text-sm text-gray-900 dark:text-custGrey"
               >
                 I agree to the
                 <router-link
                   to="/terms"
-                  class="font-medium text-blue hover:text-indigo-500"
+                  class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
                   >Terms of Service</router-link
                 >
                 and
                 <router-link
                   to="/privacy"
-                  class="font-medium text-blue hover:text-indigo-500"
+                  class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
                   >Privacy Policy</router-link
                 >
               </label>
@@ -125,7 +127,7 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
             >
               <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                 <svg
