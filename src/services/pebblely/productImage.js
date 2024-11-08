@@ -65,7 +65,7 @@ export async function fetchModelImages(base64ProductImage, base64SelectedImage, 
       const response = await axios.post(`${config.apiUrl}/create-background/v2/`, {
         images: [base64ProductImage],
         style_image: base64SelectedImage,
-        description: description,
+        description: basePrompt,
         transforms: [
           {
             x: xVal,
