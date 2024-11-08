@@ -47,13 +47,13 @@ export default {
       },
 
       // Custom Font Sizes
-      fontSize: {
-        xxs: "0.625rem", // 10px
-        xs: "0.875rem", // 14px
-        l: "1.25rem", // 20px
-        xxl: "1.75rem", // 28px
-        xxxl: "2.25rem", // 36px
-      },
+      // fontSize: {
+      //   xxs: "0.625rem", // 10px
+      //   xs: "0.875rem", // 14px
+      //   l: "1.25rem", // 20px
+      //   xxl: "1.75rem", // 28px
+      //   xxxl: "2.25rem", // 36px
+      // },
 
       // Custom Border Radius
       borderRadius: {
