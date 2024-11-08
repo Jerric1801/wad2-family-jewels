@@ -1,21 +1,60 @@
 import config from '@/config/pebblely';
 import axios from 'axios';
 
+function extractKeywords(description) {
+  const keywords = description.toLowerCase().split(" ");
+  return keywords;
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export async function fetchModelImages(base64ProductImage, base64SelectedImage, xVal, yVal, xScale, yScale, jewelleryType, description) {
+
+  let basePrompt = "";
 
   switch (jewelleryType) {
     case "necklace":
-      description = "A female model wearing a beautiful necklace, zoomed in on the neck and collarbone area." + description;
+      basePrompt = "A female model with [skin tone] skin wearing a beautiful [metal type] necklace with [gemstone type], zoomed in on the neck and collarbone area.";
       break;
     case "earrings":
-      description = "Close-up photo of a female model wearing elegant earrings, focused on the ears and face." + description;
+      basePrompt = "Close-up photo of a female model with [skin tone] skin wearing elegant [metal type] earrings with [gemstone type], focused on the ears and face.";
       break;
     case "bracelets":
-      description = "A female model showcasing a stylish bracelet, zoomed in on the wrist and hand." + description;
+      basePrompt = "A female model with [skin tone] skin showcasing a stylish [metal type] bracelet with [gemstone type], zoomed in on the wrist and hand.";
       break;
     case "rings":
-      description = "Close-up of a female model's hand wearing a stunning ring, focused on the fingers." + description;
+      basePrompt = "Close-up of a female model's hand with [skin tone] skin wearing a stunning [metal type] ring with [gemstone type], focused on the fingers.";
       break;
+  }
+
+  if (description) {
+    const keywords = extractKeywords(description);
+
+    // Metal type
+    if (keywords.some(keyword => ["gold", "silver", "platinum", "rose gold"].includes(keyword))) {
+      const metal = keywords.find(keyword => ["gold", "silver", "platinum", "rose gold"].includes(keyword));
+      basePrompt = basePrompt.replace("[metal type]", metal);
+    }
+
+    // Gemstone type
+    if (keywords.some(keyword => ["diamond", "emerald", "ruby", "sapphire", "pearl"].includes(keyword))) {
+      const gemstone = keywords.find(keyword => ["diamond", "emerald", "ruby", "sapphire", "pearl"].includes(keyword));
+      basePrompt = basePrompt.replace("[gemstone type]", gemstone);
+    }
+
+    // Skin tone
+    if (keywords.some(keyword => ["light", "fair", "medium", "tan", "dark", "deep"].includes(keyword))) {
+      const skinTone = keywords.find(keyword => ["light", "fair", "medium", "tan", "dark", "deep"].includes(keyword));
+      basePrompt = basePrompt.replace("[skin tone]", skinTone);
+    }
+
+    // Additional details (e.g., style, size, occasion)
+    const additionalDetails = description.toLowerCase().replace(/(gold|silver|platinum|rose gold|diamond|emerald|ruby|sapphire|pearl|light|fair|medium|tan|dark|deep)/g, "").trim();
+    if (additionalDetails) {
+      basePrompt += ". " + capitalizeFirstLetter(additionalDetails);
+    }
   }
 
   return new Promise(async (resolve, reject) => {
@@ -26,7 +65,7 @@ export async function fetchModelImages(base64ProductImage, base64SelectedImage, 
       const response = await axios.post(`${config.apiUrl}/create-background/v2/`, {
         images: [base64ProductImage],
         style_image: base64SelectedImage,
-        description: description, 
+        description: description,
         transforms: [
           {
             x: xVal,
