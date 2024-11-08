@@ -16,7 +16,7 @@
           >
             Full Name
           </p>
-          <p class="text-lg font-medium dark:bg-cardItemBg dark:text-custGrey">
+          <p class="text-md font-medium dark:bg-cardItemBg dark:text-custGrey">
             {{ userData.fullName }}
           </p>
         </div>
@@ -38,7 +38,7 @@
           >
             Phone Number
           </p>
-          <p class="text-lg font-medium dark:bg-cardItemBg dark:text-custGrey">
+          <p class="text-md font-medium dark:bg-cardItemBg dark:text-custGrey">
             {{ userData.phoneNumber }}
           </p>
         </div>
@@ -67,7 +67,7 @@
           >
             About Me
           </p>
-          <p class="text-lg font-medium dark:bg-cardItemBg dark:text-custGrey">
+          <p class="text-md font-medium dark:bg-cardItemBg dark:text-custGrey">
             {{ userData.bio || "No bio available" }}
           </p>
         </div>

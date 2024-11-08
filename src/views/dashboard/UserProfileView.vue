@@ -286,18 +286,18 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
     >
       <div
-        class="bg-white rounded-lg p-8 w-full max-w-md animate-fade-in-up dark:bg-cardItemBg dark:text-custGrey"
+        class="bg-white rounded-lg p-6 w-full max-w-sm animate-fade-in-up dark:bg-cardItemBg dark:text-custGrey"
       >
         <h2
-          class="text-2xl font-semibold mb-4 text-indigo-600 dark:text-custDarkerWhite"
+          class="text-xl font-semibold mb-3 text-indigo-600 dark:text-custDarkerWhite"
         >
           Edit {{ currentField }}
         </h2>
         <form @submit.prevent="saveChanges">
-          <div class="mb-4">
+          <div class="mb-3">
             <label
               :for="currentField"
-              class="block text-gray-700 font-medium mb-2 dark:text-custGrey"
+              class="block text-gray-700 text-sm font-medium mb-1 dark:text-custGrey"
               >{{ currentField }}</label
             >
             <input
@@ -305,27 +305,27 @@
               type="text"
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
+              class="border border-gray-400 p-2 rounded-lg w-full text-sm dark:bg-cardItemBg dark:text-custGrey"
             />
             <textarea
               v-else
               :id="currentField"
               v-model="currentValue"
-              class="border border-gray-400 p-2 rounded-lg w-full dark:bg-cardItemBg dark:text-custGrey"
-              style="height: 150px; width: 100%"
+              class="border border-gray-400 p-2 rounded-lg w-full text-sm dark:bg-cardItemBg dark:text-custGrey"
+              style="height: 100px; width: 100%"
             ></textarea>
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end space-x-2">
             <button
               type="button"
               @click="showEditModal = false"
-              class="px-4 py-2 mr-2 rounded-lg bg-gray-400 hover:bg-gray-700 hover:text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
+              class="px-3 py-1 rounded-lg bg-gray-400 hover:bg-gray-600 text-sm text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-red-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-green-800"
+              class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm text-white dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-green-800"
             >
               Save
             </button>
@@ -521,7 +521,7 @@ export default {
 }
 
 button {
-  @apply px-6 py-2 text-lg font-semibold rounded-lg transition duration-300 ease-in-out;
+  @apply px-3 py-1 text-sm font-medium rounded-md transition duration-300 ease-in-out;
 }
 
 .btn-subscribe {
