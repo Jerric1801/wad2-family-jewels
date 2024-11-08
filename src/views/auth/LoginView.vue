@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh]"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh] dark:bg-darkModeBg"
     >
       <div class="max-w-md w-full space-y-8">
         <div>
@@ -12,16 +12,18 @@
           />
           <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
             <span
-              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent"
+              class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
             >
               Sign in to your account
             </span>
           </h2>
-          <p class="mt-2 text-center text-base text-gray-600">
+          <p
+            class="mt-2 text-center text-base text-gray-600 dark:text-custGrey"
+          >
             Or
             <router-link
               to="/signup"
-              class="font-medium text-blue hover:text-indigo-500"
+              class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
             >
               create a new account
             </router-link>
@@ -38,7 +40,7 @@
                 v-model="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Email address"
               />
             </div>
@@ -51,7 +53,7 @@
                 v-model="password"
                 autocomplete="current-password"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base"
+                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Password"
               />
             </div>
@@ -61,7 +63,7 @@
             <div class="text-base">
               <a
                 href="/password-reset"
-                class="font-medium text-blue hover:text-indigo-500"
+                class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
               >
                 Forgot your password?
               </a>
@@ -77,7 +79,7 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
             >
               Sign in
             </button>

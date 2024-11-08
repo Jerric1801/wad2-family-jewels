@@ -30,6 +30,7 @@ export default {
         lightModeBtnBlue: "#454eb7",
         darkModeSelectedNav: "#d9d5d5",
         darkModeNavBg: "#1e293b",
+        tailwindBlue: "#38bdf9",
 
         background: "#fdfdfd", // White background color
         muted: "#E0E2E5",
