@@ -131,7 +131,7 @@
         </h2>
         <a
           href="/upload"
-          class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white"
+          class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white button-glow"
         >
           <button class="w-[100%] h-[100%]">Start Here!</button>
         </a>
@@ -351,5 +351,17 @@ export default {
 .character-border {
   -webkit-text-stroke: 1px white; /* Border width and color */
   -webkit-text-fill-color: transparent; /* Ensures fill color is from background gradient */
+}
+.button-glow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.button-glow:hover {
+  box-shadow: 0 0 15px rgba(147, 112, 219, 0.7),
+    /* Soft purple */ 0 0 25px rgba(65, 105, 225, 0.6),
+    /* Royal blue */ 0 0 35px rgba(138, 43, 226, 0.5),
+    /* Medium purple */ 0 0 50px rgba(72, 61, 139, 0.4),
+    /* Dark slate blue */ 0 0 75px rgba(0, 191, 255, 0.3),
+    /* Deep sky blue */ 0 0 100px rgba(75, 0, 130, 0.2); /* Indigo */
 }
 </style>
