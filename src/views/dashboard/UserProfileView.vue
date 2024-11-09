@@ -80,7 +80,7 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap pt-1',
                   activeTab === 'personalInfo'
                     ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
@@ -89,8 +89,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -113,7 +113,7 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap pt-1',
                   activeTab === 'signInInformation'
                     ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
@@ -122,8 +122,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -147,7 +147,7 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap pt-1',
                   activeTab === 'preferences'
                     ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
@@ -156,8 +156,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -179,7 +179,7 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap pt-1',
                   activeTab === 'orderHistory'
                     ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
@@ -188,8 +188,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -210,7 +210,7 @@
             <li class="me-2">
               <a
                 :class="[
-                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap',
+                  'flex flex-col items-center text-sm justify-center px-2 py-1 border-b-2 rounded-t-md group whitespace-nowrap pt-1',
                   activeTab === 'addresses'
                     ? 'text-black border-black dark:text-custGrey dark:border-custWhite'
                     : 'text-gray-700 hover:text-black hover:border-gray-400 dark:text-custGrey dark:border-darkModeBg',
@@ -219,8 +219,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
