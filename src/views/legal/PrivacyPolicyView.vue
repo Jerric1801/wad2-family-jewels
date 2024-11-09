@@ -1,26 +1,36 @@
 <template>
   <DefaultLayout>
     <div
-      class="relative text-center z-10 flex items-center justify-center w-full p-8 md:p-[25vh] bg-transparent"
+      class="relative z-10 flex items-center justify-center w-full p-8 md:p-[20vh] bg-transparent"
     >
-      <div class="flex flex-col w-full md:w-[55vw] gap-3">
-        <h2 class="text-3xl md:text-5xl font-bold">
-          <span
-            class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
-            v-for="(line, index) in headlineLines"
-            :key="index"
-            :style="{ animationDelay: `${index * 0.2}s` }"
+      <div
+        class="flex flex-col w-full md:w-[55vw] gap-6 p-8 bg-white rounded-lg shadow-lg dark:bg-darkModeBg"
+      >
+        <!-- Title Section -->
+        <div class="text-center">
+          <h2
+            class="text-3xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
           >
-            {{ line }}<br v-if="index === 0" />
-          </span>
-        </h2>
-
-        <div
-          class="terms-content text-left text-gray-700 text-sm md:text-base dark:text-custGrey"
-        >
-          <p v-for="(paragraph, index) in privacyParagraphs" :key="index">
-            {{ paragraph }}
+            Privacy Policy
+          </h2>
+          <p class="text-sm text-gray-500 mb-8 dark:text-custGrey">
+            Last updated on November 2, 2021
           </p>
+        </div>
+
+        <!-- Content Section -->
+        <div class="terms-content text-left text-gray-800 dark:text-custGrey">
+          <div
+            v-for="(paragraph, index) in privacyParagraphs"
+            :key="index"
+            class="mb-6"
+          >
+            <p
+              class="text-base leading-7 tracking-wide text-gray-700 dark:text-custGrey"
+            >
+              {{ paragraph }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -37,7 +47,6 @@ export default {
   },
   data() {
     return {
-      headlineLines: ["Privacy Policy"],
       privacyParagraphs: [
         "Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Jewelry Design Platform.",
         "Please read this Privacy Policy carefully. If you do not agree with the terms of this Privacy Policy, please do not access the platform.",
@@ -75,7 +84,6 @@ export default {
 </script>
 
 <style scoped>
-/* Use the same animation styles as in your Error404View */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -94,8 +102,19 @@ export default {
 }
 
 .terms-content {
-  /* Add some basic styling for the terms content */
-  line-height: 1.6;
-  margin-top: 20px;
+  line-height: 1.8;
+}
+
+.terms-content p.font-semibold.text-lg {
+  color: #1f2937; /* darker gray for headings */
+  margin-top: 24px;
+}
+
+.shadow-lg {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.bg-darkModeBg {
+  background-color: #2d2f36;
 }
 </style>
