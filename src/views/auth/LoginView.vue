@@ -1,36 +1,34 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh] dark:bg-darkModeBg"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 pt-[15vh] dark:bg-darkModeBg"
     >
-      <div class="max-w-md w-full space-y-8">
-        <div>
+      <div class="max-w-sm w-full space-y-6">
+        <div class="pt-4">
           <img
-            class="mx-auto h-40 w-auto animate-logo"
+            class="mx-auto h-28 w-auto animate-logo"
             src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
-          <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+          <h2 class="text-center text-xl font-semibold text-gray-900">
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
             >
               Sign in to your account
             </span>
           </h2>
-          <p
-            class="mt-2 text-center text-base text-gray-600 dark:text-custGrey"
-          >
+          <p class="mt-1 text-center text-xs text-gray-600 dark:text-custGrey">
             Or
             <router-link
               to="/signup"
-              class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
+              class="font-medium text-blue text-xs hover:text-indigo-500 dark:text-tailwindBlue"
             >
               create a new account
             </router-link>
           </p>
         </div>
-        <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
-          <div class="rounded-md shadow-sm -space-y-px">
+        <form class="mt-6 space-y-4" @submit.prevent="handleLogin">
+          <div class="rounded-md shadow-sm">
             <div>
               <label for="email-address" class="sr-only">Email address</label>
               <input
@@ -40,7 +38,7 @@
                 v-model="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
+                class="appearance-none rounded-t-md w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Email address"
               />
             </div>
@@ -53,17 +51,17 @@
                 v-model="password"
                 autocomplete="current-password"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
+                class="appearance-none rounded-b-md w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Password"
               />
             </div>
           </div>
 
           <div class="flex items-center justify-between">
-            <div class="text-base">
+            <div class="text-sm">
               <a
                 href="/password-reset"
-                class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
+                class="text-xs text-blue hover:text-indigo-500 dark:text-tailwindBlue"
               >
                 Forgot your password?
               </a>
@@ -71,7 +69,7 @@
           </div>
           <div
             v-if="errorMessage"
-            class="text-red-500 text-center animate-bounce"
+            class="text-red-500 text-center text-xs animate-bounce"
           >
             {{ errorMessage }}
           </div>
@@ -79,7 +77,7 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
+              class="group w-full flex justify-center py-2 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
             >
               Sign in
             </button>
@@ -152,7 +150,7 @@ export default {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -161,6 +159,6 @@ export default {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 1.5s ease-in forwards;
+  animation: fadeInUp 1s ease-in forwards;
 }
 </style>

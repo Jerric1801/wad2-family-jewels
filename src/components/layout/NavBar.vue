@@ -4,7 +4,7 @@
       'navbar',
       'fixed top-0 left-0 w-full p-4 bg-transparent transition-all duration-1000 ease-in-out z-50 shadow-md',
       {
-        'opacity-100 translate-y-0': isVisible,
+        'opacity-0 -translate-y-full': isVisible,
         'opacity-0 -translate-y-full': !isVisible,
       },
     ]"
@@ -20,7 +20,7 @@
           @click="$router.push('/')"
         />
         <span
-          class="text-xs font-bold animate-text cursor-pointer hidden lg:block text-black dark:text-custGrey"
+          class="text-sm font-bold animate-text cursor-pointer hidden lg:block text-black dark:text-custGrey"
           @click="$router.push('/')"
         >
           Family Jewels
@@ -393,7 +393,7 @@
             :is="item.isLink ? 'router-link' : 'button'"
             :to="item.to"
             @click="handleClick(item.text)"
-            class="text-lg font-medium flex items-center justify-start w-full py-2 px-4 rounded-lg transition-all duration-300 dark:text-custGrey"
+            class="text-sm font-medium flex items-center justify-start w-full py-2 px-4 rounded-lg transition-all duration-300 dark:text-custGrey"
             :style="{ animationDelay: `${index * 0.1}s` }"
           >
             <span
