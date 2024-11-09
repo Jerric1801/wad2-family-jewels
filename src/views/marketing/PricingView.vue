@@ -14,7 +14,7 @@
 
       <div class="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
         <div
-          class="plan-container bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2 dark:bg-cardItemBg"
+          class="plan-container bg-white rounded-lg shadow-xl p-6 w-full md:w-1/2 dark:bg-cardItemBg"
         >
           <h3 class="text-2xl font-semibold mb-4 dark:text-custDarkerWhite">
             Basic Plan
@@ -82,13 +82,35 @@ export default {
 </script>
 
 <style scoped>
-/* ... (animation styles remain the same) ... */
-
 .plan-container {
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.dark .plan-container {
+  border: none; /* No border in dark mode */
 }
 
 .plan-container:hover {
   transform: translateY(-5px);
+}
+
+/* Light mode fire glow */
+.plan-container:hover {
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.7),
+    /* Outer red-orange glow */ 0 0 20px rgba(255, 140, 0, 0.6),
+    /* Medium orange glow */ 0 0 30px rgba(255, 215, 0, 0.5),
+    /* Soft yellow glow */ 0 0 40px rgba(255, 69, 0, 0.4),
+    /* Outer red-orange flame effect */ 0 0 60px rgba(255, 140, 0, 0.3),
+    /* Faint outer yellowish glow */ 0 0 80px rgba(255, 69, 0, 0.2); /* Very faint extended glow */
+}
+
+/* Dark mode purple glow */
+.dark .plan-container:hover {
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.7),
+    /* Outer purple glow */ 0 0 20px rgba(75, 0, 130, 0.6),
+    /* Indigo glow */ 0 0 30px rgba(238, 130, 238, 0.5),
+    /* Violet glow */ 0 0 40px rgba(148, 0, 211, 0.4),
+    /* Dark purple glow */ 0 0 60px rgba(138, 43, 226, 0.3),
+    /* Soft purple glow */ 0 0 80px rgba(75, 0, 130, 0.2); /* Faint extended glow */
 }
 </style>
