@@ -16,7 +16,7 @@
         </p>
         <select
           v-model="dateRange"
-          class="border rounded px-2 py-1 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey"
+          class="border rounded-lg px-2 py-1 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey mt-2 sm:mt-0"
         >
           <option value="999">All</option>
           <option value="3">Past three months</option>
@@ -28,7 +28,7 @@
         type="text"
         v-model="searchQuery"
         placeholder="Search all orders"
-        class="border rounded px-2 py-1 w-full sm:w-1/3 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey"
+        class="border rounded-lg px-2 py-1 w-full sm:w-1/3 text-xs sm:text-sm dark:bg-cardItemBg dark:text-custGrey"
       />
     </div>
 

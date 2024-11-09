@@ -4,13 +4,13 @@
       class="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 pt-[15vh] dark:bg-darkModeBg"
     >
       <div class="max-w-sm w-full space-y-6">
-        <div>
+        <div class="pt-4">
           <img
             class="mx-auto h-28 w-auto animate-logo"
             src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
-          <h2 class="mt-4 text-center text-xl font-semibold text-gray-900">
+          <h2 class="text-center text-xl font-semibold text-gray-900">
             <span
               class="animate-fade-in-up bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
             >
