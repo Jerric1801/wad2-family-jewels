@@ -47,38 +47,13 @@
         ></div>
       </div>
     </div>
-    <!-- Section 1: Image Gen -->
-    <div
-      class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"
-    >
-      <div class="h-[40%] w-[80%] md:w-[45%]">
-        <h2
-          class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
-        >
-          Effortless Product Image Generation
-        </h2>
-        <p class="mt-4">
-          Upload your jewelry photos, and our AI will seamlessly place them on
-          lifelike models, creating captivating images in seconds. No more
-          expensive photoshoots or complex editing!
-        </p>
-      </div>
-      <div
-        class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative"
-      >
-        <img
-          class="w-full max-w-[85%] absolute bg-cover rounded-md"
-          src="../../assets/images/home/product_1.jpg"
-        />
-      </div>
-    </div>
-    <!-- Section 2: Perfect the look -->
+    <!-- Section 1: Perfect the look -->
     <div
       class="h-[85vh] w-[100vw] flex flex-col justify-center items-center gap-10 bg-white md:h-[110vh]"
     >
       <div class="w-[80vw] text-center md:w-[50vw]">
         <h2
-          class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+          class="text-3xl pt-3 sm:pt-0 md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
         >
           Perfect the Look
         </h2>
@@ -118,6 +93,32 @@
         ></div>
       </div>
     </div>
+    <!-- Section 2: Image Gen -->
+    <div
+      class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"
+    >
+      <div class="h-[40%] w-[80%] md:w-[45%]">
+        <h2
+          class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        >
+          Effortless Product Image Generation
+        </h2>
+        <p class="mt-4">
+          Upload your jewelry photos, and our AI will seamlessly place them on
+          lifelike models, creating captivating images in seconds. No more
+          expensive photoshoots or complex editing!
+        </p>
+      </div>
+      <div
+        class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative"
+      >
+        <img
+          class="w-full max-w-[85%] absolute bg-cover rounded-md"
+          src="../../assets/images/home/product_1.jpg"
+        />
+      </div>
+    </div>
+
     <!-- Section 3: Call-To-Action -->
     <div
       class="h-[65vh] md:h-[80vh] w-[100vw] bg-gradient-to-r from-pink via-purple to-blue flex justify-center items-center"
