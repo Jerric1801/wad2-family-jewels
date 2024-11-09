@@ -1,17 +1,17 @@
 <template>
   <DefaultLayout>
     <div
-      class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 pt-[20vh] dark:bg-darkModeBg"
+      class="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 pt-[15vh] dark:bg-darkModeBg"
     >
-      <div class="max-w-md w-full space-y-8 animate-pulse-fast">
+      <div class="max-w-sm w-full space-y-6 animate-pulse-fast">
         <div>
           <img
-            class="mx-auto h-40 w-auto animate-logo"
+            class="mx-auto h-32 w-auto animate-logo"
             src="@/assets/images/logo/logo.png"
             alt="Family Jewels Logo"
           />
           <h2
-            class="mt-6 text-center text-4xl font-extrabold text-gray-900 animate-fields"
+            class="mt-4 text-center text-xl font-semibold text-gray-900 animate-fields"
           >
             <span
               class="bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
@@ -21,22 +21,21 @@
             </span>
           </h2>
           <p
-            class="mt-2 text-center text-base text-gray-600 animate-fields dark:text-custGrey"
+            class="mt-1 text-center text-xs text-gray-600 animate-fields dark:text-custGrey"
           >
             Or
             <router-link
               to="/login"
-              class="font-medium text-blue hover:text-indigo-500 dark:text-tailwindBlue"
+              class="font-medium text-blue hover:text-indigo-500 text-xs dark:text-tailwindBlue"
             >
               sign in to your existing account
             </router-link>
           </p>
         </div>
         <form
-          class="mt-8 space-y-6 animate-fields"
+          class="mt-6 space-y-4 animate-fields"
           @submit.prevent="handleSignUp"
         >
-          <input type="hidden" name="remember" value="true" />
           <div class="rounded-md shadow-sm -space-y-px">
             <div>
               <label for="full-name" class="sr-only">Full name</label>
@@ -46,7 +45,7 @@
                 name="name"
                 type="text"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
+                class="appearance-none rounded-none block w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Full name"
               />
             </div>
@@ -59,7 +58,7 @@
                 type="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
+                class="appearance-none rounded-none block w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Email address"
               />
             </div>
@@ -73,8 +72,8 @@
                 autocomplete="new-password"
                 required
                 minlength="6"
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
-                placeholder="Password (minimum 6 characters)"
+                class="appearance-none rounded-none block w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
+                placeholder="Password (min 6 chars)"
               />
             </div>
             <div>
@@ -89,7 +88,7 @@
                 autocomplete="new-password"
                 required
                 minlength="6"
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-base dark:bg-cardItemBg dark:text-custGrey"
+                class="appearance-none rounded-none block w-full px-2 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-cardItemBg dark:text-custGrey"
                 placeholder="Confirm Password"
               />
             </div>
@@ -102,11 +101,11 @@
                 name="terms-and-privacy"
                 type="checkbox"
                 required
-                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:border-gray-600 dark:text-indigo-400 dark:focus:ring-indigo-400 dark:bg-cardItemBg"
+                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:border-gray-600 dark:text-indigo-400 dark:focus:ring-indigo-400 dark:bg-cardItemBg"
               />
               <label
                 for="terms-and-privacy"
-                class="ml-2 block text-sm text-gray-900 dark:text-custGrey"
+                class="ml-2 text-xs text-gray-900 dark:text-custGrey"
               >
                 I agree to the
                 <router-link
@@ -127,11 +126,11 @@
           <div>
             <button
               type="submit"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
+              class="group relative w-full flex justify-center py-2 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-blue hover:bg-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-animate dark:bg-darkModeBtnGrey dark:text-custWhite dark:hover:bg-custDarkGrey"
             >
-              <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <span class="absolute left-0 inset-y-0 flex items-center pl-2">
                 <svg
-                  class="h-6 w-6 text-purple group-hover:text-blue"
+                  class="h-5 w-5 text-purple group-hover:text-blue"
                   :class="{ 'spin-once': spin }"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -157,14 +156,14 @@
       v-if="showSuccessPopup"
       class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 animate-popup"
     >
-      <div class="bg-white p-12 rounded-lg shadow-lg max-w-md w-full">
-        <h3 class="text-2xl font-bold mb-6">Account Created Successfully!</h3>
-        <p class="text-lg mb-8">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h3 class="text-xl font-bold mb-4">Account Created Successfully!</h3>
+        <p class="text-sm mb-6">
           Your account has been created. You can now log in.
         </p>
         <button
           @click="closeSuccessPopup"
-          class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-indigo-700 transition-colors duration-300"
+          class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors duration-300"
         >
           Close
         </button>
