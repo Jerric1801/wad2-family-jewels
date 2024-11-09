@@ -5,7 +5,7 @@
     >
       <!-- Title -->
       <h1
-        class="text-3xl font-semibold mb-6 text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in dark:text-custDarkerWhite"
+        class="text-3xl font-semibold text-center bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent animate-fade-in dark:text-custDarkerWhite"
       >
         User Profile
       </h1>

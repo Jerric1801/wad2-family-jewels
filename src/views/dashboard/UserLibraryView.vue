@@ -54,7 +54,7 @@
                     : 'bg-lightModeBtnGreen dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
-                class="flex items-center space-x-1 text-white px-2 py-1 rounded-lg transition-colors"
+                class="common-btn flex items-center space-x-1 text-white rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
@@ -66,8 +66,7 @@
               <ButtonComponent
                 @click="openListModal(item)"
                 variant="primary"
-                size="sm"
-                class="bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white px-3 py-1 rounded-lg transition-colors"
+                class="common-btn bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white rounded-lg transition-colors"
               >
                 Edit
                 <FontAwesomeIcon
@@ -124,7 +123,7 @@
                     : 'bg-lightModeBtnGreen dark:bg-darkModeBtnGrey dark:text-custWhite'
                 "
                 :disabled="loading"
-                class="flex items-center space-x-1 text-white px-2 py-1 rounded-lg transition-colors"
+                class="common-btn flex items-center space-x-1 text-white rounded-lg transition-colors"
               >
                 {{ item.data.listed ? "Delist" : "List" }}
                 <FontAwesomeIcon
@@ -135,8 +134,7 @@
 
               <ButtonComponent
                 @click="openListModal(item)"
-                size="md"
-                class="bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white px-3 py-1 rounded-lg transition-colors"
+                class="common-btn bg-lightModeBtnPurple dark:bg-darkModeBtnGrey dark:text-custWhite text-white rounded-lg transition-colors"
               >
                 Edit
                 <FontAwesomeIcon
@@ -479,5 +477,18 @@ export default {
   @apply bg-green-500 text-white hover:bg-green-800 rounded-lg shadow-md transition;
   padding: 0.5rem 1rem; /* Smaller padding */
   font-size: 0.875rem; /* Smaller font size */
+}
+
+/* Common button style for consistent size */
+.common-btn {
+  padding: 0.5rem 1rem; /* Adjust to your preferred size */
+  font-size: 0.875rem; /* Adjust font size */
+  border-radius: 0.5rem; /* Consistent rounding */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Customize the hover effects here if desired */
+.common-btn:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 </style>
