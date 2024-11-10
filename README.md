@@ -16,15 +16,27 @@ Family Jewels empowers independent jewelers to showcase their creations without 
 
 ## Data Storage ☁️
 
-* **Cloud Storage:** Securely store user data, images, and model libraries.
+* **Firebase:** Securely store user data, images, and model libraries in the cloud. 
 
 ## APIs Used 🛠️
 
 * **Pebblely:** Generate new backgrounds for product images. ([https://pebblely.com/docs/#create-background](https://pebblely.com/docs/#create-background))
-* **remove.bg:** Intelligently remove backgrounds from product photos. ([https://www.remove.bg/api](https://www.remove.bg/api))
-* **Claid.ai:** Generate realistic backgrounds when resizing images. ([https://claid.ai/api-products/generative-resize/](https://claid.ai/api-products/generative-resize/))
+* **Imgly Background Removal:**  Remove backgrounds from product photos.
+* **Firebase:**  Authentication, database, and storage. ([https://firebase.google.com/docs](https://firebase.google.com/docs)) 
 
 ## Beyond the Lab (BTL) / "X Factor" 🚀
+
+* **Firebase Functions:** Backend function to call Pebblely API, mitigating CORS errors.
+* **3js:**  Spinning ring animation on the front page, with scroll-controlled movement and custom vertex & fragment shaders for dynamic lighting. 
+* **Chart.js Dashboards:**  Visualize key metrics with interactive charts.
+* **Day & Night Mode:**  Seamless light and dark mode toggle powered by Tailwind CSS. 
+* * **Paypal SDK:**  Integrate Paypal SDK with marketplace for seamless payment experience
+
+## Running the App 🏃‍♀️
+
+1. **Clone the repository:** `git clone <repository_url>`
+2. **Install dependencies:** `npm install`
+3. **Start the development server:** `npm run dev`
 
 ## Team Members 🤝
 * Alexander Luk Wei Heng 
@@ -32,4 +44,4 @@ Family Jewels empowers independent jewelers to showcase their creations without 
 * Liew Zhen Jie 
 * Xu Xin Hui 
 * Jerric Chan 
-* Gabriel Shawn Stephen You Fu Chang 
+* Gabriel Shawn Stephen You Fu Chang
