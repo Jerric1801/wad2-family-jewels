@@ -4,6 +4,10 @@
 
 Family Jewels empowers independent jewelers to showcase their creations without the cost and complexity of traditional photoshoots. Our platform leverages AI to seamlessly place jewelry onto model images, offering a cost-effective and efficient way to create stunning marketing visuals.
 
+## Links 🔗
+
+Visit us here: [familyjewels4u.shop](https://familyjewels4u.shop/)
+
 ## Key Features 🌟
 
 * **AI-Powered Product Image Generation:** Effortlessly generate professional product images with text prompts and optional reference photos.
@@ -30,13 +34,14 @@ Family Jewels empowers independent jewelers to showcase their creations without 
 * **3js:**  Spinning ring animation on the front page, with scroll-controlled movement and custom vertex & fragment shaders for dynamic lighting. 
 * **Chart.js Dashboards:**  Visualize key metrics with interactive charts.
 * **Day & Night Mode:**  Seamless light and dark mode toggle powered by Tailwind CSS. 
-* * **Paypal SDK:**  Integrate Paypal SDK with marketplace for seamless payment experience
+* **Paypal SDK:**  Integrate Paypal SDK with marketplace for seamless payment experience
 
 ## Running the App 🏃‍♀️
 
-1. **Clone the repository:** `git clone <repository_url>`
+1. **Clone the repository:** `git clone https://github.com/Jerric1801/wad2-family-jewels.git`
 2. **Install dependencies:** `npm install`
-3. **Start the development server:** `npm run dev`
+3. Ensure Env File is present
+4. **Start the development server:** `npm run dev`
 
 ## Team Members 🤝
 * Alexander Luk Wei Heng 
