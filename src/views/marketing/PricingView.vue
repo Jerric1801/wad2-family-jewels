@@ -1,9 +1,9 @@
 <template>
   <DefaultLayout>
     <div
-      class="relative text-center z-10 flex flex-col items-center justify-center w-full p-8 md:p-[20vh] bg-transparent dark:bg-darkModeBg"
+      class="relative text-center pt-[120px] z-10 flex flex-col items-center justify-center w-full p-8 md:p-[20vh] bg-transparent dark:bg-darkModeBg"
     >
-      <h2 class="text-4xl md:text-5xl font-bold mb-8">
+      <h2 class="text-4xl md:text-5xl font-bold mb-12">
         <span
           class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent dark:text-custDarkerWhite"
         >
@@ -14,7 +14,7 @@
 
       <div class="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
         <div
-          class="plan-container bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2 dark:bg-cardItemBg"
+          class="plan-container glow-effect bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2 dark:bg-cardItemBg"
         >
           <h3 class="text-2xl font-semibold mb-4 dark:text-custDarkerWhite">
             Basic Plan
@@ -40,7 +40,7 @@
         </div>
 
         <div
-          class="plan-container bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2 dark:bg-cardItemBg"
+          class="plan-container glow-effect bg-white rounded-lg shadow-lg p-6 w-full md:w-1/2 dark:bg-cardItemBg"
         >
           <h3 class="text-2xl font-semibold mb-4 dark:text-custDarkerWhite">
             Pro Plan
@@ -82,13 +82,26 @@ export default {
 </script>
 
 <style scoped>
-/* ... (animation styles remain the same) ... */
-
 .plan-container {
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .plan-container:hover {
   transform: translateY(-5px);
+}
+
+/* Light mode purple glow */
+.glow-effect:hover {
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.7), 0 0 20px rgba(75, 0, 130, 0.6),
+    0 0 30px rgba(238, 130, 238, 0.5), 0 0 40px rgba(138, 43, 226, 0.4),
+    0 0 60px rgba(75, 0, 130, 0.3), 0 0 80px rgba(138, 43, 226, 0.2);
+}
+
+/* Dark mode white glow */
+.dark .glow-effect:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
+    0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.3),
+    0 0 80px rgba(255, 255, 255, 0.2);
 }
 </style>

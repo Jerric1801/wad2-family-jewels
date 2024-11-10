@@ -8,9 +8,9 @@
       <div
         class="relative text-center z-10 mt-[40vh] flex justify-center w-full h-[100vh] bg-transparent"
       >
-        <h2 class="text-5xl font-bold" style="z-index: 5">
+        <h2 class="text-5xl font-bold relative" style="z-index: 5">
           <span
-            class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+            class="animate-fade-in-up bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent character-border"
             v-for="(line, index) in headlineLines"
             :key="index"
             :style="{ animationDelay: `${index * 1}s` }"
@@ -47,38 +47,13 @@
         ></div>
       </div>
     </div>
-    <!-- Section 1: Image Gen -->
-    <div
-      class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"
-    >
-      <div class="h-[40%] w-[80%] md:w-[45%]">
-        <h2
-          class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
-        >
-          Effortless Product Image Generation
-        </h2>
-        <p class="mt-4">
-          Upload your jewelry photos, and our AI will seamlessly place them on
-          lifelike models, creating captivating images in seconds. No more
-          expensive photoshoots or complex editing!
-        </p>
-      </div>
-      <div
-        class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative"
-      >
-        <img
-          class="w-full max-w-[85%] absolute bg-cover rounded-md"
-          src="../../assets/images/home/product_1.jpg"
-        />
-      </div>
-    </div>
-    <!-- Section 2: Perfect the look -->
+    <!-- Section 1: Perfect the look -->
     <div
       class="h-[85vh] w-[100vw] flex flex-col justify-center items-center gap-10 bg-white md:h-[110vh]"
     >
       <div class="w-[80vw] text-center md:w-[50vw]">
         <h2
-          class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+          class="text-3xl pt-3 sm:pt-0 md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
         >
           Perfect the Look
         </h2>
@@ -118,6 +93,32 @@
         ></div>
       </div>
     </div>
+    <!-- Section 2: Image Gen -->
+    <div
+      class="bg-white h-[85vh] text-center w-full flex flex-col md:flex-row md:h-[85vh] md:text-left justify-center items-center gap-3 p-4"
+    >
+      <div class="h-[40%] w-[80%] md:w-[45%]">
+        <h2
+          class="pb-2 text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink via-purple to-blue bg-clip-text text-transparent"
+        >
+          Effortless Product Image Generation
+        </h2>
+        <p class="mt-4">
+          Upload your jewelry photos, and our AI will seamlessly place them on
+          lifelike models, creating captivating images in seconds. No more
+          expensive photoshoots or complex editing!
+        </p>
+      </div>
+      <div
+        class="h-[20%] w-[90%] md:w-[45%] flex justify-center items-center relative"
+      >
+        <img
+          class="w-full max-w-[85%] absolute bg-cover rounded-md"
+          src="../../assets/images/home/product_1.jpg"
+        />
+      </div>
+    </div>
+
     <!-- Section 3: Call-To-Action -->
     <div
       class="h-[65vh] md:h-[80vh] w-[100vw] bg-gradient-to-r from-pink via-purple to-blue flex justify-center items-center"
@@ -130,7 +131,7 @@
         </h2>
         <a
           href="/upload"
-          class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white"
+          class="w-[45%] rounded-[99px] md:w-[30%] p-4 bg-white button-glow"
         >
           <button class="w-[100%] h-[100%]">Start Here!</button>
         </a>
@@ -346,5 +347,21 @@ export default {
 .animate-fade-in-up {
   animation: fadeInUp 2s ease-out forwards;
   opacity: 0;
+}
+.character-border {
+  -webkit-text-stroke: 1px white; /* Border width and color */
+  -webkit-text-fill-color: transparent; /* Ensures fill color is from background gradient */
+}
+.button-glow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.button-glow:hover {
+  box-shadow: 0 0 15px rgba(147, 112, 219, 0.7),
+    /* Soft purple */ 0 0 25px rgba(65, 105, 225, 0.6),
+    /* Royal blue */ 0 0 35px rgba(138, 43, 226, 0.5),
+    /* Medium purple */ 0 0 50px rgba(72, 61, 139, 0.4),
+    /* Dark slate blue */ 0 0 75px rgba(0, 191, 255, 0.3),
+    /* Deep sky blue */ 0 0 100px rgba(75, 0, 130, 0.2); /* Indigo */
 }
 </style>

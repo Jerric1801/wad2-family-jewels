@@ -7,7 +7,7 @@
         <img
           src="../../assets/images/logo/logo.png"
           alt="Family Jewels Logo"
-          class="w-16 h-16 mb-2"
+          class="w-16 h-16"
         />
         <h3 class="text-lg font-semibold dark:text-custDarkerWhite">
           Family Jewels
@@ -18,7 +18,7 @@
       </div>
 
       <div
-        class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4"
+        class="flex flex-row flex-wrap md:pt-20 justify-center space-x-4 text-sm pt-4 md:pt-0 md:flex-row md:space-x-4"
       >
         <a href="/" class="text-gray-600 hover:text-gray-800 dark:text-custGrey"
           >Home</a
@@ -49,7 +49,7 @@
     <div
       class="container mx-auto mt-4 pt-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center"
     >
-      <p class="text-sm text-gray-500 dark:text-custGrey">
+      <p class="text-xs text-gray-500 dark:text-custGrey">
         &copy; 2024 Family Jewels. All rights reserved.
       </p>
       <div class="flex space-x-4 mt-2 md:mt-0">
@@ -58,11 +58,10 @@
           target="_blank"
           class="text-gray-600 hover:text-gray-800"
         >
-          <!-- Display the image if light mode is enabled -->
           <img
             src="../../assets/images/logo/github.png"
-            alt="Family Jewels Logo"
-            class="w-7 h-7 mb-2 mr-2 dark:hidden"
+            alt="GitHub Logo"
+            class="w-7 h-7 dark:hidden"
           />
         </a>
       </div>
