@@ -80,9 +80,9 @@ export default {
             onApprove: (data, actions) => {
               return actions.order.capture().then((details) => {
                 const orderData = {
-                  date: Date.now(),
+                  date: new Date().toISOString().slice(0, 10),
                   imageUrl: this.item.data.image, 
-                  orderId: details.id,
+                  orderNumber: details.id,
                   recipientName: details.payer.name.given_name,
                   total: this.item.data.price.toString(),
                   productName: this.item.data.title,

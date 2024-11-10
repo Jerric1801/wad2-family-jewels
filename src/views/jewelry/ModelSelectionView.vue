@@ -263,7 +263,7 @@ export default {
           'necklace_1.jpg',
           'necklace_2.jpg',
           'necklace_3.jpg',
-          'necklace_4.jpg',
+          'necklace_4.png',
           'necklace_5.jpg',
           'necklace_6.jpg',
         ];
